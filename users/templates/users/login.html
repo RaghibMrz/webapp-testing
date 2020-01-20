@@ -1,0 +1,33 @@
+{% extends "users/startupBase.html" %}
+{% load crispy_forms_tags %}
+{% block ctt %}
+<div class="row">
+	<div class="col-lg-12">
+		<div class="p-5">
+			<div class="text-center">
+				<h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+			</div>
+			<div class="content-section">
+				<form method="POST">
+					{% csrf_token %}
+					<fieldset class="form-group">
+						{{ form|crispy }}
+					</fieldset>
+					<div class="form-group">
+						<button class="btn btn-primary btn-user btn-block" type="submit">
+							Login
+						</button>
+					</div>
+				</form>
+			</div>
+			<hr>
+			<div class="text-center">
+				<a class="small" href="{% url 'forgot' %}">Forgot Password?</a>
+			</div>
+			<div class="text-center">
+				<a class="small" href="{% url 'register' %}">Create an Account!</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock ctt %}

@@ -1,0 +1,19 @@
+{% extends "transactions/base.html" %}
+{% block ctt %}
+<div class="alert alert-info">
+	Success! Report Generated
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="p-5">
+			<div class="text-center">
+				<p class="p text-gray-900 mb-4">Click the link below to download. </p>
+			</div>
+			<hr>
+			<div class="text-center">
+				<a class="small" href="{% url 'home' %}">Download report.</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock ctt %}

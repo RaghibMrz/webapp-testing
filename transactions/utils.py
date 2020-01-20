@@ -30,10 +30,12 @@ def getRows(userID):
 	return row
 
 def addToAccountList(request, addedAccount):
-	accList = request.user.profile.getAccount()
-	request.user.profile.storeAccount(addedAccount)
-	request.user.profile.clearAccountList()
-	print(request.user.profile.accountIDList)
+	##if (addedAccount not in request.user.profile.getAccount):
+	Account.objects.create(accountid=  str(addedAccount), user = request.user)
+	##accList = request.user.profile.getAccount()
+	##request.user.profile.storeAccount(addedAccount)
+	##request.user.profile.clearAccountList()
+	print(request.user.profile.getAccount)
 
 
 class UserID():

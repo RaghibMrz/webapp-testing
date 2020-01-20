@@ -12,7 +12,7 @@ class Profile(models.Model):
 		return f'{self.user.username}\'s Profile'
 
 	def getAccount(self):
-		return self.accountIDList
+		return Account.objects.filter(user__username = self.user.username)
 
 	def storeAccount(self, accList):
 		self.accountIDList = self.accountIDList+","+(accList)
@@ -29,3 +29,7 @@ class Profile(models.Model):
 			outputSize = (200, 200)
 			image = image.resize(outputSize)
 			image.save(self.img.path)
+
+class Account(models.Model):
+	user = models.ForeignKey(User)
+	accountid = models.CharField(max_length=20)

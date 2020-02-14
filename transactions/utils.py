@@ -37,6 +37,8 @@ def addToAccountList(request, addedAccount):
 	##request.user.profile.clearAccountList()
 	print(request.user.profile.getAccount)
 
+def getDataForAccount(accountID):
+	
 
 class UserID():
 	def __init__(self, userID):

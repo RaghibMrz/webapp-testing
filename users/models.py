@@ -12,7 +12,7 @@ class Profile(models.Model):
 		return f'{self.user.username}\'s Profile'
 
 	def getAccount(self):
-		return Account.objects.filter(user__username = self.user.username)
+		return Account.objects.filter(user__username = self.user.username).values_list('accountid', flat=True)
 
 	def storeAccount(self, accList):
 		self.accountIDList = self.accountIDList+","+(accList)
@@ -31,5 +31,5 @@ class Profile(models.Model):
 			image.save(self.img.path)
 
 class Account(models.Model):
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	accountid = models.CharField(max_length=20)

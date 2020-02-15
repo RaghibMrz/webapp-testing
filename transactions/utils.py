@@ -2,6 +2,7 @@ import requests
 from requests import auth
 from django import template
 import requests, json, urllib
+from users.models import Account 
 
 register = template.Library()
 
@@ -30,12 +31,13 @@ def getRows(userID):
 	return row
 
 def addToAccountList(request, addedAccount):
-	##if (addedAccount not in request.user.profile.getAccount):
-	Account.objects.create(accountid=  str(addedAccount), user = request.user)
+	if (addedAccount not in request.user.profile.getAccount()):
+		Account.objects.create(accountid=  str(addedAccount), user = request.user)
 	##accList = request.user.profile.getAccount()
 	##request.user.profile.storeAccount(addedAccount)
 	##request.user.profile.clearAccountList()
-	print(request.user.profile.getAccount)
+	print(request.user.profile.getAccount())
+	print(request.user.profile.getAccount()[0])
 
 
 class UserID():

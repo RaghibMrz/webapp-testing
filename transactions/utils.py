@@ -39,6 +39,8 @@ def addToAccountList(request, addedAccount):
 	print(request.user.profile.getAccount())
 	print(request.user.profile.getAccount()[0])
 
+def getDataForAccount(accountID):
+	
 
 class UserID():
 	def __init__(self, userID):

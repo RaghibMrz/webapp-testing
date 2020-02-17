@@ -41,6 +41,7 @@ def addToAccountList(request, addedAccount):
 
 def getDataForAccount(accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
+    print("Run")
     res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/data.json", auth = me)
     if (res.status_code == 404):
         return False
@@ -53,13 +54,15 @@ def getDataForAccount(accountID):
                 if key == "Account":
                     month = item["OpeningDate"][3:5]
                     day = item["OpeningDate"][0:2]
-                    resultDic["OpeningDate"] = month+day
+                    resultDic["BillingDate"] = month+'-'+day
                 current.append(item)
             resultDic[key] = current
     result = json.dumps(resultDic)
-    url = "http://51.11.48.127:8060/v1/documents?uri=/docs/"+accountID+".json"
-    headers = {'content-type': 'application/json'}
-    r = requests.post(url, data=result, headers=headers, auth = me)
+    print(type(result))
+    url = "http://51.11.48.127:8060/v1/documents?uri=/documents/"+accountID+".json"
+    headers = {'Content-Type': 'application/json'}
+    r = requests.put(url, data=json.dumps(result), headers=headers, auth = me)
+    print(r.status_code)
 
 
 	

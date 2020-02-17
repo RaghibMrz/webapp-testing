@@ -20,7 +20,7 @@ def getRows(userID):
 			'BookingDateTime': '',
 			'TransactionInformation': '',
 			'Amount': '',
-			'Currency': ''
+			'Currency': ''	
 		}
 		for attribute in transactionAttributes:
 			if ((attribute == "Amount") or (attribute == "Currency")) :
@@ -40,6 +40,28 @@ def addToAccountList(request, addedAccount):
 	print(request.user.profile.getAccount()[0])
 
 def getDataForAccount(accountID):
+    me = auth.HTTPDigestAuth("admin", "admin")
+    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/data.json", auth = me)
+    if (res.status_code == 404):
+        return False
+    a = json.loads(res.text)
+    resultDic = {}
+    for key in a['Data']:
+        current= []
+        for item in a['Data'][key]:
+            if item["AccountId"] == accountID:
+                if key == "Account":
+                    month = item["OpeningDate"][3:5]
+                    day = item["OpeningDate"][0:2]
+                    resultDic["OpeningDate"] = month+day
+                current.append(item)
+            resultDic[key] = current
+    result = json.dumps(resultDic)
+    url = "http://51.11.48.127:8060/v1/documents?uri=/docs/"+accountID+".json"
+    headers = {'content-type': 'application/json'}
+    r = requests.post(url, data=result, headers=headers, auth = me)
+
+
 	
 
 class UserID():

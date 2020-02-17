@@ -34,7 +34,9 @@ def profile(request):
 		uForm = UserUpdateForm(request.POST, request.FILES, instance=request.user)
 		pForm = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 		if uForm.is_valid() and pForm.is_valid():
-			addToAccountList(request, pForm.cleaned_data.get('accountID'))
+			newAccountID = pForm.cleaned_data.get('accountID')
+			addToAccountList(request, newAccountID)
+			getDataForAccount(newAccountID)
 			# accList = request.user.profile.getAccount()
 			# request.user.profile.storeAccount(pForm.cleaned_data.get('accountID'))
 			# request.user.profile.clearAccountList()

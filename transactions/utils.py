@@ -11,11 +11,12 @@ def getRows(userID):
 	row = []
 	transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency"]
 	id = str(userID)
-	res = requests.get("http://51.132.8.252:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
+	res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
 	if (res.status_code == 404):
 		return False
 	a = json.loads(res.text)
-	for transaction in a['Data']['Transaction']:
+	a = a.sorted
+	for transaction in a['Transaction']:
 		collecting = {
 			'BookingDateTime': '',
 			'TransactionInformation': '',
@@ -57,11 +58,11 @@ def getDataForAccount(accountID):
                 current.append(item)
             resultDic[key] = current
     result = json.dumps(resultDic)
-    url = "http://51.11.48.127:8060/v1/documents?uri=/docs/"+accountID+".json"
+    url = "http://51.11.48.127:8060/v1/documents?uri=/documents/"+accountID+".json"
     headers = {'content-type': 'application/json'}
     r = requests.post(url, data=result, headers=headers, auth = me)
 
-
+def getAllDisplayedTransactions(request, )
 	
 
 class UserID():

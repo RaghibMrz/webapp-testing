@@ -15,7 +15,7 @@ def getRows(userID):
 	if (res.status_code == 404):
 		return False
 	a = json.loads(res.text)
-	for transaction in a['Data']['Transaction']:
+	for transaction in a['Transaction']:
 		collecting = {
 			'BookingDateTime': '',
 			'TransactionInformation': '',

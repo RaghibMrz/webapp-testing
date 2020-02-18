@@ -65,7 +65,29 @@ def getDataForAccount(accountID):
     print(r.status_code)
 
 
-	
+def getAverageSpending(testDate, accountID):
+    me = auth.HTTPDigestAuth("admin", "admin")
+    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
+    if (res.status_code == 404):
+        return False
+    a = json.loads(res.text)
+    billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
+    print(billingdate)
+    if billingdate<=testDate:
+        startdate = billingdate- relativedelta(months=1)
+        enddate = billingdate
+    else:
+        startdate = billingdate - relativedelta(months=2)
+        enddate = billingdate - relativedelta(months=1)
+    totalamount = 0 
+    for transaction in a['Transaction']:
+        bookingdate = datetime.datetime.strptime(transaction['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+        if bookingdate<enddate and bookingdate>startdate and transaction['ProprietaryBankTransactionCode']['Code']!="DirectDebit":
+            totalamount+=float(transaction['Amount']['Amount'])
+    print(startdate)
+    print(enddate)
+    print("{0:.2f}".format(totalamount/(enddate- startdate).days))
+
 
 class UserID():
 	def __init__(self, userID):

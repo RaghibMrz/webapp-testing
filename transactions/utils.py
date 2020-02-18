@@ -11,7 +11,7 @@ def getRows(userID):
 	row = []
 	transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency"]
 	id = str(userID)
-	res = requests.get("http://51.132.8.252:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
+	res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
 	if (res.status_code == 404):
 		return False
 	a = json.loads(res.text)

@@ -3,6 +3,8 @@ from requests import auth
 from django import template
 import requests, json, urllib
 from users.models import Account 
+import datetime
+from dateutil.relativedelta import relativedelta
 
 register = template.Library()
 
@@ -88,6 +90,32 @@ def getAverageSpending(testDate, accountID):
     print(enddate)
     print("{0:.2f}".format(totalamount/(enddate- startdate).days))
 
+def prediction(testDate, accountID):
+    me = auth.HTTPDigestAuth("admin", "admin")
+    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
+    if (res.status_code == 404):
+        return False
+    a = json.loads(res.text)
+    billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
+    averagespending = getAverageSpending(testDate,accountID)
+    if testDate.day()>billingdate.day():
+        targetdate = billingdate + relativedelta(months=1)
+    else:
+        targetdate = billingdate
+    currentbalance = float(a['Balance']['Amount']['Amount'])
+    prediction={}
+    currentdate = testDate.date
+    while currentdate<targetdate.date:
+        currentdate +=relativedelta(days= 1)
+        currentbalance-=averagespending
+        prediction[currentdate] = currentbalance
+    for directdebit in a['DirectDebit']:
+        if directdebit['DirectDebitStatusCode'] == "Active":
+            previouspayment = datetime.datetime.strptime(directdebit['PreviousPaymentDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+            nextpayment = previouspayment + relativedelta(months=1)
+            if nextpayment.date in prediction:
+                prediction[nextpayment.date] -=float(directdebit['PreviousPaymentAmount']['Amount'])
+    return prediction
 
 class UserID():
 	def __init__(self, userID):

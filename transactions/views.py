@@ -11,21 +11,24 @@ from .utils import *
 
 @login_required
 def home(request):
-	request.session.set_expiry(600)
-	if (getRows(request.user.profile.accountID) == False):
-		context = {
-			'rows': [{
-			'BookingDateTime': 'No Data Found',
-			'TransactionInformation': 'Incorrect UserID linked',
-			'Amount': 'Update accountID',
-			'Currency': 'and try again'
-			}]
-		}
-		return render(request, 'transactions/home.html', context)
-	context = {
-		'rows': getRows(request.user.profile.accountID)
-	}
-	return render(request, 'transactions/home.html', context)
+    request.session.set_expiry(600)
+    accountid = request.user.profile.getAccount()
+    #print("home")
+    #print(accountid)
+    #print(type(accountid))
+    if getRows(accountid) == False:
+        context = {
+            'rows': [{
+            'BookingDateTime': 'No Data Found',
+            'TransactionInformation': 'Incorrect UserID linked',
+            'Amount': 'Update accountID',
+            'Currency': 'and try again'
+        }]}
+        return render(request, 'transactions/home.html', context)
+    context = {
+        'rows': getRows(accountid)
+    }
+    return render(request, 'transactions/home.html', context)
 
 @login_required
 def profile(request):
@@ -60,7 +63,9 @@ def profile(request):
 @login_required
 def transactions(request):
 	request.session.set_expiry(600)
-	if (getRows(request.user.profile.accountID) == False):
+	#print("Transactions")
+	#print(request.user.profile.getAccount())
+	if (getRows(request.user.profile.getAccount()) == False):
 		context = {
 			'rows': [{
 			'BookingDateTime': 'No Data Found',
@@ -70,7 +75,7 @@ def transactions(request):
 		}
 		return render(request, 'transactions/transactions.html', context)
 	context = {
-		'rows': getRows(request.user.profile.accountID)
+		'rows': getRows(request.user.profile.getAccount())
 	}
 	return render(request, 'transactions/transactions.html', context)
 

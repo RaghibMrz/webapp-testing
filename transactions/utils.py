@@ -8,29 +8,33 @@ from dateutil.relativedelta import relativedelta
 
 register = template.Library()
 
-def getRows(userID):
-	me = auth.HTTPDigestAuth("admin", "admin")
-	row = []
-	transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency"]
-	id = str(userID)
-	res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
-	if (res.status_code == 404):
-		return False
-	a = json.loads(res.text)
-	for transaction in a['Transaction']:
-		collecting = {
-			'BookingDateTime': '',
-			'TransactionInformation': '',
-			'Amount': '',
-			'Currency': ''	
-		}
-		for attribute in transactionAttributes:
-			if ((attribute == "Amount") or (attribute == "Currency")) :
-				collecting[attribute] = transaction['Amount'][str(attribute)]
-			else:
-				collecting[attribute] = transaction[str(attribute)]
-		row.append(collecting)
-	return row
+def getRows(accountID):
+  #print("getRows")
+  #print(type(accountID))
+  me = auth.HTTPDigestAuth("admin", "admin")
+  row = []
+  transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency"]
+  for i in range(len(accountID)):
+    id = str(accountID[i])
+    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
+    if (res.status_code == 404):
+      continue
+    a = json.loads(res.text)
+    for transaction in a['Transaction']:
+      collecting = {
+        'BookingDateTime': '',
+        'TransactionInformation': '',
+        'Amount': '',
+        'Currency': ''	
+      }
+      for attribute in transactionAttributes:
+        if ((attribute == "Amount") or (attribute == "Currency")) :
+          collecting[attribute] = transaction['Amount'][str(attribute)]
+        else:
+          collecting[attribute] = transaction[str(attribute)]
+        if (collecting not in row):
+            row.append(collecting)
+  return row
 
 def addToAccountList(request, addedAccount):
 	if (addedAccount not in request.user.profile.getAccount()):

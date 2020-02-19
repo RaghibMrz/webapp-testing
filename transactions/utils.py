@@ -5,6 +5,7 @@ import requests, json, urllib
 from users.models import Account 
 import datetime
 from dateutil.relativedelta import relativedelta
+import csv
 
 register = template.Library()
 
@@ -12,8 +13,8 @@ def getRows(userID):
 	me = auth.HTTPDigestAuth("admin", "admin")
 	row = []
 	transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency"]
-	id = str(userID)
-	res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
+	u_id = str(userID)
+	res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+u_id+".json", auth=me)
 	if (res.status_code == 404):
 		return False
 	a = json.loads(res.text)
@@ -22,7 +23,7 @@ def getRows(userID):
 			'BookingDateTime': '',
 			'TransactionInformation': '',
 			'Amount': '',
-			'Currency': ''	
+			'Currency': ''
 		}
 		for attribute in transactionAttributes:
 			if ((attribute == "Amount") or (attribute == "Currency")) :
@@ -34,10 +35,10 @@ def getRows(userID):
 
 def addToAccountList(request, addedAccount):
 	if (addedAccount not in request.user.profile.getAccount()):
-		Account.objects.create(accountid=  str(addedAccount), user = request.user)
+		Account.objects.create(accountid=str(addedAccount), user = request.user)
+	##request.user.profile.clearAccountList()
 	##accList = request.user.profile.getAccount()
 	##request.user.profile.storeAccount(addedAccount)
-	##request.user.profile.clearAccountList()
 	print(request.user.profile.getAccount())
 	print(request.user.profile.getAccount()[0])
 
@@ -65,7 +66,6 @@ def getDataForAccount(accountID):
     headers = {'Content-Type': 'application/json'}
     r = requests.put(url, data=json.dumps(result), headers=headers, auth = me)
     print(r.status_code)
-
 
 def getAverageSpending(testDate, accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
@@ -116,6 +116,35 @@ def prediction(testDate, accountID):
             if nextpayment.date in prediction:
                 prediction[nextpayment.date] -=float(directdebit['PreviousPaymentAmount']['Amount'])
     return prediction
+
+def getCategory(mcc):
+    reader = csv.reader(open('aux_files/MCC_CatId.csv', 'r'))
+    catDict = {
+        "1": "Bills & Payments",
+        "2": "Transport",
+        "3": "Groceries",
+        "4": "Electronics",
+        "5": "Fashion & Cosmetics",
+        "6": "Finances",
+        "7": "Food",
+        "8": "General",
+        "9": "Charity",
+        "10": "Entertainment",
+        "11": "Leisure & Self-Care",
+        "12": "Medical",
+        "0": "Uncategorised"
+    }
+
+    d = {}
+    count = 0
+
+    for row in reader:
+        if count == 0:
+            count += 1
+            continue
+        key, value = row
+        d[key] = value
+    return catDict[d[mcc]]
 
 class UserID():
 	def __init__(self, userID):

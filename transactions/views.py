@@ -22,12 +22,33 @@ def home(request):
             'BookingDateTime': 'No Data Found',
             'TransactionInformation': 'Incorrect UserID linked',
             'Amount': 'Update accountID',
-            'Currency': 'and try again'
+            'Currency': 'and try again',
+            'MCC': '.'
         }]}
         return render(request, 'transactions/home.html', context)
+    bpList, tpList, groceryList, electronicsList, fcList, financesList = [], [], [], [], [], []
+    foodList, genList, charityList, entertainmentList, lsList, medList, uncatList = [], [], [], [], [], [], []
     context = {
-        'rows': getRows(accountid)
+        "one": bpList,
+        "two": tpList,
+        "three": groceryList,
+        "four": electronicsList,
+        "five": fcList,
+        "six": financesList,
+        "seven": foodList,
+        "eight": genList,
+        "nine": charityList,
+        "ten": entertainmentList,
+        "eleven": lsList,
+        "twelve": medList,
+        "zero": uncatList
     }
+    for transaction in getRows(accountid):
+    	context[getCategory(transaction['MCC'])].append(transaction)
+
+    # context = {
+    #     'rows': getRows(accountid)
+    # }
     return render(request, 'transactions/home.html', context)
 
 @login_required

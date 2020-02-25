@@ -135,12 +135,12 @@
         <!-- Card Body -->
         <div class="card-body">
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedFoodTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
-              <h6 class="m-0 font-weight-bold text-primary">Food</h6>
+            <a href="#collapsedBPTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
               <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
             </a>
             <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedFoodTransactions">
+            <div class="collapse hide" id="collapsedBPTransactions">
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
@@ -153,7 +153,41 @@
                       </tr>
                   </thead>
                   <tbody>
-                    {% for row in rows %}
+                    {% for row in one %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedTransportTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Transport</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedTransportTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in two %}
                       <tr>
                       <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
@@ -187,7 +221,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                    {% for row in rows %}
+                    {% for row in three %}
                       <tr>
                       <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
@@ -203,12 +237,12 @@
           </div>
 
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedBillsTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
-              <h6 class="m-0 font-weight-bold text-primary">Entertainment</h6>
+            <a href="#collapsedElectronicsTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Electronics</h6>
               <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
             </a>
             <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedBillsTransactions">
+            <div class="collapse hide" id="collapsedElectronicsTransactions">
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
@@ -221,7 +255,177 @@
                       </tr>
                   </thead>
                   <tbody>
-                    {% for row in rows %}
+                    {% for row in four %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedFCTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Fashion & Cosmetics</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedFCTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                    <th>Date</th>
+                    <th>Transaction</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for row in five %}
+                    <tr>
+                    <td>{{ row.BookingDateTime }}</td>
+                    <td>{{ row.TransactionInformation }}</td>
+                    <td>{{ row.Amount }}</td>
+                    <td>{{ row.Currency }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedFinancesTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Finances</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedFinancesTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in six %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedFoodTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Food</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedFoodTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in seven %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedGeneralTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">General</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedGeneralTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in eight %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedCharityTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Charity</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedCharityTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in nine %}
                       <tr>
                       <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
@@ -238,7 +442,7 @@
 
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
             <a href="#collapsedEntertainmentTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
-              <h6 class="m-0 font-weight-bold text-primary">Bills</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Entertainment</h6>
               <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
             </a>
             <!-- Card Content - Collapse -->
@@ -255,7 +459,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                    {% for row in rows %}
+                    {% for row in ten %}
                       <tr>
                       <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
@@ -271,39 +475,107 @@
           </div>
 
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedTravelTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
-              <h6 class="m-0 font-weight-bold text-primary">Travel</h6>
+            <a href="#collapsedLSTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Leisure & Self-Care</h6>
               <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
             </a>
             <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedTravelTransactions">
+            <div class="collapse hide" id="collapsedLSTransactions">
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
                     <thead>
-                    <tr>
-                    <th>Date</th>
-                    <th>Transaction</th>
-                    <th>Amount</th>
-                    <th>Currency</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  {% for row in rows %}
-                    <tr>
-                    <td>{{ row.BookingDateTime }}</td>
-                    <td>{{ row.TransactionInformation }}</td>
-                    <td>{{ row.Amount }}</td>
-                    <td>{{ row.Currency }}</td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in eleven %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedMedTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Medical</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedMedTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in twelve %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedOtherTransactions" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+              <h6 class="m-0 font-weight-bold text-primary">Other</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedOtherTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in zero %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
         <!-- <div class="card-body">
           <div class="chart-area">
             <canvas id="myAreaChart"></canvas>

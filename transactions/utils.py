@@ -33,8 +33,14 @@ def getRows(accountID):
         if attribute == "MCC":
             collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
             continue
-        if ((attribute == "Amount") or (attribute == "Currency")) :
-          collecting[attribute] = transaction['Amount'][str(attribute)]
+        if ((attribute == "Amount") or (attribute == "Currency")):
+            collecting[attribute] = transaction['Amount'][str(attribute)]
+            if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
+                continue
+            if transaction["CreditDebitIndicator"] == "Debit":
+                collecting['Amount'] = "-" + collecting['Amount']
+            elif transaction["CreditDebitIndicator"] == "Credit":
+                collecting['Amount'] = "+" + collecting['Amount']
         else:
           collecting[attribute] = transaction[str(attribute)]
         if (collecting not in row):

@@ -17,15 +17,14 @@ def home(request):
     #print(accountid)
     #print(type(accountid))
     if getRows(accountid) == False:
-        context = {
-            'rows': [{
-            'BookingDateTime': 'No Data Found',
-            'TransactionInformation': 'Incorrect UserID linked',
-            'Amount': 'Update accountID',
-            'Currency': 'and try again',
-            'MCC': '.'
-        }]}
-        return render(request, 'transactions/home.html', context)
+        # context = {
+        #     'rows': [{
+        #     'BookingDateTime': 'No Data Found',
+        #     'TransactionInformation': 'Incorrect UserID linked',
+        #     'Amount': 'Update accountID',
+        #     'Currency': 'and try again',
+        # }]}
+        return render(request, 'transactions/home.html')
     bpList, tpList, groceryList, electronicsList, fcList, financesList = [], [], [], [], [], []
     foodList, genList, charityList, entertainmentList, lsList, medList, uncatList = [], [], [], [], [], [], []
     context = {
@@ -46,9 +45,6 @@ def home(request):
     for transaction in getRows(accountid):
     	context[getCategory(transaction['MCC'])].append(transaction)
 
-    # context = {
-    #     'rows': getRows(accountid)
-    # }
     return render(request, 'transactions/home.html', context)
 
 @login_required

@@ -5,7 +5,7 @@ import requests, json, urllib
 from users.models import Account 
 import datetime
 from dateutil.relativedelta import relativedelta
-import csv
+import csv, os, sys
 
 register = template.Library()
 
@@ -14,10 +14,10 @@ def getRows(accountID):
   #print(type(accountID))
   me = auth.HTTPDigestAuth("admin", "admin")
   row = []
-  transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency"]
+  transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
   for i in range(len(accountID)):
     id = str(accountID[i])
-    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
     if (res.status_code == 404):
       continue
     a = json.loads(res.text)
@@ -26,11 +26,21 @@ def getRows(accountID):
         'BookingDateTime': '',
         'TransactionInformation': '',
         'Amount': '',
-        'Currency': ''	
+        'Currency': '',
+        'MCC': ''
       }
       for attribute in transactionAttributes:
-        if ((attribute == "Amount") or (attribute == "Currency")) :
-          collecting[attribute] = transaction['Amount'][str(attribute)]
+        if attribute == "MCC":
+            collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
+            continue
+        if ((attribute == "Amount") or (attribute == "Currency")):
+            collecting[attribute] = transaction['Amount'][str(attribute)]
+            if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
+                continue
+            if transaction["CreditDebitIndicator"] == "Debit":
+                collecting['Amount'] = "-" + collecting['Amount']
+            elif transaction["CreditDebitIndicator"] == "Credit":
+                collecting['Amount'] = "+" + collecting['Amount']
         else:
           collecting[attribute] = transaction[str(attribute)]
         if (collecting not in row):
@@ -49,7 +59,7 @@ def addToAccountList(request, addedAccount):
 def getDataForAccount(accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
     print("Run")
-    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/data.json", auth = me)
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/data.json", auth = me)
     if (res.status_code == 404):
         return False
     a = json.loads(res.text)
@@ -66,14 +76,14 @@ def getDataForAccount(accountID):
             resultDic[key] = current
     result = json.dumps(resultDic)
     print(type(result))
-    url = "http://51.11.48.127:8060/v1/documents?uri=/documents/"+accountID+".json"
+    url = "http://51.104.239.212:8060/v1/documents?uri=/documents/"+accountID+".json"
     headers = {'Content-Type': 'application/json'}
     r = requests.put(url, data=json.dumps(result), headers=headers, auth = me)
     print(r.status_code)
 
 def getAverageSpending(testDate, accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
     if (res.status_code == 404):
         return False
     a = json.loads(res.text)
@@ -96,7 +106,7 @@ def getAverageSpending(testDate, accountID):
 
 def prediction(testDate, accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.11.48.127:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
     if (res.status_code == 404):
         return False
     a = json.loads(res.text)
@@ -122,33 +132,49 @@ def prediction(testDate, accountID):
     return prediction
 
 def getCategory(mcc):
-    reader = csv.reader(open('aux_files/MCC_CatId.csv', 'r'))
-    catDict = {
-        "1": "Bills & Payments",
-        "2": "Transport",
-        "3": "Groceries",
-        "4": "Electronics",
-        "5": "Fashion & Cosmetics",
-        "6": "Finances",
-        "7": "Food",
-        "8": "General",
-        "9": "Charity",
-        "10": "Entertainment",
-        "11": "Leisure & Self-Care",
-        "12": "Medical",
-        "0": "Uncategorised"
+    reader = csv.reader(open(os.path.join(sys.path[0], "aux_files/MCC_CatId.csv"), 'r'))
+    # catDict = {
+    #     "1": "Bills & Payments",
+    #     "2": "Transport",
+    #     "3": "Groceries",
+    #     "4": "Electronics",
+    #     "5": "Fashion & Cosmetics",
+    #     "6": "Finances",
+    #     "7": "Food",
+    #     "8": "General",
+    #     "9": "Charity",
+    #     "10": "Entertainment",
+    #     "11": "Leisure & Self-Care",
+    #     "12": "Medical",
+    #     "0": "Uncategorised"
+    # }
+    getLetters = {
+        "1": "one",
+        "2": "two",
+        "3": "three",
+        "4": "four",
+        "5": "five",
+        "6": "six",
+        "7": "seven",
+        "8": "eight",
+        "9": "nine",
+        "10": "ten",
+        "11": "eleven",
+        "12": "twelve",
+        "0": "zero"
     }
-
     d = {}
     count = 0
-
     for row in reader:
         if count == 0:
             count += 1
             continue
         key, value = row
         d[key] = value
-    return catDict[d[mcc]]
+    if mcc in d.keys():
+        return getLetters[d[mcc]]
+    else:
+        return "zero"
 
 class UserID():
 	def __init__(self, userID):

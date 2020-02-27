@@ -10,18 +10,20 @@ import csv, os, sys
 register = template.Library()
 
 def getRows(accountID):
-  #print("getRows")
-  #print(type(accountID))
-  me = auth.HTTPDigestAuth("admin", "admin")
-  row = []
-  transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
-  for i in range(len(accountID)):
-    id = str(accountID[i])
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
-    if (res.status_code == 404):
-      continue
-    a = json.loads(res.text)
-    for transaction in a['Transaction']:
+    #print("getRows")
+    #print(type(accountID))
+    me = auth.HTTPDigestAuth("admin", "admin")
+    row = []
+    transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
+  # for i in range(len(accountID)):
+  #   id = str(accountID[i])
+  #   res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
+  #   if (res.status_code == 404):
+  #     continue
+    # a = json.loads(res.text)
+    with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
+        a = json.load(data)
+    for transaction in a['Data']['Transaction']:
       collecting = {
         'BookingDateTime': '',
         'TransactionInformation': '',
@@ -45,7 +47,7 @@ def getRows(accountID):
           collecting[attribute] = transaction[str(attribute)]
         if (collecting not in row):
             row.append(collecting)
-  return row
+    return row
 
 def addToAccountList(request, addedAccount):
 	if (addedAccount not in request.user.profile.getAccount()):
@@ -158,9 +160,6 @@ def getCategory(mcc):
         "7": "seven",
         "8": "eight",
         "9": "nine",
-        "10": "ten",
-        "11": "eleven",
-        "12": "twelve",
         "0": "zero"
     }
     d = {}

@@ -1,0 +1,2909 @@
+{
+    "Data": {
+        "Account": [
+            {
+                "AccountId": "22289",
+                "Status": "Enabled",
+                "StatusUpdateDateTime": "2019-01-01T06:06:06+00:00",
+                "Currency": "GBP",
+                "AccountType": "Personal",
+                "AccountSubType": "CurrentAccount",
+                "Nickname": "Bills",
+                "OpeningDate": "01-05-2002",
+                "Account": [
+                    {
+                        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                        "Identification": "80200110203345",
+                        "Name": "Mr Kevin",
+                        "SecondaryIdentification": "00021"
+                    }
+                ]
+            }
+        ],
+        "Transaction": [
+            {
+                "AccountId": "22289",
+                "TransactionId": "123",
+                "TransactionReference": "Ref 1",
+                "Amount": {
+                    "Amount": "125.24",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-02T1:00:00+00:00",
+                "ValueDateTime": "2019-10-02T2:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "500.00",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Npower Gas & Electricity",
+                    "MerchantCategoryCode": "5074"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "124",
+                "TransactionReference": "Ref 2",
+                "Amount": {
+                    "Amount": "52.53",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-03T1:00:00+00:00",
+                "ValueDateTime": "2019-10-03T3:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "447.47",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "125",
+                "TransactionReference": "Ref 3",
+                "Amount": {
+                    "Amount": "3.59",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-06T11:00:00+00:00",
+                "ValueDateTime": "2019-10-06T13:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "443.88",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "McDonald's",
+                    "MerchantCategoryCode": "5812"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "126",
+                "TransactionReference": "Ref 4",
+                "Amount": {
+                    "Amount": "10.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-07T2:00:00+00:00",
+                "ValueDateTime": "2019-10-07T4:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "433.88",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "VOXI Mobile",
+                    "MerchantCategoryCode": "2842"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "127",
+                "TransactionReference": "Ref 5",
+                "Amount": {
+                    "Amount": "31.20",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-07T12:00:00+00:00",
+                "ValueDateTime": "2019-10-07T14:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "402.68",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "eat TOKYO",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "128",
+                "TransactionReference": "Ref 6",
+                "Amount": {
+                    "Amount": "23.40",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-07T21:00:00+00:00",
+                "ValueDateTime": "2019-10-07T21:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "426.08",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Cash from Friends",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "129",
+                "TransactionReference": "Ref 7",
+                "Amount": {
+                    "Amount": "32.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-08T0:00:00+00:00",
+                "ValueDateTime": "2019-10-08T0:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "393.58",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "130",
+                "TransactionReference": "Ref 8",
+                "Amount": {
+                    "Amount": "14.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-08T0:00:00+00:00",
+                "ValueDateTime": "2019-10-08T1:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "379.58",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Waitrose",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "131",
+                "TransactionReference": "Ref 9",
+                "Amount": {
+                    "Amount": "32.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-09T1:00:00+00:00",
+                "ValueDateTime": "2019-10-09T3:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "347.58",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Longdan",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "132",
+                "TransactionReference": "Ref 10",
+                "Amount": {
+                    "Amount": "22.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-10T9:00:00+00:00",
+                "ValueDateTime": "2019-10-10T10:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "369.58",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Cash from Friends",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "133",
+                "TransactionReference": "Ref 11",
+                "Amount": {
+                    "Amount": "8.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-12T0:00:00+00:00",
+                "ValueDateTime": "2019-10-12T1:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "361.08",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Roti King",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "134",
+                "TransactionReference": "Ref 12",
+                "Amount": {
+                    "Amount": "37.24",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-14T20:00:00+00:00",
+                "ValueDateTime": "2019-10-14T20:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "323.84",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "LIDL",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "135",
+                "TransactionReference": "Ref 13",
+                "Amount": {
+                    "Amount": "18.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-16T4:00:00+00:00",
+                "ValueDateTime": "2019-10-16T6:00:00+00:00",
+                "TransactionInformation": "Entertainment",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "305.84",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "ODEON",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "136",
+                "TransactionReference": "Ref 14",
+                "Amount": {
+                    "Amount": "27.53",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-19T9:00:00+00:00",
+                "ValueDateTime": "2019-10-19T10:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "278.31",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "ASDA",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "137",
+                "TransactionReference": "Ref 15",
+                "Amount": {
+                    "Amount": "45.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-21T0:00:00+00:00",
+                "ValueDateTime": "2019-10-21T0:00:00+00:00",
+                "TransactionInformation": "Leisure & Self-Care",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "233.31",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Gym membership",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "138",
+                "TransactionReference": "Ref 16",
+                "Amount": {
+                    "Amount": "10.59",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-21T12:00:00+00:00",
+                "ValueDateTime": "2019-10-21T12:00:00+00:00",
+                "TransactionInformation": "Medical",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "222.72",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Boots",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "139",
+                "TransactionReference": "Ref 17",
+                "Amount": {
+                    "Amount": "6.49",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-21T17:00:00+00:00",
+                "ValueDateTime": "2019-10-21T19:00:00+00:00",
+                "TransactionInformation": "Fashion & Cosmetics",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "216.23",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Superdrug",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "140",
+                "TransactionReference": "Ref 18",
+                "Amount": {
+                    "Amount": "1005.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-22T9:00:00+00:00",
+                "ValueDateTime": "2019-10-22T10:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "788.77",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Rent",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "141",
+                "TransactionReference": "Ref 19",
+                "Amount": {
+                    "Amount": "2150.12",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-24T13:00:00+00:00",
+                "ValueDateTime": "2019-10-24T13:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1361.35",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "UCL Salary",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "142",
+                "TransactionReference": "Ref 20",
+                "Amount": {
+                    "Amount": "29.54",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-25T12:00:00+00:00",
+                "ValueDateTime": "2019-10-25T12:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1331.81",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "143",
+                "TransactionReference": "Ref 21",
+                "Amount": {
+                    "Amount": "6.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-27T3:00:00+00:00",
+                "ValueDateTime": "2019-10-27T3:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1325.81",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "PoundLand",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "144",
+                "TransactionReference": "Ref 22",
+                "Amount": {
+                    "Amount": "4.30",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-28T16:00:00+00:00",
+                "ValueDateTime": "2019-10-28T18:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1321.51",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Tesco",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "145",
+                "TransactionReference": "Ref 23",
+                "Amount": {
+                    "Amount": "35.70",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-10-31T11:00:00+00:00",
+                "ValueDateTime": "2019-10-31T13:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1285.81",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "ASDA",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "146",
+                "TransactionReference": "Ref 24",
+                "Amount": {
+                    "Amount": "125.24",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-02T10:00:00+00:00",
+                "ValueDateTime": "2019-11-02T12:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1160.57",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Npower Gas & Eelctricity",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "147",
+                "TransactionReference": "Ref 25",
+                "Amount": {
+                    "Amount": "30.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-03T2:00:00+00:00",
+                "ValueDateTime": "2019-11-03T3:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1130.57",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "CASH ATM",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "148",
+                "TransactionReference": "Ref 26",
+                "Amount": {
+                    "Amount": "96.40",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-04T5:00:00+00:00",
+                "ValueDateTime": "2019-11-04T6:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1034.17",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Royal China",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "149",
+                "TransactionReference": "Ref 27",
+                "Amount": {
+                    "Amount": "78.20",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-05T3:00:00+00:00",
+                "ValueDateTime": "2019-11-05T3:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1112.37",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Cash from Friends",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "150",
+                "TransactionReference": "Ref 28",
+                "Amount": {
+                    "Amount": "37.30",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-06T9:00:00+00:00",
+                "ValueDateTime": "2019-11-06T11:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1075.07",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Waitrose",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "151",
+                "TransactionReference": "Ref 29",
+                "Amount": {
+                    "Amount": "10.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-07T15:00:00+00:00",
+                "ValueDateTime": "2019-11-07T17:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1065.07",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "VOXI Mobile",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "152",
+                "TransactionReference": "Ref 30",
+                "Amount": {
+                    "Amount": "4.20",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-07T13:00:00+00:00",
+                "ValueDateTime": "2019-11-07T13:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1060.87",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Wasabi",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "153",
+                "TransactionReference": "Ref 31",
+                "Amount": {
+                    "Amount": "14.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-10T1:00:00+00:00",
+                "ValueDateTime": "2019-11-10T3:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1046.87",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Ippudo",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "154",
+                "TransactionReference": "Ref 32",
+                "Amount": {
+                    "Amount": "6.49",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-12T7:00:00+00:00",
+                "ValueDateTime": "2019-11-12T8:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1040.38",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "McDonald's",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "155",
+                "TransactionReference": "Ref 33",
+                "Amount": {
+                    "Amount": "4.20",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-13T16:00:00+00:00",
+                "ValueDateTime": "2019-11-13T17:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1036.18",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Chatime",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "156",
+                "TransactionReference": "Ref 34",
+                "Amount": {
+                    "Amount": "25.30",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-13T14:00:00+00:00",
+                "ValueDateTime": "2019-11-13T15:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1010.88",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "ASDA",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "157",
+                "TransactionReference": "Ref 35",
+                "Amount": {
+                    "Amount": "4.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-17T16:00:00+00:00",
+                "ValueDateTime": "2019-11-17T18:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1006.38",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "CoCo",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "158",
+                "TransactionReference": "Ref 36",
+                "Amount": {
+                    "Amount": "34.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-18T5:00:00+00:00",
+                "ValueDateTime": "2019-11-18T6:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "972.38",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "159",
+                "TransactionReference": "Ref 37",
+                "Amount": {
+                    "Amount": "15.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-19T5:00:00+00:00",
+                "ValueDateTime": "2019-11-19T7:00:00+00:00",
+                "TransactionInformation": "Transport",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "957.38",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "TFL Travel",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "160",
+                "TransactionReference": "Ref 38",
+                "Amount": {
+                    "Amount": "45.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-21T13:00:00+00:00",
+                "ValueDateTime": "2019-11-21T14:00:00+00:00",
+                "TransactionInformation": "Leisure & Self-Care",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "912.38",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Gym membership",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "161",
+                "TransactionReference": "Ref 39",
+                "Amount": {
+                    "Amount": "1005.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-22T14:00:00+00:00",
+                "ValueDateTime": "2019-11-22T14:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "92.62",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Rent",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "162",
+                "TransactionReference": "Ref 40",
+                "Amount": {
+                    "Amount": "4.20",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-23T5:00:00+00:00",
+                "ValueDateTime": "2019-11-23T6:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "96.82",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Wasabi",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "163",
+                "TransactionReference": "Ref 41",
+                "Amount": {
+                    "Amount": "2150.12",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-24T3:00:00+00:00",
+                "ValueDateTime": "2019-11-24T3:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2053.30",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "UCL Salary",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "164",
+                "TransactionReference": "Ref 42",
+                "Amount": {
+                    "Amount": "36.10",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-24T1:00:00+00:00",
+                "ValueDateTime": "2019-11-24T1:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2017.20",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Waitrose",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "165",
+                "TransactionReference": "Ref 43",
+                "Amount": {
+                    "Amount": "6.79",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-27T3:00:00+00:00",
+                "ValueDateTime": "2019-11-27T5:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2010.41",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "KFC",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "166",
+                "TransactionReference": "Ref 44",
+                "Amount": {
+                    "Amount": "17.80",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-29T7:00:00+00:00",
+                "ValueDateTime": "2019-11-29T8:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1992.61",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "167",
+                "TransactionReference": "Ref 45",
+                "Amount": {
+                    "Amount": "14.80",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-11-30T13:00:00+00:00",
+                "ValueDateTime": "2019-11-30T15:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1977.81",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Four Seasons",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "168",
+                "TransactionReference": "Ref 46",
+                "Amount": {
+                    "Amount": "125.24",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-02T6:00:00+00:00",
+                "ValueDateTime": "2019-12-02T6:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1852.57",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Npower Gas & Eelctricity",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "169",
+                "TransactionReference": "Ref 47",
+                "Amount": {
+                    "Amount": "10.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-07T20:00:00+00:00",
+                "ValueDateTime": "2019-12-07T22:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1842.57",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "VOXI Mobile",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "170",
+                "TransactionReference": "Ref 48",
+                "Amount": {
+                    "Amount": "68.30",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-07T1:00:00+00:00",
+                "ValueDateTime": "2019-12-07T3:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1774.27",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "171",
+                "TransactionReference": "Ref 49",
+                "Amount": {
+                    "Amount": "18.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-08T4:00:00+00:00",
+                "ValueDateTime": "2019-12-08T5:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1756.27",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Kanada-Ya",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "172",
+                "TransactionReference": "Ref 50",
+                "Amount": {
+                    "Amount": "18.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-08T7:00:00+00:00",
+                "ValueDateTime": "2019-12-08T8:00:00+00:00",
+                "TransactionInformation": "Entertainment",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1738.27",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "ODEON",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "173",
+                "TransactionReference": "Ref 51",
+                "Amount": {
+                    "Amount": "3.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-13T19:00:00+00:00",
+                "ValueDateTime": "2019-12-13T19:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1741.77",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Lottery Win",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "174",
+                "TransactionReference": "Ref 52",
+                "Amount": {
+                    "Amount": "35.70",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-13T1:00:00+00:00",
+                "ValueDateTime": "2019-12-13T1:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1706.07",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Waitrose",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "175",
+                "TransactionReference": "Ref 53",
+                "Amount": {
+                    "Amount": "21.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-14T21:00:00+00:00",
+                "ValueDateTime": "2019-12-14T22:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1684.57",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "176",
+                "TransactionReference": "Ref 54",
+                "Amount": {
+                    "Amount": "4.59",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-17T21:00:00+00:00",
+                "ValueDateTime": "2019-12-17T23:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1679.98",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "McDonald's",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "177",
+                "TransactionReference": "Ref 55",
+                "Amount": {
+                    "Amount": "10.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-19T4:00:00+00:00",
+                "ValueDateTime": "2019-12-19T4:00:00+00:00",
+                "TransactionInformation": "Charity",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1669.98",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Charity Donation",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "178",
+                "TransactionReference": "Ref 56",
+                "Amount": {
+                    "Amount": "45.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-21T19:00:00+00:00",
+                "ValueDateTime": "2019-12-21T19:00:00+00:00",
+                "TransactionInformation": "Leisure & Self-Care",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1624.98",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Gym membership",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "179",
+                "TransactionReference": "Ref 57",
+                "Amount": {
+                    "Amount": "48.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-21T9:00:00+00:00",
+                "ValueDateTime": "2019-12-21T9:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1576.48",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "180",
+                "TransactionReference": "Ref 58",
+                "Amount": {
+                    "Amount": "1005.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-22T15:00:00+00:00",
+                "ValueDateTime": "2019-12-22T17:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "571.48",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Rent",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "181",
+                "TransactionReference": "Ref 59",
+                "Amount": {
+                    "Amount": "15.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-23T1:00:00+00:00",
+                "ValueDateTime": "2019-12-23T2:00:00+00:00",
+                "TransactionInformation": "Transport",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "556.48",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "TFL Travel",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "182",
+                "TransactionReference": "Ref 60",
+                "Amount": {
+                    "Amount": "2150.12",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-24T20:00:00+00:00",
+                "ValueDateTime": "2019-12-24T22:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2706.60",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "UCL Salary",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "183",
+                "TransactionReference": "Ref 61",
+                "Amount": {
+                    "Amount": "3.59",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-27T4:00:00+00:00",
+                "ValueDateTime": "2019-12-27T6:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2703.01",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "McDonald's",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "184",
+                "TransactionReference": "Ref 62",
+                "Amount": {
+                    "Amount": "50.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-29T21:00:00+00:00",
+                "ValueDateTime": "2019-12-29T23:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2653.01",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "CASH ATM",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "185",
+                "TransactionReference": "Ref 63",
+                "Amount": {
+                    "Amount": "13.70",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2019-12-30T19:00:00+00:00",
+                "ValueDateTime": "2019-12-30T21:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2666.71",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Waitrose",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "186",
+                "TransactionReference": "Ref 64",
+                "Amount": {
+                    "Amount": "22.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-01T14:00:00+00:00",
+                "ValueDateTime": "2020-01-01T16:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2644.21",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "187",
+                "TransactionReference": "Ref 65",
+                "Amount": {
+                    "Amount": "125.24",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-02T18:00:00+00:00",
+                "ValueDateTime": "2020-01-02T18:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2518.97",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Npower Gas & Eelctricity",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "188",
+                "TransactionReference": "Ref 66",
+                "Amount": {
+                    "Amount": "24.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-04T10:00:00+00:00",
+                "ValueDateTime": "2020-01-04T12:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2494.97",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "KFC",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "189",
+                "TransactionReference": "Ref 67",
+                "Amount": {
+                    "Amount": "40.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-06T9:00:00+00:00",
+                "ValueDateTime": "2020-01-06T10:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2454.97",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "CASH ATM",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "190",
+                "TransactionReference": "Ref 68",
+                "Amount": {
+                    "Amount": "18.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-06T4:00:00+00:00",
+                "ValueDateTime": "2020-01-06T5:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2472.97",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Cash from Friends",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "191",
+                "TransactionReference": "Ref 69",
+                "Amount": {
+                    "Amount": "14.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-06T1:00:00+00:00",
+                "ValueDateTime": "2020-01-06T3:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2458.97",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Domino's",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "192",
+                "TransactionReference": "Ref 70",
+                "Amount": {
+                    "Amount": "37.40",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-07T11:00:00+00:00",
+                "ValueDateTime": "2020-01-07T12:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2421.57",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "193",
+                "TransactionReference": "Ref 71",
+                "Amount": {
+                    "Amount": "10.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-07T12:00:00+00:00",
+                "ValueDateTime": "2020-01-07T13:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2411.57",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "VOXI Mobile",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "194",
+                "TransactionReference": "Ref 72",
+                "Amount": {
+                    "Amount": "6.50",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-08T18:00:00+00:00",
+                "ValueDateTime": "2020-01-08T20:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2405.07",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Shake Shack",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "195",
+                "TransactionReference": "Ref 73",
+                "Amount": {
+                    "Amount": "1246.80",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-09T2:00:00+00:00",
+                "ValueDateTime": "2020-01-09T4:00:00+00:00",
+                "TransactionInformation": "Finances",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1158.27",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Credit Card VISA",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "196",
+                "TransactionReference": "Ref 74",
+                "Amount": {
+                    "Amount": "18.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-10T11:00:00+00:00",
+                "ValueDateTime": "2020-01-10T11:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1140.27",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Five Guys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "197",
+                "TransactionReference": "Ref 75",
+                "Amount": {
+                    "Amount": "45.30",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-12T11:00:00+00:00",
+                "ValueDateTime": "2020-01-12T12:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1094.97",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Sainsburys",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "198",
+                "TransactionReference": "Ref 76",
+                "Amount": {
+                    "Amount": "1005.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-22T11:00:00+00:00",
+                "ValueDateTime": "2020-01-22T11:00:00+00:00",
+                "TransactionInformation": "Bills & Payments",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "89.97",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Rent",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "199",
+                "TransactionReference": "Ref 77",
+                "Amount": {
+                    "Amount": "5.91",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-21T11:00:00+00:00",
+                "ValueDateTime": "2020-01-21T13:00:00+00:00",
+                "TransactionInformation": "Food",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "84.06",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "LEON",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "200",
+                "TransactionReference": "Ref 78",
+                "Amount": {
+                    "Amount": "37.90",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-23T19:00:00+00:00",
+                "ValueDateTime": "2020-01-23T19:00:00+00:00",
+                "TransactionInformation": "Groceries",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "46.16",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "ASDA",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "201",
+                "TransactionReference": "Ref 79",
+                "Amount": {
+                    "Amount": "2150.12",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-24T15:00:00+00:00",
+                "ValueDateTime": "2020-01-24T16:00:00+00:00",
+                "TransactionInformation": "Uncategorised",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2196.28",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "UCL Salary",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "202",
+                "TransactionReference": "Ref 80",
+                "Amount": {
+                    "Amount": "45.00",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-24T18:00:00+00:00",
+                "ValueDateTime": "2020-01-24T20:00:00+00:00",
+                "TransactionInformation": "Leisure & Self-Care",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "2151.28",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Gym membership",
+                    "MerchantCategoryCode": "5411"
+                }
+            },
+            {
+                "AccountId": "22289",
+                "TransactionId": "203",
+                "TransactionReference": "Ref 81",
+                "Amount": {
+                    "Amount": "670.84",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Status": "Booked",
+                "BookingDateTime": "2020-01-27T19:00:00+00:00",
+                "ValueDateTime": "2020-01-27T20:00:00+00:00",
+                "TransactionInformation": "Finances",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Amount": {
+                        "Amount": "1480.44",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Debit",
+                    "Type": "InterimBooked"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Credit Card AMEX",
+                    "MerchantCategoryCode": "5411"
+                }
+            }
+        ],
+        "DirectDebit": [
+            {
+                "AccountId": "22289",
+                "DirectDebitId": "DD03",
+                "MandateIdentification": "Npower Gas & Eelctricity",
+                "DirectDebitStatusCode": "Active",
+                "Name": "Gas Bill",
+                "PreviousPaymentDateTime": "2019-10-02T14:22:09+00:00",
+                "PreviousPaymentAmount": {
+                    "Amount": "125.24",
+                    "Currency": "GBP"
+                }
+            }
+        ],
+        "Product": [
+            {
+                "AccountId": "22289",
+                "ProductType": "PersonalCurrentAccount",
+                "ProductName": "Nationwide FlexDirect",
+                "PCA": {
+                    "CreditInterest": {
+                        "TierBandSet": {
+                            "TierBandMethod": "Tiered",
+                            "CalculationMethod": "Compound",
+                            "Notes": [
+                                "From the 11th June 2017, we will be changing how we pat credit interest on our Bank of Scotland current accounts with Vantage.",
+                                "We are replacing the current tiered rates with a single interest rate of 2% AER(1.98% gross) (variable) on credit balances between \u00c2\u00a31 and \u00c2\u00a35,000. Depending on the balance of your account this may be an increase or decrease to the rate your currently receive."
+                            ],
+                            "TierBand": [
+                                {
+                                    "Identification": "1",
+                                    "TierValueMinimum": "1.00",
+                                    "TierValueMaximum": "999.99",
+                                    "CalculationFrequency": "Monthly",
+                                    "ApplicationFrequency": "Monthly",
+                                    "DepositInterestAppliedCoverage": "Tiered",
+                                    "FixedVariableInterestRateType": "Variable",
+                                    "AER": "1.50",
+                                    "BankInterestRateType": "Gross"
+                                },
+                                {
+                                    "Identification": "2",
+                                    "TierValueMinimum": "1000.00",
+                                    "TierValueMaximum": "2999.99",
+                                    "CalculationFrequency": "Monthly",
+                                    "ApplicationFrequency": "Monthly",
+                                    "DepositInterestAppliedCoverage": "Tiered",
+                                    "FixedVariableInterestRateType": "Variable",
+                                    "AER": "2.00",
+                                    "BankInterestRateType": "Gross"
+                                },
+                                {
+                                    "TierValueMinimum": "3000.00",
+                                    "TierValueMaximum": "5000.00",
+                                    "CalculationFrequency": "Monthly",
+                                    "ApplicationFrequency": "Monthly",
+                                    "DepositInterestAppliedCoverage": "Tiered",
+                                    "FixedVariableInterestRateType": "Variable",
+                                    "AER": "3.00",
+                                    "BankInterestRateType": "Gross"
+                                }
+                            ]
+                        }
+                    },
+                    "Overdraft": {
+                        "OverdraftTierBandSet": [
+                            {
+                                "TierBandMethod": "Whole",
+                                "Identification": "Arranged Overdraft",
+                                "OverdraftFeesCharges": [
+                                    {
+                                        "OverdraftFeeChargeCap": [
+                                            {
+                                                "CappingPeriod": "Month",
+                                                "FeeType": [
+                                                    "UnauthorisedBorrowing"
+                                                ],
+                                                "FeeMinMaxType": "Maximum",
+                                                "FeeCapAmount": "60.00"
+                                            },
+                                            {
+                                                "CappingPeriod": "Month",
+                                                "FeeType": [
+                                                    "BorrowingItem"
+                                                ],
+                                                "FeeMinMaxType": "Maximum",
+                                                "FeeCapAmount": "35.00"
+                                            }
+                                        ],
+                                        "OverdraftFeeChargeDetail": [
+                                            {
+                                                "ApplicationFrequency": "Monthly",
+                                                "FeeType": "ArrangedOverdraft",
+                                                "CalculationFrequency": "Daily",
+                                                "FeeAmount": "0.50"
+                                            },
+                                            {
+                                                "ApplicationFrequency": "Monthly",
+                                                "FeeType": "UnauthorisedBorrowing",
+                                                "CalculationFrequency": "Daily",
+                                                "FeeAmount": "5.00"
+                                            },
+                                            {
+                                                "ApplicationFrequency": "Monthly",
+                                                "FeeType": "BorrowingItem",
+                                                "CalculationFrequency": "Daily",
+                                                "FeeAmount": "5.00"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "BufferAmount": "10.00",
+                                "Notes": [
+                                    "The daily usage fee-free overdraft period is for 12 months starting on the date you open a Current Account with us."
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    "Links": {
+        "Self": "https://api.alphabank.com/open-banking/v3.1/aisp/transactions"
+    },
+    "Meta": {
+        "TotalPages": 1,
+        "FirstAvailableDateTime": "2017-05-03T00:00:00+00:00",
+        "LastAvailableDateTime": "2017-12-03T00:00:00+00:00"
+    }
+}

@@ -25,21 +25,18 @@ def home(request):
         #     'Currency': 'and try again',
         # }]}
         return render(request, 'transactions/home.html')
-    bpList, tpList, groceryList, electronicsList, fcList, financesList = [], [], [], [], [], []
-    foodList, genList, charityList, entertainmentList, lsList, medList, uncatList = [], [], [], [], [], [], []
+    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
+    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
     context = {
         "one": bpList,
         "two": tpList,
         "three": groceryList,
-        "four": electronicsList,
-        "five": fcList,
-        "six": financesList,
-        "seven": foodList,
-        "eight": genList,
-        "nine": charityList,
-        "ten": entertainmentList,
-        "eleven": lsList,
-        "twelve": medList,
+        "four": fcList,
+        "five": financesList,
+        "six": foodList,
+        "seven": genList,
+        "eight": entertainmentList,
+        "nine": lsList,
         "zero": uncatList
     }
     for transaction in getRows(accountid):

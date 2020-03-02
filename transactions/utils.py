@@ -15,42 +15,74 @@ def getRows(accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
     row = []
     transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
+  ####### code that works with vm
   # for i in range(len(accountID)):
   #   id = str(accountID[i])
   #   res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
   #   if (res.status_code == 404):
   #     continue
     # a = json.loads(res.text)
-    for account in accountID:
-        with open(os.path.join(sys.path[0], "aux_files/"+account+".json"), 'r') as data:
-            jsondata = json.load(data)
-            a = json.loads(jsondata)
-        print(a)
-        for transaction in a['Transaction']:
-            collecting = {
-                'BookingDateTime': '',
-                'TransactionInformation': '',
-                'Amount': '',
-                'Currency': '',
-                'MCC': ''
-            }
-            for attribute in transactionAttributes:
-                if attribute == "MCC":
-                    collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
-                    continue
-                if ((attribute == "Amount") or (attribute == "Currency")):
-                    collecting[attribute] = transaction['Amount'][str(attribute)]
-                    if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
-                        continue
-                    if transaction["CreditDebitIndicator"] == "Debit":
-                        collecting['Amount'] = "-" + collecting['Amount']
-                    elif transaction["CreditDebitIndicator"] == "Credit":
-                        collecting['Amount'] = "+" + collecting['Amount']
-                else:
-                    collecting[attribute] = transaction[str(attribute)]
-                if (collecting not in row):
-                    row.append(collecting)
-    print(row)
+
+####### code written by yuheng, works same way as online code with local files
+    # for account in accountID:
+    #     with open(os.path.join(sys.path[0], "aux_files/"+account+".json"), 'r') as data:
+    #         jsondata = json.load(data)
+    #         a = json.loads(jsondata)
+    #     print(a)
+    #     for transaction in a['Transaction']:
+    #         collecting = {
+    #             'BookingDateTime': '',
+    #             'TransactionInformation': '',
+    #             'Amount': '',
+    #             'Currency': '',
+    #             'MCC': ''
+    #         }
+    #         for attribute in transactionAttributes:
+    #             if attribute == "MCC":
+    #                 collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
+    #                 continue
+    #             if ((attribute == "Amount") or (attribute == "Currency")):
+    #                 collecting[attribute] = transaction['Amount'][str(attribute)]
+    #                 if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
+    #                     continue
+    #                 if transaction["CreditDebitIndicator"] == "Debit":
+    #                     collecting['Amount'] = "-" + collecting['Amount']
+    #                 elif transaction["CreditDebitIndicator"] == "Credit":
+    #                     collecting['Amount'] = "+" + collecting['Amount']
+    #             else:
+    #                 collecting[attribute] = transaction[str(attribute)]
+    #             if (collecting not in row):
+    #                 row.append(collecting)
+    # print(row)
+    # return row
+
+    ##### Raghib code, easier debugging
+    with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
+        a = json.load(data)
+    for transaction in a['Data']['Transaction']:
+      collecting = {
+        'BookingDateTime': '',
+        'TransactionInformation': '',
+        'Amount': '',
+        'Currency': '',
+        'MCC': ''
+      }
+      for attribute in transactionAttributes:
+        if attribute == "MCC":
+            collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
+            continue
+        if ((attribute == "Amount") or (attribute == "Currency")):
+            collecting[attribute] = transaction['Amount'][str(attribute)]
+            if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
+                continue
+            if transaction["CreditDebitIndicator"] == "Debit":
+                collecting['Amount'] = "-" + collecting['Amount']
+            elif transaction["CreditDebitIndicator"] == "Credit":
+                collecting['Amount'] = "+" + collecting['Amount']
+        else:
+          collecting[attribute] = transaction[str(attribute)]
+        if (collecting not in row):
+            row.append(collecting)
     return row
 
 def addToAccountList(request, addedAccount):
@@ -63,13 +95,12 @@ def addToAccountList(request, addedAccount):
 	print(request.user.profile.getAccount()[0])
 
 def getDataForAccount(accountID):
-    #me = auth.HTTPDigestAuth("admin", "admin")
-    #print("Run")
-    #res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/data.json", auth = me)
-    #if (res.status_code == 404):
-    #    return False
-    with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
-        a = json.load(data)
+    me = auth.HTTPDigestAuth("admin", "admin")
+    print("Run")
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/data.json", auth = me)
+    if (res.status_code == 404):
+        return False
+    a = json.loads(res.text)
     resultDic = {}
     for key in a['Data']:
         current= []
@@ -83,12 +114,10 @@ def getDataForAccount(accountID):
             resultDic[key] = current
     result = json.dumps(resultDic)
     print(type(result))
-    with open(os.path.join(sys.path[0], "aux_files/"+accountID+".json"), 'w') as outfile:
-        json.dump(result, outfile)
-    #url = "http://51.104.239.212:8060/v1/documents?uri=/documents/"+accountID+".json"
-    #headers = {'Content-Type': 'application/json'}
-    #r = requests.put(url, data=json.dumps(result), headers=headers, auth = me)
-    #print(r.status_code)
+    url = "http://51.104.239.212:8060/v1/documents?uri=/documents/"+accountID+".json"
+    headers = {'Content-Type': 'application/json'}
+    r = requests.put(url, data=json.dumps(result), headers=headers, auth = me)
+    print(r.status_code)
 
 def getAverageSpending(testDate, accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
@@ -142,21 +171,6 @@ def prediction(testDate, accountID):
 
 def getCategory(mcc):
     reader = csv.reader(open(os.path.join(sys.path[0], "aux_files/MCC_CatId.csv"), 'r'))
-    # catDict = {
-    #     "1": "Bills & Payments",
-    #     "2": "Transport",
-    #     "3": "Groceries",
-    #     "4": "Electronics",
-    #     "5": "Fashion & Cosmetics",
-    #     "6": "Finances",
-    #     "7": "Food",
-    #     "8": "General",
-    #     "9": "Charity",
-    #     "10": "Entertainment",
-    #     "11": "Leisure & Self-Care",
-    #     "12": "Medical",
-    #     "0": "Uncategorised"
-    # }
     getLetters = {
         "1": "one",
         "2": "two",

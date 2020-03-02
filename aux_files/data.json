@@ -31,15 +31,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-02T1:00:00+00:00",
-                "ValueDateTime": "2019-10-02T2:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-10-02T14:00:00+00:00",
+                "ValueDateTime": "2019-10-02T16:00:00+00:00",
+                "TransactionInformation": "Npower Gas & Electricity",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -51,8 +52,8 @@
                     "Type": "InterimBooked"
                 },
                 "MerchantDetails": {
-                    "MerchantName": "Npower Gas & Electricity",
-                    "MerchantCategoryCode": "5074"
+                    "MerchantName": "Npower Gas & Eelctricity",
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -65,9 +66,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-03T1:00:00+00:00",
-                "ValueDateTime": "2019-10-03T3:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-03T16:00:00+00:00",
+                "ValueDateTime": "2019-10-03T17:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -99,9 +100,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-06T11:00:00+00:00",
-                "ValueDateTime": "2019-10-06T13:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-10-06T16:00:00+00:00",
+                "ValueDateTime": "2019-10-06T16:00:00+00:00",
+                "TransactionInformation": "McDonald's",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -133,15 +134,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-07T2:00:00+00:00",
-                "ValueDateTime": "2019-10-07T4:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-10-07T19:00:00+00:00",
+                "ValueDateTime": "2019-10-07T20:00:00+00:00",
+                "TransactionInformation": "VOXI Mobile",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -154,7 +156,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "VOXI Mobile",
-                    "MerchantCategoryCode": "2842"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -167,9 +169,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-07T12:00:00+00:00",
-                "ValueDateTime": "2019-10-07T14:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-10-07T18:00:00+00:00",
+                "ValueDateTime": "2019-10-07T20:00:00+00:00",
+                "TransactionInformation": "eat TOKYO",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -188,7 +190,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "eat TOKYO",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -201,9 +203,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-07T21:00:00+00:00",
-                "ValueDateTime": "2019-10-07T21:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-10-07T12:00:00+00:00",
+                "ValueDateTime": "2019-10-07T13:00:00+00:00",
+                "TransactionInformation": "Cash from Friends",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -222,7 +224,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Cash from Friends",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6531"
                 }
             },
             {
@@ -235,9 +237,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-08T0:00:00+00:00",
-                "ValueDateTime": "2019-10-08T0:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-08T13:00:00+00:00",
+                "ValueDateTime": "2019-10-08T14:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -269,9 +271,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-08T0:00:00+00:00",
-                "ValueDateTime": "2019-10-08T1:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-08T17:00:00+00:00",
+                "ValueDateTime": "2019-10-08T17:00:00+00:00",
+                "TransactionInformation": "Waitrose",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -303,9 +305,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-09T1:00:00+00:00",
-                "ValueDateTime": "2019-10-09T3:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-09T20:00:00+00:00",
+                "ValueDateTime": "2019-10-09T21:00:00+00:00",
+                "TransactionInformation": "Longdan",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -337,9 +339,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-10T9:00:00+00:00",
-                "ValueDateTime": "2019-10-10T10:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-10-10T16:00:00+00:00",
+                "ValueDateTime": "2019-10-10T17:00:00+00:00",
+                "TransactionInformation": "Cash from Friends",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -358,7 +360,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Cash from Friends",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6531"
                 }
             },
             {
@@ -371,9 +373,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-12T0:00:00+00:00",
-                "ValueDateTime": "2019-10-12T1:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-10-12T1:00:00+00:00",
+                "ValueDateTime": "2019-10-12T2:00:00+00:00",
+                "TransactionInformation": "Roti King",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -392,7 +394,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Roti King",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -405,9 +407,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-14T20:00:00+00:00",
-                "ValueDateTime": "2019-10-14T20:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-14T6:00:00+00:00",
+                "ValueDateTime": "2019-10-14T8:00:00+00:00",
+                "TransactionInformation": "LIDL",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -439,9 +441,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-16T4:00:00+00:00",
-                "ValueDateTime": "2019-10-16T6:00:00+00:00",
-                "TransactionInformation": "Entertainment",
+                "BookingDateTime": "2019-10-16T1:00:00+00:00",
+                "ValueDateTime": "2019-10-16T3:00:00+00:00",
+                "TransactionInformation": "ODEON",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -460,7 +462,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "ODEON",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -473,9 +475,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-19T9:00:00+00:00",
-                "ValueDateTime": "2019-10-19T10:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-19T12:00:00+00:00",
+                "ValueDateTime": "2019-10-19T14:00:00+00:00",
+                "TransactionInformation": "ASDA",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -507,15 +509,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-21T0:00:00+00:00",
-                "ValueDateTime": "2019-10-21T0:00:00+00:00",
-                "TransactionInformation": "Leisure & Self-Care",
+                "BookingDateTime": "2019-10-21T16:00:00+00:00",
+                "ValueDateTime": "2019-10-21T17:00:00+00:00",
+                "TransactionInformation": "Gym membership",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -528,7 +531,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Gym membership",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -541,9 +544,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-21T12:00:00+00:00",
-                "ValueDateTime": "2019-10-21T12:00:00+00:00",
-                "TransactionInformation": "Medical",
+                "BookingDateTime": "2019-10-21T18:00:00+00:00",
+                "ValueDateTime": "2019-10-21T19:00:00+00:00",
+                "TransactionInformation": "Boots",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -562,7 +565,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Boots",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "8099"
                 }
             },
             {
@@ -575,9 +578,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-21T17:00:00+00:00",
-                "ValueDateTime": "2019-10-21T19:00:00+00:00",
-                "TransactionInformation": "Fashion & Cosmetics",
+                "BookingDateTime": "2019-10-21T20:00:00+00:00",
+                "ValueDateTime": "2019-10-21T22:00:00+00:00",
+                "TransactionInformation": "Superdrug",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -596,7 +599,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Superdrug",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "8099"
                 }
             },
             {
@@ -609,15 +612,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-22T9:00:00+00:00",
-                "ValueDateTime": "2019-10-22T10:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-10-22T0:00:00+00:00",
+                "ValueDateTime": "2019-10-22T2:00:00+00:00",
+                "TransactionInformation": "Rent",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -630,7 +634,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Rent",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -643,9 +647,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-24T13:00:00+00:00",
-                "ValueDateTime": "2019-10-24T13:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-10-24T3:00:00+00:00",
+                "ValueDateTime": "2019-10-24T5:00:00+00:00",
+                "TransactionInformation": "UCL Salary",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -664,7 +668,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "UCL Salary",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6532"
                 }
             },
             {
@@ -677,9 +681,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-25T12:00:00+00:00",
-                "ValueDateTime": "2019-10-25T12:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-25T5:00:00+00:00",
+                "ValueDateTime": "2019-10-25T7:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -711,9 +715,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-27T3:00:00+00:00",
+                "BookingDateTime": "2019-10-27T2:00:00+00:00",
                 "ValueDateTime": "2019-10-27T3:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "TransactionInformation": "PoundLand",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -745,9 +749,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-28T16:00:00+00:00",
-                "ValueDateTime": "2019-10-28T18:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-28T2:00:00+00:00",
+                "ValueDateTime": "2019-10-28T3:00:00+00:00",
+                "TransactionInformation": "Tesco",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -779,9 +783,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-10-31T11:00:00+00:00",
-                "ValueDateTime": "2019-10-31T13:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-10-31T2:00:00+00:00",
+                "ValueDateTime": "2019-10-31T3:00:00+00:00",
+                "TransactionInformation": "ASDA",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -813,15 +817,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-02T10:00:00+00:00",
-                "ValueDateTime": "2019-11-02T12:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-11-02T8:00:00+00:00",
+                "ValueDateTime": "2019-11-02T9:00:00+00:00",
+                "TransactionInformation": "Npower Gas & Eelctricity",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -834,7 +839,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Npower Gas & Eelctricity",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -847,9 +852,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-03T2:00:00+00:00",
-                "ValueDateTime": "2019-11-03T3:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-11-03T15:00:00+00:00",
+                "ValueDateTime": "2019-11-03T15:00:00+00:00",
+                "TransactionInformation": "CASH ATM",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -868,7 +873,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "CASH ATM",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6010"
                 }
             },
             {
@@ -881,9 +886,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-04T5:00:00+00:00",
-                "ValueDateTime": "2019-11-04T6:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-04T18:00:00+00:00",
+                "ValueDateTime": "2019-11-04T20:00:00+00:00",
+                "TransactionInformation": "Royal China",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -902,7 +907,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Royal China",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -915,9 +920,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-05T3:00:00+00:00",
-                "ValueDateTime": "2019-11-05T3:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-11-05T17:00:00+00:00",
+                "ValueDateTime": "2019-11-05T19:00:00+00:00",
+                "TransactionInformation": "Cash from Friends",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -936,7 +941,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Cash from Friends",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6531"
                 }
             },
             {
@@ -949,9 +954,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-06T9:00:00+00:00",
-                "ValueDateTime": "2019-11-06T11:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-11-06T11:00:00+00:00",
+                "ValueDateTime": "2019-11-06T12:00:00+00:00",
+                "TransactionInformation": "Waitrose",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -983,15 +988,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-07T15:00:00+00:00",
-                "ValueDateTime": "2019-11-07T17:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-11-07T13:00:00+00:00",
+                "ValueDateTime": "2019-11-07T14:00:00+00:00",
+                "TransactionInformation": "VOXI Mobile",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -1004,7 +1010,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "VOXI Mobile",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -1017,9 +1023,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-07T13:00:00+00:00",
-                "ValueDateTime": "2019-11-07T13:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-07T10:00:00+00:00",
+                "ValueDateTime": "2019-11-07T12:00:00+00:00",
+                "TransactionInformation": "Wasabi",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1038,7 +1044,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Wasabi",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1051,9 +1057,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-10T1:00:00+00:00",
-                "ValueDateTime": "2019-11-10T3:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-10T17:00:00+00:00",
+                "ValueDateTime": "2019-11-10T17:00:00+00:00",
+                "TransactionInformation": "Ippudo",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1072,7 +1078,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Ippudo",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1085,9 +1091,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-12T7:00:00+00:00",
-                "ValueDateTime": "2019-11-12T8:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-12T2:00:00+00:00",
+                "ValueDateTime": "2019-11-12T4:00:00+00:00",
+                "TransactionInformation": "McDonald's",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1106,7 +1112,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "McDonald's",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1119,9 +1125,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-13T16:00:00+00:00",
+                "BookingDateTime": "2019-11-13T17:00:00+00:00",
                 "ValueDateTime": "2019-11-13T17:00:00+00:00",
-                "TransactionInformation": "Food",
+                "TransactionInformation": "Chatime",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1140,7 +1146,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Chatime",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1153,9 +1159,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-13T14:00:00+00:00",
-                "ValueDateTime": "2019-11-13T15:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-11-13T4:00:00+00:00",
+                "ValueDateTime": "2019-11-13T5:00:00+00:00",
+                "TransactionInformation": "ASDA",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1187,9 +1193,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-17T16:00:00+00:00",
-                "ValueDateTime": "2019-11-17T18:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-17T9:00:00+00:00",
+                "ValueDateTime": "2019-11-17T9:00:00+00:00",
+                "TransactionInformation": "CoCo",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1208,7 +1214,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "CoCo",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1221,9 +1227,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-18T5:00:00+00:00",
-                "ValueDateTime": "2019-11-18T6:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-11-18T19:00:00+00:00",
+                "ValueDateTime": "2019-11-18T21:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1255,9 +1261,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-19T5:00:00+00:00",
-                "ValueDateTime": "2019-11-19T7:00:00+00:00",
-                "TransactionInformation": "Transport",
+                "BookingDateTime": "2019-11-19T8:00:00+00:00",
+                "ValueDateTime": "2019-11-19T10:00:00+00:00",
+                "TransactionInformation": "TFL Travel",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1276,7 +1282,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "TFL Travel",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4131"
                 }
             },
             {
@@ -1289,15 +1295,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-21T13:00:00+00:00",
-                "ValueDateTime": "2019-11-21T14:00:00+00:00",
-                "TransactionInformation": "Leisure & Self-Care",
+                "BookingDateTime": "2019-11-21T5:00:00+00:00",
+                "ValueDateTime": "2019-11-21T6:00:00+00:00",
+                "TransactionInformation": "Gym membership",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -1310,7 +1317,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Gym membership",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -1323,15 +1330,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-22T14:00:00+00:00",
-                "ValueDateTime": "2019-11-22T14:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-11-22T10:00:00+00:00",
+                "ValueDateTime": "2019-11-22T11:00:00+00:00",
+                "TransactionInformation": "Rent",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -1344,7 +1352,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Rent",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -1357,9 +1365,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-23T5:00:00+00:00",
-                "ValueDateTime": "2019-11-23T6:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-23T12:00:00+00:00",
+                "ValueDateTime": "2019-11-23T13:00:00+00:00",
+                "TransactionInformation": "Wasabi",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1378,7 +1386,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Wasabi",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1391,9 +1399,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-24T3:00:00+00:00",
-                "ValueDateTime": "2019-11-24T3:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-11-24T12:00:00+00:00",
+                "ValueDateTime": "2019-11-24T12:00:00+00:00",
+                "TransactionInformation": "UCL Salary",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1412,7 +1420,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "UCL Salary",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6532"
                 }
             },
             {
@@ -1425,9 +1433,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-24T1:00:00+00:00",
-                "ValueDateTime": "2019-11-24T1:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-11-24T11:00:00+00:00",
+                "ValueDateTime": "2019-11-24T12:00:00+00:00",
+                "TransactionInformation": "Waitrose",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1459,9 +1467,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-27T3:00:00+00:00",
-                "ValueDateTime": "2019-11-27T5:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-27T9:00:00+00:00",
+                "ValueDateTime": "2019-11-27T9:00:00+00:00",
+                "TransactionInformation": "KFC",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1480,7 +1488,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "KFC",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1493,9 +1501,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-29T7:00:00+00:00",
-                "ValueDateTime": "2019-11-29T8:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-11-29T21:00:00+00:00",
+                "ValueDateTime": "2019-11-29T22:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1527,9 +1535,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-11-30T13:00:00+00:00",
-                "ValueDateTime": "2019-11-30T15:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-11-30T20:00:00+00:00",
+                "ValueDateTime": "2019-11-30T22:00:00+00:00",
+                "TransactionInformation": "Four Seasons",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1548,7 +1556,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Four Seasons",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1561,15 +1569,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-02T6:00:00+00:00",
-                "ValueDateTime": "2019-12-02T6:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-12-02T3:00:00+00:00",
+                "ValueDateTime": "2019-12-02T4:00:00+00:00",
+                "TransactionInformation": "Npower Gas & Eelctricity",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -1582,7 +1591,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Npower Gas & Eelctricity",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -1595,15 +1604,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-07T20:00:00+00:00",
-                "ValueDateTime": "2019-12-07T22:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-12-07T18:00:00+00:00",
+                "ValueDateTime": "2019-12-07T20:00:00+00:00",
+                "TransactionInformation": "VOXI Mobile",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -1616,7 +1626,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "VOXI Mobile",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -1629,9 +1639,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-07T1:00:00+00:00",
-                "ValueDateTime": "2019-12-07T3:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-12-07T21:00:00+00:00",
+                "ValueDateTime": "2019-12-07T22:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1663,9 +1673,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-08T4:00:00+00:00",
-                "ValueDateTime": "2019-12-08T5:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-12-08T1:00:00+00:00",
+                "ValueDateTime": "2019-12-08T3:00:00+00:00",
+                "TransactionInformation": "Kanada-Ya",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1684,7 +1694,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Kanada-Ya",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1697,9 +1707,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-08T7:00:00+00:00",
-                "ValueDateTime": "2019-12-08T8:00:00+00:00",
-                "TransactionInformation": "Entertainment",
+                "BookingDateTime": "2019-12-08T15:00:00+00:00",
+                "ValueDateTime": "2019-12-08T16:00:00+00:00",
+                "TransactionInformation": "ODEON",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1718,7 +1728,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "ODEON",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1731,9 +1741,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-13T19:00:00+00:00",
-                "ValueDateTime": "2019-12-13T19:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-12-13T16:00:00+00:00",
+                "ValueDateTime": "2019-12-13T16:00:00+00:00",
+                "TransactionInformation": "Lottery Win",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1752,7 +1762,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Lottery Win",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "7800"
                 }
             },
             {
@@ -1765,9 +1775,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-13T1:00:00+00:00",
-                "ValueDateTime": "2019-12-13T1:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-12-13T0:00:00+00:00",
+                "ValueDateTime": "2019-12-13T2:00:00+00:00",
+                "TransactionInformation": "Waitrose",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1799,9 +1809,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-14T21:00:00+00:00",
-                "ValueDateTime": "2019-12-14T22:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-12-14T11:00:00+00:00",
+                "ValueDateTime": "2019-12-14T11:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1834,8 +1844,8 @@
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
                 "BookingDateTime": "2019-12-17T21:00:00+00:00",
-                "ValueDateTime": "2019-12-17T23:00:00+00:00",
-                "TransactionInformation": "Food",
+                "ValueDateTime": "2019-12-17T22:00:00+00:00",
+                "TransactionInformation": "McDonald's",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1854,7 +1864,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "McDonald's",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -1867,9 +1877,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-19T4:00:00+00:00",
-                "ValueDateTime": "2019-12-19T4:00:00+00:00",
-                "TransactionInformation": "Charity",
+                "BookingDateTime": "2019-12-19T14:00:00+00:00",
+                "ValueDateTime": "2019-12-19T16:00:00+00:00",
+                "TransactionInformation": "Charity Donation",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1888,7 +1898,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Charity Donation",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "8398"
                 }
             },
             {
@@ -1901,15 +1911,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-21T19:00:00+00:00",
-                "ValueDateTime": "2019-12-21T19:00:00+00:00",
-                "TransactionInformation": "Leisure & Self-Care",
+                "BookingDateTime": "2019-12-21T9:00:00+00:00",
+                "ValueDateTime": "2019-12-21T10:00:00+00:00",
+                "TransactionInformation": "Gym membership",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -1922,7 +1933,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Gym membership",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -1935,9 +1946,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-21T9:00:00+00:00",
-                "ValueDateTime": "2019-12-21T9:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2019-12-21T21:00:00+00:00",
+                "ValueDateTime": "2019-12-21T21:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -1969,15 +1980,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-22T15:00:00+00:00",
-                "ValueDateTime": "2019-12-22T17:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2019-12-22T7:00:00+00:00",
+                "ValueDateTime": "2019-12-22T8:00:00+00:00",
+                "TransactionInformation": "Rent",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -1990,7 +2002,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Rent",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -2003,9 +2015,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-23T1:00:00+00:00",
-                "ValueDateTime": "2019-12-23T2:00:00+00:00",
-                "TransactionInformation": "Transport",
+                "BookingDateTime": "2019-12-23T10:00:00+00:00",
+                "ValueDateTime": "2019-12-23T10:00:00+00:00",
+                "TransactionInformation": "TFL Travel",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2024,7 +2036,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "TFL Travel",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4131"
                 }
             },
             {
@@ -2037,9 +2049,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-24T20:00:00+00:00",
-                "ValueDateTime": "2019-12-24T22:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-12-24T4:00:00+00:00",
+                "ValueDateTime": "2019-12-24T4:00:00+00:00",
+                "TransactionInformation": "UCL Salary",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2058,7 +2070,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "UCL Salary",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6532"
                 }
             },
             {
@@ -2071,9 +2083,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-27T4:00:00+00:00",
-                "ValueDateTime": "2019-12-27T6:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2019-12-27T21:00:00+00:00",
+                "ValueDateTime": "2019-12-27T22:00:00+00:00",
+                "TransactionInformation": "McDonald's",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2092,7 +2104,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "McDonald's",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -2105,9 +2117,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2019-12-29T21:00:00+00:00",
-                "ValueDateTime": "2019-12-29T23:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2019-12-29T2:00:00+00:00",
+                "ValueDateTime": "2019-12-29T2:00:00+00:00",
+                "TransactionInformation": "CASH ATM",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2126,7 +2138,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "CASH ATM",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6010"
                 }
             },
             {
@@ -2140,8 +2152,8 @@
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
                 "BookingDateTime": "2019-12-30T19:00:00+00:00",
-                "ValueDateTime": "2019-12-30T21:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "ValueDateTime": "2019-12-30T20:00:00+00:00",
+                "TransactionInformation": "Waitrose",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2173,9 +2185,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-01T14:00:00+00:00",
-                "ValueDateTime": "2020-01-01T16:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2020-01-01T19:00:00+00:00",
+                "ValueDateTime": "2020-01-01T21:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2207,15 +2219,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-02T18:00:00+00:00",
-                "ValueDateTime": "2020-01-02T18:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2020-01-02T10:00:00+00:00",
+                "ValueDateTime": "2020-01-02T11:00:00+00:00",
+                "TransactionInformation": "Npower Gas & Eelctricity",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -2228,7 +2241,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Npower Gas & Eelctricity",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -2241,9 +2254,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-04T10:00:00+00:00",
-                "ValueDateTime": "2020-01-04T12:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2020-01-04T19:00:00+00:00",
+                "ValueDateTime": "2020-01-04T19:00:00+00:00",
+                "TransactionInformation": "KFC",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2262,7 +2275,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "KFC",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -2276,8 +2289,8 @@
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
                 "BookingDateTime": "2020-01-06T9:00:00+00:00",
-                "ValueDateTime": "2020-01-06T10:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "ValueDateTime": "2020-01-06T9:00:00+00:00",
+                "TransactionInformation": "CASH ATM",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2296,7 +2309,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "CASH ATM",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6010"
                 }
             },
             {
@@ -2309,9 +2322,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-06T4:00:00+00:00",
-                "ValueDateTime": "2020-01-06T5:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2020-01-06T19:00:00+00:00",
+                "ValueDateTime": "2020-01-06T19:00:00+00:00",
+                "TransactionInformation": "Cash from Friends",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2330,7 +2343,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Cash from Friends",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6531"
                 }
             },
             {
@@ -2343,9 +2356,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-06T1:00:00+00:00",
-                "ValueDateTime": "2020-01-06T3:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2020-01-06T14:00:00+00:00",
+                "ValueDateTime": "2020-01-06T14:00:00+00:00",
+                "TransactionInformation": "Domino's",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2364,7 +2377,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Domino's",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -2377,9 +2390,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-07T11:00:00+00:00",
-                "ValueDateTime": "2020-01-07T12:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2020-01-07T7:00:00+00:00",
+                "ValueDateTime": "2020-01-07T9:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2411,15 +2424,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-07T12:00:00+00:00",
-                "ValueDateTime": "2020-01-07T13:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2020-01-07T2:00:00+00:00",
+                "ValueDateTime": "2020-01-07T4:00:00+00:00",
+                "TransactionInformation": "VOXI Mobile",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -2432,7 +2446,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "VOXI Mobile",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -2445,9 +2459,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-08T18:00:00+00:00",
-                "ValueDateTime": "2020-01-08T20:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2020-01-08T21:00:00+00:00",
+                "ValueDateTime": "2020-01-08T22:00:00+00:00",
+                "TransactionInformation": "Shake Shack",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2466,7 +2480,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Shake Shack",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -2480,8 +2494,8 @@
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
                 "BookingDateTime": "2020-01-09T2:00:00+00:00",
-                "ValueDateTime": "2020-01-09T4:00:00+00:00",
-                "TransactionInformation": "Finances",
+                "ValueDateTime": "2020-01-09T2:00:00+00:00",
+                "TransactionInformation": "Credit Card VISA",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2500,7 +2514,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Credit Card VISA",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "9700"
                 }
             },
             {
@@ -2513,9 +2527,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-10T11:00:00+00:00",
-                "ValueDateTime": "2020-01-10T11:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2020-01-10T20:00:00+00:00",
+                "ValueDateTime": "2020-01-10T21:00:00+00:00",
+                "TransactionInformation": "Five Guys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2534,7 +2548,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Five Guys",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -2547,9 +2561,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-12T11:00:00+00:00",
-                "ValueDateTime": "2020-01-12T12:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2020-01-12T18:00:00+00:00",
+                "ValueDateTime": "2020-01-12T20:00:00+00:00",
+                "TransactionInformation": "Sainsburys",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2576,14 +2590,14 @@
                 "TransactionId": "198",
                 "TransactionReference": "Ref 76",
                 "Amount": {
-                    "Amount": "1005.00",
+                    "Amount": "5.91",
                     "Currency": "GBP"
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-22T11:00:00+00:00",
-                "ValueDateTime": "2020-01-22T11:00:00+00:00",
-                "TransactionInformation": "Bills & Payments",
+                "BookingDateTime": "2020-01-21T4:00:00+00:00",
+                "ValueDateTime": "2020-01-21T5:00:00+00:00",
+                "TransactionInformation": "LEON",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2594,15 +2608,15 @@
                 },
                 "Balance": {
                     "Amount": {
-                        "Amount": "89.97",
+                        "Amount": "1089.06",
                         "Currency": "GBP"
                     },
                     "CreditDebitIndicator": "Debit",
                     "Type": "InterimBooked"
                 },
                 "MerchantDetails": {
-                    "MerchantName": "Rent",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantName": "LEON",
+                    "MerchantCategoryCode": "5812"
                 }
             },
             {
@@ -2610,20 +2624,21 @@
                 "TransactionId": "199",
                 "TransactionReference": "Ref 77",
                 "Amount": {
-                    "Amount": "5.91",
+                    "Amount": "1005.00",
                     "Currency": "GBP"
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-21T11:00:00+00:00",
-                "ValueDateTime": "2020-01-21T13:00:00+00:00",
-                "TransactionInformation": "Food",
+                "BookingDateTime": "2020-01-22T8:00:00+00:00",
+                "ValueDateTime": "2020-01-22T9:00:00+00:00",
+                "TransactionInformation": "Rent",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -2635,8 +2650,8 @@
                     "Type": "InterimBooked"
                 },
                 "MerchantDetails": {
-                    "MerchantName": "LEON",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantName": "Rent",
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -2649,9 +2664,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-23T19:00:00+00:00",
-                "ValueDateTime": "2020-01-23T19:00:00+00:00",
-                "TransactionInformation": "Groceries",
+                "BookingDateTime": "2020-01-23T4:00:00+00:00",
+                "ValueDateTime": "2020-01-23T5:00:00+00:00",
+                "TransactionInformation": "ASDA",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2683,9 +2698,9 @@
                 },
                 "CreditDebitIndicator": "Credit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-24T15:00:00+00:00",
-                "ValueDateTime": "2020-01-24T16:00:00+00:00",
-                "TransactionInformation": "Uncategorised",
+                "BookingDateTime": "2020-01-24T11:00:00+00:00",
+                "ValueDateTime": "2020-01-24T12:00:00+00:00",
+                "TransactionInformation": "UCL Salary",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2704,7 +2719,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "UCL Salary",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "6532"
                 }
             },
             {
@@ -2717,15 +2732,16 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-24T18:00:00+00:00",
-                "ValueDateTime": "2020-01-24T20:00:00+00:00",
-                "TransactionInformation": "Leisure & Self-Care",
+                "BookingDateTime": "2020-01-24T7:00:00+00:00",
+                "ValueDateTime": "2020-01-24T8:00:00+00:00",
+                "TransactionInformation": "Gym membership",
+                "AddressLine": "Coventry",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
-                    "SubCode": "DomesticCreditTransfer"
+                    "SubCode": "AutomaticTransfer"
                 },
                 "ProprietaryBankTransactionCode": {
-                    "Code": "Transfer",
+                    "Code": "DirectDebit",
                     "Issuer": "AlphaBank"
                 },
                 "Balance": {
@@ -2738,7 +2754,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Gym membership",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "4900"
                 }
             },
             {
@@ -2751,9 +2767,9 @@
                 },
                 "CreditDebitIndicator": "Debit",
                 "Status": "Booked",
-                "BookingDateTime": "2020-01-27T19:00:00+00:00",
-                "ValueDateTime": "2020-01-27T20:00:00+00:00",
-                "TransactionInformation": "Finances",
+                "BookingDateTime": "2020-01-27T10:00:00+00:00",
+                "ValueDateTime": "2020-01-27T12:00:00+00:00",
+                "TransactionInformation": "Credit Card AMEX",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -2772,7 +2788,7 @@
                 },
                 "MerchantDetails": {
                     "MerchantName": "Credit Card AMEX",
-                    "MerchantCategoryCode": "5411"
+                    "MerchantCategoryCode": "9700"
                 }
             }
         ],

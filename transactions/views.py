@@ -21,17 +21,51 @@ def home(request):
     #print(accountid)
     #print(type(accountid))
     if getRows(accountid) == False:
-        context = {
-            'rows': [{
-            'BookingDateTime': 'No Data Found',
-            'TransactionInformation': 'Incorrect UserID linked',
-            'Amount': 'Update accountID',
-            'Currency': 'and try again'
-        }]}
-        return render(request, 'transactions/home.html', context)
+        # context = {
+        #     'rows': [{
+        #     'BookingDateTime': 'No Data Found',
+        #     'TransactionInformation': 'Incorrect UserID linked',
+        #     'Amount': 'Update accountID',
+        #     'Currency': 'and try again',
+        # }]}
+        return render(request, 'transactions/home.html')
+    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
+    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
+    totalList = []
+    spendIndicator = []
     context = {
-        'rows': getRows(accountid)
+        "one": bpList,
+        "two": tpList,
+        "three": groceryList,
+        "four": fcList,
+        "five": financesList,
+        "six": foodList,
+        "seven": genList,
+        "eight": entertainmentList,
+        "nine": lsList,
+        "zero": uncatList,
+        "totals": totalList,
+        "spendIndicator": spendIndicator
     }
+
+    #get data from database, store into "context" dictionary
+    for transaction in getRows(accountid):
+    	context[getCategory(transaction['MCC'])].append(transaction)
+
+    #works out totals spend for each category
+    for catList in context:
+    	if catList == "totals":
+    		break;
+    	total = 0
+    	for transaction in context[catList]:
+    		total += float(transaction['Amount'])
+
+    	if (str(total)[0] == "-"):
+    		spendIndicator.append("Spent")
+    		total = total*-1.0
+    	else:
+    		spendIndicator.append("Income")
+    	totalList.append(round(float(total),2))
     return render(request, 'transactions/home.html', context)
 
 @login_required

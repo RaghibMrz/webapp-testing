@@ -7,4 +7,5 @@ urlpatterns = [
     path('transactions', views.transactions, name = 'transactions'),
     path('report', views.report, name = 'report'),
     path('help', views.help, name = 'help'),
+    path('api/chart/data', views.ChartData.as_view()),
 ]

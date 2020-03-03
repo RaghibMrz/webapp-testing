@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 import requests
 from requests import auth
@@ -8,6 +9,9 @@ from django.core.mail import send_mail
 from .forms import ContactForm
 #auxilliary file I made to hold some of the logic
 from .utils import *
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 @login_required
 def home(request):
@@ -100,3 +104,15 @@ def help(request):
 		'form' : form
 	}
 	return render(request, 'transactions/help.html', context)
+
+
+class ChartData(LoginRequiredMixin, APIView):
+	authentication_classes = []
+	permission_classes = []
+
+	def get(self, request, format = None):
+		data = {
+			"sales" : 100,
+			"customers": 10,
+		}
+		return Response(data)

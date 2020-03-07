@@ -33,6 +33,7 @@ def home(request):
     foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
     totalList = []
     spendIndicator = []
+    numOfTransactions = []
     context = {
         "one": bpList,
         "two": tpList,
@@ -45,12 +46,19 @@ def home(request):
         "nine": lsList,
         "zero": uncatList,
         "totals": totalList,
+        "count": numOfTransactions,
         "spendIndicator": spendIndicator
     }
 
     #get data from database, store into "context" dictionary
     for transaction in getRows(accountid):
     	context[getCategory(transaction['MCC'])].append(transaction)
+
+    #gets number of transactions for treemap
+    for catList in context:
+    	if (catList == "totals"):
+    		break
+    	numOfTransactions.append(len(catList))
 
     #works out totals spend for each category
     for catList in context:

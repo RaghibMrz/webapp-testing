@@ -54,7 +54,7 @@ def home(request):
     for catList in context:
     	if (catList == "totals"):
     		break
-    	numOfTransactions.append(len(catList))
+    	numOfTransactions.append(len(context[catList]))
 
     #works out totals spend for each category
     for catList in context:

@@ -867,13 +867,24 @@
             var lsTotal = "{{totals.8}}";
             var uncatTotal = "{{totals.9}}";
 
+            var bpCount = "{{count.0}}";
+            var tpCount = "{{count.1}}";
+            var groceryCount = "{{count.2}}";
+            var fcCount = "{{count.3}}";
+            var financesCount = "{{count.4}}";
+            var foodCount = "{{count.5}}";
+            var genCount = "{{count.6}}";
+            var entertainmentCount = "{{count.7}}";
+            var lsCount = "{{count.8}}";
+            var uncatCount = "{{count.9}}";
+
             var myTreeChart = new Chart(ctxTree,{
               type: 'treemap',
               data: {
                 labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                 datasets: [{
-                  label: 'Color Density: Number of Transactions    Size: Amount Spent',
-                  tree: [bpTotal, tpTotal, groceryTotal, fcTotal, financesTotal, foodTotal, genTotal, entertainmentTotal, lsTotal, uncatTotal],
+                  label: 'Color Density: Amount Spent    Size: Number of Transactions',
+                  tree: [bpCount, tpCount, groceryCount, fcCount, financesCount, foodCount, genCount, entertainmentCount, lsCount, uncatCount],
                   // fontColor: '#000000',
                   // fontFamily: 'serif',
                   // fontSize: 12,

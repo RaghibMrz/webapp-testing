@@ -55,7 +55,7 @@ def home(request):
     #works out totals spend for each category
     for catList in context:
     	if catList == "totals":
-    		break;
+    		break
     	total = 0
     	for transaction in context[catList]:
     		total += float(transaction['Amount'])
@@ -140,13 +140,15 @@ def help(request):
 	return render(request, 'transactions/help.html', context)
 
 
-class ChartData(LoginRequiredMixin, APIView):
-	authentication_classes = []
-	permission_classes = []
+# class ChartData(LoginRequiredMixin, APIView):
+# 	authentication_classes = []
+# 	permission_classes = []
 
-	def get(self, request, format = None):
-		data = {
-			"sales" : 100,
-			"customers": 10,
-		}
-		return Response(data)
+# 	def get(self, request, format = None):
+# 		labels = ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other']
+# 		default_items = [5,5,5,5,5,5,5,5,5,5]
+# 		data = {
+# 			"labels" : labels,
+# 			"default": default_items,
+# 		}
+# 		return Response(data)

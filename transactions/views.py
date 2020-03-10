@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from users.forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 import requests
 from requests import auth
@@ -9,23 +10,71 @@ from .forms import ContactForm
 #auxilliary file I made to hold some of the logic
 from .utils import *
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 @login_required
 def home(request):
-	request.session.set_expiry(600)
-	if (getRows(request.user.profile.accountID) == False):
-		context = {
-			'rows': [{
-			'BookingDateTime': 'No Data Found',
-			'TransactionInformation': 'Incorrect UserID linked',
-			'Amount': 'Update accountID',
-			'Currency': 'and try again'
-			}]
-		}
-		return render(request, 'transactions/home.html', context)
-	context = {
-		'rows': getRows(request.user.profile.accountID)
-	}
-	return render(request, 'transactions/home.html', context)
+    request.session.set_expiry(600)
+    accountid = request.user.profile.getAccount()
+    #print("home")
+    #print(accountid)
+    #print(type(accountid))
+    if getRows(accountid) == False:
+        # context = {
+        #     'rows': [{
+        #     'BookingDateTime': 'No Data Found',
+        #     'TransactionInformation': 'Incorrect UserID linked',
+        #     'Amount': 'Update accountID',
+        #     'Currency': 'and try again',
+        # }]}
+        return render(request, 'transactions/home.html')
+    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
+    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
+    totalList = []
+    spendIndicator = []
+    numOfTransactions = []
+    context = {
+        "one": bpList,
+        "two": tpList,
+        "three": groceryList,
+        "four": fcList,
+        "five": financesList,
+        "six": foodList,
+        "seven": genList,
+        "eight": entertainmentList,
+        "nine": lsList,
+        "zero": uncatList,
+        "totals": totalList,
+        "count": numOfTransactions,
+        "spendIndicator": spendIndicator
+    }
+
+    #get data from database, store into "context" dictionary
+    for transaction in getRows(accountid):
+    	context[getCategory(transaction['MCC'])].append(transaction)
+
+    #gets number of transactions for treemap
+    for catList in context:
+    	if (catList == "totals"):
+    		break
+    	numOfTransactions.append(len(context[catList]))
+
+    #works out totals spend for each category
+    for catList in context:
+    	if catList == "totals":
+    		break
+    	total = 0
+    	for transaction in context[catList]:
+    		total += float(transaction['Amount'])
+
+    	if (str(total)[0] == "-"):
+    		spendIndicator.append("Spent")
+    		total = total*-1.0
+    	else:
+    		spendIndicator.append("Income")
+    	totalList.append(round(float(total),2))
+    return render(request, 'transactions/home.html', context)
 
 @login_required
 def profile(request):
@@ -60,7 +109,9 @@ def profile(request):
 @login_required
 def transactions(request):
 	request.session.set_expiry(600)
-	if (getRows(request.user.profile.accountID) == False):
+	#print("Transactions")
+	#print(request.user.profile.getAccount())
+	if (getRows(request.user.profile.getAccount()) == False):
 		context = {
 			'rows': [{
 			'BookingDateTime': 'No Data Found',
@@ -70,7 +121,7 @@ def transactions(request):
 		}
 		return render(request, 'transactions/transactions.html', context)
 	context = {
-		'rows': getRows(request.user.profile.accountID)
+		'rows': getRows(request.user.profile.getAccount())
 	}
 	return render(request, 'transactions/transactions.html', context)
 
@@ -95,3 +146,17 @@ def help(request):
 		'form' : form
 	}
 	return render(request, 'transactions/help.html', context)
+
+
+# class ChartData(LoginRequiredMixin, APIView):
+# 	authentication_classes = []
+# 	permission_classes = []
+
+# 	def get(self, request, format = None):
+# 		labels = ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other']
+# 		default_items = [5,5,5,5,5,5,5,5,5,5]
+# 		data = {
+# 			"labels" : labels,
+# 			"default": default_items,
+# 		}
+# 		return Response(data)

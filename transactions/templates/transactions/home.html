@@ -3,18 +3,26 @@
 {% load static %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
   <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
-    <h1 class="h3 mb-0 text-gray-800  mr-3">My Account</h1>
-    <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50"></i> See All Transactions</a>
-    <a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
-    <select class="custom-select w-auto">
-      <option value="Total">Total</option>
-      <option value="Account 1">Account 1</option>
-    </select>
-  </div>
+    <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+      <h1 class="h3 mb-0 text-gray-800  mr-3">MyAccount</h1>
+      <h4 class="h6 mb-0 text-gray-800  mr-3">(Account: {{ selectedAccount }})</h4>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50"></i> See All Transactions</a>
+      <a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+      <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
+      <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="accountDropdown">
+          <!--working with actual accounts-->
+          {% for account in accountIDs %}
+            <option value="{{account}}">Account: {{ account }}</option>
+          {% endfor %}
+            <option value="All">All Accounts</option>
+        </select>
+        <input type="submit" value="Select" >
+      </form>
+    </div>
+
 
   <!-- Content Row -->
   <div class="row">
@@ -196,29 +204,29 @@
             <div class="collapse hide" id="collapsedBPTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable1" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in one %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
                   </table>
                 </div>
                 <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.0}}: {{ totals.0 }}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: {{ totals.0 }}</h6>
                   <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
                 </div>
               </div>
@@ -240,22 +248,22 @@
             <div class="collapse hide" id="collapsedTransportTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable2" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in two %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -263,7 +271,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: {{ totals.1 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: {{ totals.1 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -284,22 +292,22 @@
             <div class="collapse hide" id="collapsedGroceriesTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable3" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in three %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -307,7 +315,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.2}}: {{ totals.2 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: {{ totals.2 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -328,22 +336,22 @@
             <div class="collapse hide" id="collapsedFCTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable4" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                    <th>Date</th>
                     <th>Transaction</th>
                     <th>Amount</th>
                     <th>Currency</th>
+                    <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
                   {% for row in four %}
                     <tr>
-                    <td>{{ row.BookingDateTime }}</td>
                     <td>{{ row.TransactionInformation }}</td>
                     <td>{{ row.Amount }}</td>
                     <td>{{ row.Currency }}</td>
+                    <td>{{ row.BookingDateTime }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -351,7 +359,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.3}}: {{ totals.3 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: {{ totals.3 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -372,22 +380,22 @@
             <div class="collapse hide" id="collapsedFinancesTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable5" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in five %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -395,7 +403,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.4}}: {{ totals.4 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: {{ totals.4 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -416,22 +424,22 @@
             <div class="collapse hide" id="collapsedFoodTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable6" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in six %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -439,7 +447,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.5}}: {{ totals.5 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: {{ totals.5 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -460,22 +468,22 @@
             <div class="collapse hide" id="collapsedGeneralTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable7" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in seven %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -483,7 +491,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.6}}: {{ totals.6 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: {{ totals.6 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -505,22 +513,22 @@
             <div class="collapse hide" id="collapsedEntertainmentTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable8" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in eight %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -528,7 +536,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.7}}: {{ totals.7 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: {{ totals.7 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -549,22 +557,22 @@
             <div class="collapse hide" id="collapsedLSTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable9" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in nine %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -572,7 +580,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.8}}: {{ totals.8 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: {{ totals.8 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -593,22 +601,22 @@
             <div class="collapse hide" id="collapsedOtherTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="datatable0" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for row in zero %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
                       <td>{{ row.Amount }}</td>
                       <td>{{ row.Currency }}</td>
+                      <td>{{ row.BookingDateTime }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -616,7 +624,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.9}}: {{ totals.9 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: {{ totals.9 }}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>

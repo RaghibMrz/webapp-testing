@@ -24,7 +24,8 @@ def getRows(accountID):
     # a = json.loads(res.text)
 
 ####### code written by yuheng, works same way as online code with local files
-    # for account in accountID:
+
+    # for account in accountID:  #accountID is the queryset of all accountIDs under this user
     #     with open(os.path.join(sys.path[0], "aux_files/"+account+".json"), 'r') as data:
     #         jsondata = json.load(data)
     #         a = json.loads(jsondata)
@@ -94,6 +95,7 @@ def addToAccountList(request, addedAccount):
 	print(request.user.profile.getAccount())
 	print(request.user.profile.getAccount()[0])
 
+# this funciton get the json containing all data and get all the related info about the current account id and upload it as a separate json file
 def getDataForAccount(accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
     print("Run")
@@ -119,6 +121,8 @@ def getDataForAccount(accountID):
     r = requests.put(url, data=json.dumps(result), headers=headers, auth = me)
     print(r.status_code)
 
+# this calculate the average spending of a account excluding all direct debit for the last month
+# we then assume that the user will spend similar amount in the future one month
 def getAverageSpending(testDate, accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
     res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
@@ -142,14 +146,18 @@ def getAverageSpending(testDate, accountID):
     print(enddate)
     print("{0:.2f}".format(totalamount/(enddate- startdate).days))
 
-def prediction(testDate, accountID):
+# this funciton returns a dictionary  that takes all dates from  the test date to the next biiling day and the values are the predicted remaining amount in the account 
+def getPrediction(testDate, accountID):
     me = auth.HTTPDigestAuth("admin", "admin")
     res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+accountID+".json", auth = me)
     if (res.status_code == 404):
         return False
     a = json.loads(res.text)
+    # billing day is the day that the bank charge for overdraft and pay interest
+    # it is the same day of the month as the opening day of the account
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     averagespending = getAverageSpending(testDate,accountID)
+    #test if the billingday of this calender month has already passed, if yes, we will calculate the prediction from now to next month's billing day
     if testDate.day()>billingdate.day():
         targetdate = billingdate + relativedelta(months=1)
     else:
@@ -167,6 +175,7 @@ def prediction(testDate, accountID):
             nextpayment = previouspayment + relativedelta(months=1)
             if nextpayment.date in prediction:
                 prediction[nextpayment.date] -=float(directdebit['PreviousPaymentAmount']['Amount'])
+    print(prediction)
     return prediction
 
 def getCategory(mcc):

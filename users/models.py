@@ -11,7 +11,7 @@ class Profile(models.Model):
 	def __str__(self):
 		return f'{self.user.username}\'s Profile'
 
-	def getAccount(self):
+	def getAccount(self):  # this returns a qeury set of all accountids under the user, loop through the query set just as a list
 		return Account.objects.filter(user__username = self.user.username).values_list('accountid', flat=True)
 
 	def storeAccount(self, accList):

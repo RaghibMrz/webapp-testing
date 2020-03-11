@@ -7,12 +7,20 @@
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
     <h1 class="h3 mb-0 text-gray-800  mr-3">All Transactions</h1>
+    <h4 class="h6 mb-0 text-gray-800  mr-3">(Account: {{ selectedAccount }})</h4>
     <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-tachometer-alt text-white-50"></i> See Dashboard</a>
     <a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    <select class="custom-select w-auto">
-      <option value="Total">Total</option>
-      <option value="Account 1">Account 1</option>
-    </select>
+    <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
+    <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
+      <select class="custom-select w-auto" name="accountDropdown">
+        <!--working with actual accounts-->
+        {% for account in accountIDs %}
+          <option value="{{account}}">Account: {{ account }}</option>
+        {% endfor %}
+          <option value="All">All Accounts</option>
+      </select>
+      <input type="submit" value="Select" >
+    </form>
   </div>
 
   <!-- Content Row -->
@@ -169,21 +177,21 @@
                 <tbody>
                   {% for row in rows %}
                     <tr>
-                    <td>{{ row.BookingDateTime }}</td>
                     <td>{{ row.TransactionInformation }}</td>
                     <td>{{ row.Amount }}</td>
                     <td>{{ row.Currency }}</td>
+                    <td>{{ row.BookingDateTime }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
                 </table>
             </div>
+            <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+              <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total }}</h6>
+              <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" id="capPrompt"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+              <script>src="jquery.min.js"</script>
+            </div>
         </div>
-        <!-- <div class="card-body">
-          <div class="chart-area">
-            <canvas id="myAreaChart"></canvas>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>

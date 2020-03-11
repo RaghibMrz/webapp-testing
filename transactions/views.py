@@ -25,8 +25,9 @@ def home(request):
 
     # if not gotAccount, then if statement will execute before checking 2nd argument, else it will have an account
     # thus no error handling is required
-    if (not gotAccount) or (not getRows(accountid)):
-        accountid = "Error"
+    if not gotAccount:
+        accountid = "Null"
+    if not getRows(accountid):
         context = {
             'rows': [{
                 'TransactionInformation': 'Incorrect UserID linked',
@@ -77,11 +78,14 @@ def home(request):
         total, spendIndicator = getTotal(context[catList])
         spendIndicatorList.append(spendIndicator)
         totalList.append(total)
+
+    print(context['accountIDs'])
     return render(request, 'transactions/home.html', context)
 
 
 @login_required
 def transactions(request):
+    global accountid
     request.session.set_expiry(600)
     gotAccount = False
     if len(request.user.profile.getAccount()) > 0:
@@ -93,8 +97,9 @@ def transactions(request):
 
     # if not gotAccount, then if statement will execute before checking 2nd argument, else it will have an account
     # thus no error handling is required
-    if (not gotAccount) or (not getRows(accountid)):
+    if not gotAccount:
         accountid = "Error"
+    if not getRows(accountid):
         context = {
             'rows': [{
                 'TransactionInformation': "Incorrect UserID linked",
@@ -126,7 +131,8 @@ def profile(request):
         pForm = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if uForm.is_valid() and pForm.is_valid():
             newAccountID = pForm.cleaned_data.get('accountID')
-            addToAccountList(request, newAccountID)
+            request.user.profile.addToAccountList(newAccountID)
+
             # getDataForAccount(newAccountID)
             uForm.save()
             pForm.save()

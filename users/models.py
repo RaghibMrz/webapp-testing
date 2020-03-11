@@ -16,6 +16,10 @@ class Profile(models.Model):
     def getAccount(self):
         return Account.objects.filter(user__username=self.user.username).values_list('accountid', flat=True)
 
+    def addToAccountList(self, accountID):
+        if accountID not in self.getAccount():
+            Account.objects.create(accountid=str(accountID), user=self.user)
+
     def clearAccountList(self):
         for accountid in self.getAccount():
             Account.objects.filter(accountid=str(accountid), user=self.user).delete()

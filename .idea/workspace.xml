@@ -2,24 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56d375cb-22f8-4fc2-8d61-a446ee593c56" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/RaghibMrz.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webapp-testing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webapp-testing.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/RaghibMrz.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/RaghibMrz.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/transactions.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/transactions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transactions/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/bin/python" beforeDir="false" afterPath="$PROJECT_DIR$/venv/bin/python" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/bin/python3" beforeDir="false" afterPath="$PROJECT_DIR$/venv/bin/python3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/lib64" beforeDir="false" afterPath="$PROJECT_DIR$/venv/lib64" afterDir="false" />
@@ -32,13 +17,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transactions/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="35" column="62" lean-forward="true" selection-start-line="35" selection-start-column="62" selection-end-line="35" selection-end-column="62" />
+            <state relative-caret-position="1020">
+              <caret line="63" column="40" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="40" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/transactions/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="253">
+              <caret line="107" column="8" selection-start-line="107" selection-start-column="8" selection-end-line="107" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -103,7 +100,6 @@
       <list>
         <option value="$PROJECT_DIR$/transactions/templates/transactions/base.html" />
         <option value="$PROJECT_DIR$/transactions/models.py" />
-        <option value="$PROJECT_DIR$/transactions/utils.py" />
         <option value="$PROJECT_DIR$/users/forms.py" />
         <option value="$PROJECT_DIR$/transactions/forms.py" />
         <option value="$PROJECT_DIR$/users/views.py" />
@@ -113,6 +109,7 @@
         <option value="$PROJECT_DIR$/transactions/templates/transactions/transactions.html" />
         <option value="$PROJECT_DIR$/transactions/templates/transactions/profile.html" />
         <option value="$PROJECT_DIR$/transactions/views.py" />
+        <option value="$PROJECT_DIR$/transactions/utils.py" />
       </list>
     </option>
   </component>
@@ -284,16 +281,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/transactions/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="118" column="49" lean-forward="true" selection-start-line="118" selection-start-column="49" selection-end-line="118" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/transactions/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -349,10 +336,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/transactions/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="35" column="62" lean-forward="true" selection-start-line="35" selection-start-column="62" selection-end-line="35" selection-end-column="62" />
+        <state relative-caret-position="1020">
+          <caret line="63" column="40" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="40" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transactions/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="107" column="8" selection-start-line="107" selection-start-column="8" selection-end-line="107" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>

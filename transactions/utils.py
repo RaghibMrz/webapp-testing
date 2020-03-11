@@ -29,51 +29,19 @@ def getTotal(transactionList):
 
 # takes user bank accountID and returns a list of transactions.
 def getRows(accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    row = []
-    transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
-    for transaction in a['Transaction']:
-        collecting = {
-            'BookingDateTime': '',
-            'TransactionInformation': '',
-            'Amount': '',
-            'Currency': '',
-            'MCC': ''
-        }
-        for attribute in transactionAttributes:
-            if attribute == "MCC":
-                collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
-                continue
-            if (attribute == "Amount") or (attribute == "Currency"):
-                collecting[attribute] = transaction['Amount'][str(attribute)]
-                if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
-                    continue
-                if transaction["CreditDebitIndicator"] == "Debit":
-                    collecting['Amount'] = "-" + collecting['Amount']
-                elif transaction["CreditDebitIndicator"] == "Credit":
-                    collecting['Amount'] = "+" + collecting['Amount']
-            else:
-                collecting[attribute] = transaction[str(attribute)]
-            if collecting not in row:
-                row.append(collecting)
-    return row
-
-    ##### Raghib code, easier debugging
+    # me = auth.HTTPDigestAuth("admin", "admin")
     # row = []
     # transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
-    # with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
-    #     a = json.load(data)
-    #
-    # for transaction in a['Data']['Transaction']:
+    # res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
+    # if res.status_code == 404:
+    #     return False
+    # a = json.loads(res.text)
+    # for transaction in a['Transaction']:
     #     collecting = {
+    #         'BookingDateTime': '',
     #         'TransactionInformation': '',
     #         'Amount': '',
     #         'Currency': '',
-    #         'BookingDateTime': '',
     #         'MCC': ''
     #     }
     #     for attribute in transactionAttributes:
@@ -93,6 +61,38 @@ def getRows(accountID):
     #         if collecting not in row:
     #             row.append(collecting)
     # return row
+
+    ##### Raghib code, easier debugging
+    row = []
+    transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
+    with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
+        a = json.load(data)
+
+    for transaction in a['Data']['Transaction']:
+        collecting = {
+            'TransactionInformation': '',
+            'Amount': '',
+            'Currency': '',
+            'BookingDateTime': '',
+            'MCC': ''
+        }
+        for attribute in transactionAttributes:
+            if attribute == "MCC":
+                collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
+                continue
+            if (attribute == "Amount") or (attribute == "Currency"):
+                collecting[attribute] = transaction['Amount'][str(attribute)]
+                if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
+                    continue
+                if transaction["CreditDebitIndicator"] == "Debit":
+                    collecting['Amount'] = "-" + collecting['Amount']
+                elif transaction["CreditDebitIndicator"] == "Credit":
+                    collecting['Amount'] = "+" + collecting['Amount']
+            else:
+                collecting[attribute] = transaction[str(attribute)]
+            if collecting not in row:
+                row.append(collecting)
+    return row
 
 
 def getStrAccountIDs(profile):

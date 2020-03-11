@@ -1,3 +1,4 @@
+python-dateutil
 django==3.0.1
 django-crispy-forms==1.8.1
 django_cleanup==4.0.0

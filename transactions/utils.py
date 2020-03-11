@@ -13,6 +13,21 @@ from users.models import Account
 
 register = template.Library()
 
+def getDataFromML(accountID):
+    id = str(accountID[i])
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/"+id+".json", auth = me)
+    if (res.status_code == 404):
+        return False
+    a = json.loads(res.text)
+    return a
+
+def getDataLocally(accountID):
+    with open(os.path.join(sys.path[0], "aux_files/"+accountID+".json"), 'r') as data:
+        jsondata = json.load(data)
+    a = json.loads(jsondata)
+    print(a)
+    return a 
+
 
 # function which takes a list of transaction, works out the total and if the sum is money spent or income.
 def getTotal(transactionList):
@@ -29,7 +44,6 @@ def getTotal(transactionList):
 
 # takes user bank accountID and returns a list of transactions.
 def getRows(accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
     row = []
     transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
   ####### code that works with vm
@@ -111,11 +125,7 @@ def getDataForAccount(accountID):
 # this calculate the average spending of a account excluding all direct debit for the last month
 # we then assume that the user will spend similar amount in the future one month
 def getAverageSpending(testDate, accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getDataLocally(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     print(billingdate)
     if billingdate <= testDate:
@@ -136,11 +146,7 @@ def getAverageSpending(testDate, accountID):
 
 # this funciton returns a dictionary  that takes all dates from  the test date to the next biiling day and the values are the predicted remaining amount in the account 
 def getPrediction(testDate, accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getDataLocally(accountID)
     # billing day is the day that the bank charge for overdraft and pay interest
     # it is the same day of the month as the opening day of the account
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))

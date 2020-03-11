@@ -14,6 +14,19 @@ from users.models import Account
 register = template.Library()
 
 
+def getDataFromML(accountID):
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=auth.HTTPDigestAuth("admin", "admin"))
+    if res.status_code == 404:
+        return False
+    return json.loads(res.text)
+
+
+def getDataLocally(accountID):
+    with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
+        jsonData = json.load(data)
+    return json.loads(jsonData)
+
+
 # function which takes a list of transaction, works out the total and if the sum is money spent or income.
 def getTotal(transactionList):
     total = 0
@@ -29,13 +42,9 @@ def getTotal(transactionList):
 
 # takes user bank accountID and returns a list of transactions.
 def getRows(accountID):
-    # me = auth.HTTPDigestAuth("admin", "admin")
     # row = []
     # transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
-    # res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    # if res.status_code == 404:
-    #     return False
-    # a = json.loads(res.text)
+    # a = getDataFromML(accountID)
     # for transaction in a['Transaction']:
     #     collecting = {
     #         'BookingDateTime': '',
@@ -103,12 +112,7 @@ def getStrAccountIDs(profile):
 
 
 def getDataForAccount(accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    print("Run")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/data.json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getDataFromML(accountID)
     resultDic = {}
     for key in a['Data']:
         current = []
@@ -129,11 +133,7 @@ def getDataForAccount(accountID):
 
 
 def getAverageSpending(testDate, accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getDataFromML(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     print(billingdate)
     if billingdate <= testDate:
@@ -153,11 +153,7 @@ def getAverageSpending(testDate, accountID):
 
 
 def prediction(testDate, accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getDataFromML(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     averagespending = getAverageSpending(testDate, accountID)
     if testDate.day() > billingdate.day():

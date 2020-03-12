@@ -3,7 +3,6 @@
 {% load static %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
     <h1 class="h3 mb-0 text-gray-800  mr-3">All Transactions</h1>
@@ -14,10 +13,10 @@
     <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
       <select class="custom-select w-auto" name="accountDropdown">
         <!--working with actual accounts-->
+        <option value="All">All Accounts</option>
         {% for account in accountIDs %}
           <option value="{{account}}">Account: {{ account }}</option>
         {% endfor %}
-          <option value="All">All Accounts</option>
       </select>
       <input type="submit" value="Select" >
     </form>
@@ -128,39 +127,49 @@
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
-          <div class="dropdown mb-0">
-            Sort By:  
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Date (Descending)
-            </button>
-            <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="">Date (Descending)</a>
-                <a class="dropdown-item" href="">Category</a>
-                <a class="dropdown-item" href="">Amount (Descending)</a>
-                <a class="dropdown-item" href="">Amount (Ascending)</a>
-            </div>
-            <!-- <select class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Date (Descending)
-            </select>
-            <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
-                <option value="Date (Descending)"><a class="dropdown-item" href="#">Date (Descending)</a></option>
-                <option value="Category"><a class="dropdown-item" href="#">Category</a></option>
-                <option value="Amount (Descending)"><a class="dropdown-item" href="#">Amount (Descending)</a></option>
-                <option value="Amount(Ascending)"><a class="dropdown-item" href="#">Amount (Ascending)</a></option>
-            </div> -->
-          </div>
-          <!-- <div class="dropdown no-arrow">
-            <a class="dropdown-toggle font-weight-bold text-primary" href="#" role="button" id="dropdownMenuLink"   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sort By: <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-              <div class="dropdown-header">Dropdown Header:</div>
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div> -->
+          <!--<div>-->
+              <!--<form action="{% url 'transactions' %}" method="POST">-->
+                <!--{% csrf_token %}-->
+              <!--Start Date:{{ form.start_date }}&nbsp;&nbsp; End Date:{{ form.end_date }}<br>-->
+              <!--<input type = "submit" name = "submit" value = "date">-->
+              <!--</form>-->
+          <!--</div>-->
+
+          <!--<script>-->
+            <!--$.ajax({-->
+             <!--url:'/',-->
+             <!--type : "POST",-->
+             <!--data: {start : 'start', end : 'end'},-->
+             <!--success: function(response){},-->
+             <!--complete: function(){},-->
+             <!--error: function(xhr, textStatus, thrownError){}-->
+             <!--});-->
+          <!--</script>-->
+
+          View data between:
+          <form action="{% url 'transactions' %}" method="POST">
+            {% csrf_token %}
+          {{ form }}
+          <input type = "submit" name = "submit" value = "Enter">
+          </form>
+
+          <!--<form action="{% url 'transactions' %}" method="POST">-->
+                <!--{% csrf_token %}-->
+            <!--<input type="text" name="datetimes" />-->
+              <!--<script>-->
+              <!--$(function() {-->
+                <!--$('input[name="datetimes"]').daterangepicker({-->
+                  <!--timePicker: true,-->
+                  <!--startDate: moment().startOf('hour'),-->
+                  <!--endDate: moment().startOf('hour').add(32, 'hour'),-->
+                  <!--locale: {-->
+                    <!--format: 'M/DD hh:mm A'-->
+                  <!--}-->
+                <!--});-->
+              <!--});-->
+              <!--</script>-->
+          <!--</form>-->
+
         </div>
         <!-- Card Body -->
         <div class="card-body">

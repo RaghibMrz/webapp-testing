@@ -14,10 +14,10 @@
         {% csrf_token %}
         <select class="custom-select w-auto" name="accountDropdown">
           <!--working with actual accounts-->
+          <option value="All">All Accounts</option>
           {% for account in accountIDs %}
             <option value="{{account}}">Account: {{ account }}</option>
           {% endfor %}
-            <option value="All">All Accounts</option>
         </select>
         <input type="submit" value="Select">
       </form>

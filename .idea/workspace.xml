@@ -2,16 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56d375cb-22f8-4fc2-8d61-a446ee593c56" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/aux_files/10567.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aux_files/76523.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aux_files/90613.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aux_files/92548.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aux_files/97513.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aux_files/finalData.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/custom.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-3.4.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/AUTHORS.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/external/jquery/jquery.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/images/ui-icons_444444_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/images/ui-icons_555555_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/images/ui-icons_777620_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/images/ui-icons_777777_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/images/ui-icons_cc0000_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/images/ui-icons_ffffff_256x240.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.structure.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.structure.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.theme.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/jquery-ui.theme.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transactions/static/transactions/js/jquery-ui-1.12.1/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/RaghibMrz.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/RaghibMrz.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aux_files/10567.json" beforeDir="false" afterPath="$PROJECT_DIR$/aux_files/10567.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aux_files/22289.json" beforeDir="false" afterPath="$PROJECT_DIR$/aux_files/22289.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aux_files/76523.json" beforeDir="false" afterPath="$PROJECT_DIR$/aux_files/76523.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aux_files/90613.json" beforeDir="false" afterPath="$PROJECT_DIR$/aux_files/90613.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aux_files/92548.json" beforeDir="false" afterPath="$PROJECT_DIR$/aux_files/92548.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aux_files/97513.json" beforeDir="false" afterPath="$PROJECT_DIR$/aux_files/97513.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transactions/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/transactions.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/transactions.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transactions/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/utils.py" afterDir="false" />
@@ -19,6 +41,7 @@
       <change beforePath="$PROJECT_DIR$/venv/bin/python" beforeDir="false" afterPath="$PROJECT_DIR$/venv/bin/python" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/bin/python3" beforeDir="false" afterPath="$PROJECT_DIR$/venv/bin/python3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/lib64" beforeDir="false" afterPath="$PROJECT_DIR$/venv/lib64" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webapp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/webapp/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,8 +54,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transactions/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+            <state relative-caret-position="523">
+              <caret line="105" column="27" lean-forward="true" selection-start-line="105" selection-start-column="27" selection-end-line="105" selection-end-column="27" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -40,11 +63,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/webapp/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-89">
+              <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transactions/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="557">
-              <caret line="254" column="21" lean-forward="true" selection-start-line="254" selection-start-column="21" selection-end-line="254" selection-end-column="21" />
+            <state relative-caret-position="846">
+              <caret line="164" column="81" selection-start-line="164" selection-start-column="81" selection-end-line="164" selection-end-column="106" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -55,20 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/users/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="-38">
               <caret column="1" selection-start-column="1" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/home.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="45" column="4" selection-start-line="45" selection-start-column="4" selection-end-line="104" selection-end-column="8" />
-              <folding>
-                <element signature="n#style#0;n#h6#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -76,8 +96,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/transactions.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="82" column="59" lean-forward="true" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
+            <state relative-caret-position="200">
+              <caret line="151" column="17" selection-start-line="151" selection-start-column="13" selection-end-line="151" selection-end-column="17" />
               <folding>
                 <element signature="n#style#0;n#h6#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -86,10 +106,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/users/forms.py">
+        <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+            <state relative-caret-position="357">
+              <caret line="24" column="54" lean-forward="true" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/transactions/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="50" lean-forward="true" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -106,7 +135,10 @@
       <find>datatable</find>
       <find>paddin</find>
       <find>getDataForAccount</find>
+      <find>Sor</find>
       <find>Earning</find>
+      <find>function</find>
+      <find>pieChart</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -116,19 +148,21 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/transactions/templates/transactions/base.html" />
         <option value="$PROJECT_DIR$/transactions/models.py" />
         <option value="$PROJECT_DIR$/users/forms.py" />
-        <option value="$PROJECT_DIR$/transactions/forms.py" />
         <option value="$PROJECT_DIR$/users/views.py" />
         <option value="$PROJECT_DIR$/transactions/urls.py" />
         <option value="$PROJECT_DIR$/transactions/templates/transactions/profile.html" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/users/models.py" />
+        <option value="$PROJECT_DIR$/transactions/utils.py" />
+        <option value="$PROJECT_DIR$/transactions/static/transactions/js/custom.js" />
         <option value="$PROJECT_DIR$/transactions/templates/transactions/home.html" />
         <option value="$PROJECT_DIR$/transactions/templates/transactions/transactions.html" />
+        <option value="$PROJECT_DIR$/webapp/settings.py" />
+        <option value="$PROJECT_DIR$/transactions/templates/transactions/base.html" />
         <option value="$PROJECT_DIR$/transactions/views.py" />
-        <option value="$PROJECT_DIR$/transactions/utils.py" />
+        <option value="$PROJECT_DIR$/transactions/forms.py" />
       </list>
     </option>
   </component>
@@ -159,6 +193,27 @@
               <item name="webapp-testing" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp-testing" type="462c0819:PsiDirectoryNode" />
               <item name="transactions" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webapp-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp-testing" type="462c0819:PsiDirectoryNode" />
+              <item name="transactions" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="transactions" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webapp-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp-testing" type="462c0819:PsiDirectoryNode" />
+              <item name="transactions" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="transactions" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webapp-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp-testing" type="462c0819:PsiDirectoryNode" />
+              <item name="transactions" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -172,6 +227,11 @@
               <item name="webapp-testing" type="b2602c69:ProjectViewProjectNode" />
               <item name="webapp-testing" type="462c0819:PsiDirectoryNode" />
               <item name="users" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="webapp-testing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="webapp-testing" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -250,8 +310,8 @@
     <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09511229" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4992928" visible="true" weight="0.09511229" />
+      <window_info id="Structure" order="1" sideWeight="0.5007072" side_tool="true" weight="0.09511229" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32956153" />
@@ -268,6 +328,25 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.09511229" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32956153" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39886847" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32956153" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32956153" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4993395" weight="0.32956153" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5006605" side_tool="true" weight="0.32956153" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32956153" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="implemented functionality to aggregate different accounts' transactions" />
@@ -278,23 +357,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="47" column="48" lean-forward="true" selection-start-line="47" selection-start-column="48" selection-end-line="47" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1156">
-          <caret line="19" column="18" lean-forward="true" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/transactions/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -332,16 +394,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/users/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -369,13 +421,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/users/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="1" selection-start-column="1" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python38-32/Lib/datetime.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="261">
@@ -383,20 +428,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/users/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/users/js/demo/chart-pie-demo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="7" lean-forward="true" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="45" column="4" selection-start-line="45" selection-start-column="4" selection-end-line="104" selection-end-column="8" />
+        <state relative-caret-position="272">
+          <caret line="16" column="51" selection-start-line="16" selection-start-column="51" selection-end-line="16" selection-end-column="51" />
           <folding>
             <element signature="n#style#0;n#h6#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/webapp/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-89">
+          <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transactions/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="846">
+          <caret line="164" column="81" selection-start-line="164" selection-start-column="81" selection-end-line="164" selection-end-column="106" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="24" column="54" lean-forward="true" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transactions/static/transactions/js/custom.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="3" lean-forward="true" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/transactions.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="82" column="59" lean-forward="true" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
+        <state relative-caret-position="200">
+          <caret line="151" column="17" selection-start-line="151" selection-start-column="13" selection-end-line="151" selection-end-column="17" />
           <folding>
             <element signature="n#style#0;n#h6#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="true" />
           </folding>
@@ -405,20 +498,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/transactions/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+        <state relative-caret-position="523">
+          <caret line="105" column="27" lean-forward="true" selection-start-line="105" selection-start-column="27" selection-end-line="105" selection-end-column="27" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/transactions/utils.py">
+    <entry file="file://$PROJECT_DIR$/users/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="557">
-          <caret line="254" column="21" lean-forward="true" selection-start-line="254" selection-start-column="21" selection-end-line="254" selection-end-column="21" />
+        <state relative-caret-position="-38">
+          <caret column="1" selection-start-column="1" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transactions/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="50" lean-forward="true" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>

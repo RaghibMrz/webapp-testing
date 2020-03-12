@@ -55,7 +55,7 @@ def getRows(accountID):
     # with open(os.path.join(sys.path[0], "aux_files/finalData.json"), 'r') as data:
     #     a = json.load(data)
 
-    for transaction in a['Data']['Transaction']:
+    for transaction in a['Transaction']:
         collecting = {
             'TransactionInformation': '',
             'Amount': '',

@@ -3,11 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
+from django.template.context_processors import csrf
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from users.forms import UserUpdateForm, ProfileUpdateForm
-from .forms import ContactForm
+from .forms import *
 # auxiliary file I made to hold some of the logic
 from .utils import *
 
@@ -66,7 +67,7 @@ def transactions(request):
     if len(request.user.profile.getAccount()) > 0:
         accountid = "All"
         gotAccount = True
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST['submit'] != "Enter":
         accountid = request.POST.get('accountDropdown')
         gotAccount = True
 
@@ -97,6 +98,13 @@ def transactions(request):
     context = {'rows': rows, 'total': total, 'spendIndicator': spendIndicator,
                'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountid,
                'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows)}
+
+    if request.method == "POST":
+        f = DateRangeForm(request.POST)
+        print(f.is_valid())
+    else:
+        f = DateRangeForm()
+    context['form'] = f
 
     return render(request, 'transactions/transactions.html', context)
 

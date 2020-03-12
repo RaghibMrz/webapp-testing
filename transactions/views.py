@@ -3,12 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
+from django.template.context_processors import csrf
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from users.forms import UserUpdateForm, ProfileUpdateForm
-from .forms import ContactForm
-# auxilliary file I made to hold some of the logic
+from .forms import *
+# auxiliary file I made to hold some of the logic
 from .utils import *
 
 
@@ -17,16 +18,15 @@ def home(request):
     request.session.set_expiry(600)
     gotAccount = False
     if len(request.user.profile.getAccount()) > 0:
-        accountid = request.user.profile.getAccount()[0]
+        accountID = "All"
         gotAccount = True
     if request.method == 'POST':
-        accountid = request.POST.get('accountDropdown')
+        accountID = request.POST.get('accountDropdown')
         gotAccount = True
 
-    # if not gotAccount, then if statement will execute before checking 2nd argument, else it will have an account
-    # thus no error handling is required
-    if (not gotAccount) or (not getRows(accountid)):
-        accountid = "Error"
+    if not gotAccount:
+        accountID = "Null"
+    if not getRows(accountID) and accountID != "All":
         context = {
             'rows': [{
                 'TransactionInformation': 'Incorrect UserID linked',
@@ -34,49 +34,29 @@ def home(request):
                 'Currency': 'and try again',
                 'BookingDateTime': 'No Data Found',
                 'accountIDs': getStrAccountIDs(request.user.profile),
-                'selectedAccount': accountid
+                'selectedAccount': accountID
             }]}
         return render(request, 'transactions/home.html', context)
 
     bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
     foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
-    totalList, spendIndicatorList, numOfTransactions = [], [], []
 
     context = {
-        'one': bpList,
-        'two': tpList,
-        'three': groceryList,
-        'four': fcList,
-        'five': financesList,
-        'six': foodList,
-        'seven': genList,
-        'eight': entertainmentList,
-        'nine': lsList,
-        'zero': uncatList,
-        'totals': totalList,
-        'count': numOfTransactions,
-        'spendIndicatorList': spendIndicatorList,
-        'accountIDs': getStrAccountIDs(request.user.profile),
-        'selectedAccount': accountid
+        'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
+        'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
+        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
     }
 
+    if accountID == "All":
+        rows = getAllRows(getStrAccountIDs(request.user.profile))
+    else:
+        rows = getRows(accountID)
+
     # get data from database, store into "context" dictionary
-    for transaction in getRows(accountid):
+    for transaction in rows:
         context[getCategory(transaction['MCC'])].append(transaction)
 
-    # gets number of transactions for treemap
-    for catList in context:
-        if catList == "totals":
-            break
-        numOfTransactions.append(len(context[catList]))
-
-    # works out totals spend for each category
-    for catList in context:
-        if catList == "totals":
-            break
-        total, spendIndicator = getTotal(context[catList])
-        spendIndicatorList.append(spendIndicator)
-        totalList.append(total)
+    context = updateContext(context, rows)
     return render(request, 'transactions/home.html', context)
 
 
@@ -85,16 +65,17 @@ def transactions(request):
     request.session.set_expiry(600)
     gotAccount = False
     if len(request.user.profile.getAccount()) > 0:
-        accountid = request.user.profile.getAccount()[0]
+        accountid = "All"
         gotAccount = True
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST['submit'] != "Enter":
         accountid = request.POST.get('accountDropdown')
         gotAccount = True
 
     # if not gotAccount, then if statement will execute before checking 2nd argument, else it will have an account
     # thus no error handling is required
-    if (not gotAccount) or (not getRows(accountid)):
-        accountid = "Error"
+    if not gotAccount:
+        accountid = "Null"
+    if not getRows(accountid) and accountid != "All":
         context = {
             'rows': [{
                 'TransactionInformation': "Incorrect UserID linked",
@@ -107,14 +88,24 @@ def transactions(request):
         }
         return render(request, "transactions/transactions.html", context)
 
-    total, spendIndicator = getTotal(getRows(accountid))
-    context = {
-        'rows': getRows(accountid),
-        'total': total,
-        'spendIndicator': spendIndicator,
-        'accountIDs': getStrAccountIDs(request.user.profile),
-        'selectedAccount': accountid
-    }
+    if accountid == "All":
+        rows = getAllRows(getStrAccountIDs(request.user.profile))
+    else:
+        rows = getRows(accountid)
+
+    total, spendIndicator = getTotal(rows)
+
+    context = {'rows': rows, 'total': total, 'spendIndicator': spendIndicator,
+               'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountid,
+               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows)}
+
+    if request.method == "POST":
+        f = DateRangeForm(request.POST)
+        print(f.is_valid())
+    else:
+        f = DateRangeForm()
+    context['form'] = f
+
     return render(request, 'transactions/transactions.html', context)
 
 
@@ -126,7 +117,8 @@ def profile(request):
         pForm = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if uForm.is_valid() and pForm.is_valid():
             newAccountID = pForm.cleaned_data.get('accountID')
-            addToAccountList(request, newAccountID)
+            request.user.profile.addToAccountList(newAccountID)
+
             # getDataForAccount(newAccountID)
             uForm.save()
             pForm.save()

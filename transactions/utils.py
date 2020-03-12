@@ -14,6 +14,23 @@ from users.models import Account
 register = template.Library()
 
 
+def getData(accountID):
+    # get from database
+    # res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json",
+    #                    auth=auth.HTTPDigestAuth("admin", "admin"))
+    # if res.status_code == 404:
+    #     return False
+    # return json.loads(res.text)
+
+    # get locally
+    try:
+        with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
+            jsonData = json.load(data)
+        return jsonData
+    except FileNotFoundError:
+        return False
+
+
 # function which takes a list of transaction, works out the total and if the sum is money spent or income.
 def getTotal(transactionList):
     total = 0
@@ -29,8 +46,8 @@ def getTotal(transactionList):
 
 # takes user bank accountID and returns a list of transactions.
 def getRows(accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
     row = []
+<<<<<<< HEAD
     transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
     # for i in range(len(accountID)):
     #     uid = str(accountID[i])
@@ -63,6 +80,52 @@ def getRows(accountID):
     #             if collecting not in row:
     #                 row.append(collecting)
     # return row
+=======
+    transactionAttributes = ["TransactionInformation", "Amount", "Currency", "BookingDateTime", "MCC"]
+    a = getData(accountID)
+    if not a:
+        return False
+
+    # with open(os.path.join(sys.path[0], "aux_files/finalData.json"), 'r') as data:
+    #     a = json.load(data)
+
+    for transaction in a['Transaction']:
+        collecting = {
+            'TransactionInformation': '',
+            'Amount': '',
+            'Currency': '',
+            'BookingDateTime': '',
+            'MCC': ''
+        }
+        for attribute in transactionAttributes:
+            if attribute == "MCC":
+                collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
+                continue
+            if (attribute == "Amount") or (attribute == "Currency"):
+                collecting[attribute] = transaction['Amount'][str(attribute)]
+                if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
+                    continue
+                if transaction["CreditDebitIndicator"] == "Debit":
+                    collecting['Amount'] = "-" + collecting['Amount']
+                elif transaction["CreditDebitIndicator"] == "Credit":
+                    collecting['Amount'] = "+" + collecting['Amount']
+            else:
+                collecting[attribute] = transaction[str(attribute)]
+            if collecting not in row:
+                row.append(collecting)
+    return row
+
+
+# combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
+def getAllRows(IDs):
+    row = getRows(IDs[0])
+    for accountID in IDs:
+        if accountID == IDs[0]:
+            continue
+        for collectingDict in getRows(accountID):
+            row.append(collectingDict)
+    return row
+>>>>>>> 7070f0da6d8322052c3cf8f82f76e11d954f9b0c
 
     ##### Raghib code, easier debugging
     with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
@@ -102,18 +165,8 @@ def getStrAccountIDs(profile):
     return accountList
 
 
-def addToAccountList(request, addedAccount):
-    if addedAccount not in request.user.profile.getAccount():
-        Account.objects.create(accountid=str(addedAccount), user=request.user)
-
-
 def getDataForAccount(accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    print("Run")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/data.json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getData(accountID)
     resultDic = {}
     for key in a['Data']:
         current = []
@@ -129,16 +182,41 @@ def getDataForAccount(accountID):
     print(type(result))
     url = "http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json"
     headers = {'Content-Type': 'application/json'}
-    r = requests.put(url, data=json.dumps(result), headers=headers, auth=me)
+    r = requests.put(url, data=json.dumps(result), headers=headers, auth=auth.HTTPDigestAuth("admin", "admin"))
     print(r.status_code)
 
 
+# works out totals spend for each category
+def getCategoricalTotal(context):
+    spendIndicatorList, totalList = [], []
+    for catList in context:
+        if catList == "accountIDs":
+            break
+        total, spendIndicator = getTotal(context[catList])
+        spendIndicatorList.append(spendIndicator)
+        totalList.append(total)
+        if len(context[catList]) < 1:
+            context[catList].append({
+                'TransactionInformation': 'None',
+                'Amount': '-',
+                'Currency': '-',
+                'BookingDateTime': '-'
+            })
+    return totalList, spendIndicatorList, context
+
+
+# gets number of transactions for visualisation
+def getTransactionNum(context):
+    numOfTransactions = []
+    for catList in context:
+        if catList == "totals":
+            break
+        numOfTransactions.append(len(context[catList]))
+    return numOfTransactions
+
+
 def getAverageSpending(testDate, accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getData(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     print(billingdate)
     if billingdate <= testDate:
@@ -155,14 +233,11 @@ def getAverageSpending(testDate, accountID):
     print(startdate)
     print(enddate)
     print("{0:.2f}".format(totalamount / (enddate - startdate).days))
+    return totalamount / (enddate - startdate).days
 
 
 def prediction(testDate, accountID):
-    me = auth.HTTPDigestAuth("admin", "admin")
-    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json", auth=me)
-    if res.status_code == 404:
-        return False
-    a = json.loads(res.text)
+    a = getData(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     averagespending = getAverageSpending(testDate, accountID)
     if testDate.day() > billingdate.day():
@@ -186,6 +261,53 @@ def prediction(testDate, accountID):
     return prediction
 
 
+def getIncome(rows):
+    monthDict = {}
+    for row in rows:
+        amount = float(row['Amount'])
+        date = datetime.datetime.strptime(row['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+        if str(date.month) not in monthDict:
+            monthDict[str(date.month)] = 0
+        if amount > 0:
+            monthDict[str(date.month)] += amount
+    return round(sum(monthDict.values()) / len(monthDict.values()), 2)
+
+
+def getSpend(rows):
+    monthDict = {}
+    for row in rows:
+        amount = float(row['Amount'])
+        date = datetime.datetime.strptime(row['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+        if str(date.month) not in monthDict:
+            monthDict[str(date.month)] = 0
+        if amount < 0:
+            monthDict[str(date.month)] += amount
+    return round(sum(monthDict.values()) / -len(monthDict.values()), 2)
+
+
+def calcExcess(rows):
+    leftOver = []
+    left = getIncome(rows) - getSpend(rows)
+    if left >= 0:
+        leftOver.append("Excess income:")
+    else:
+        leftOver.append("Spend exceeds income by:")
+    leftOver.append(round(left, 2))
+    return leftOver
+
+
+def updateContext(context, rows):
+    totalList, spendIndicatorList, context = getCategoricalTotal(context)
+    context['count'] = getTransactionNum(context)
+    context['totals'] = totalList
+    context['spendIndicatorList'] = spendIndicatorList
+    context['monthlyIncome'] = getIncome(rows)
+    context['monthlySpend'] = getSpend(rows)
+    context['leftOver'] = calcExcess(rows)
+    return context
+
+
+# performs lookup from Merchant Category Code file- maps it to a defined category
 def getCategory(mcc):
     reader = csv.reader(open(os.path.join(sys.path[0], "aux_files/MCC_CatId.csv"), 'r'))
     getLetters = {
@@ -216,11 +338,10 @@ def getCategory(mcc):
     else:
         return "zero"
 
-
-class UserID():
-    def __init__(self, userID):
-        self.transactions = getRows(UserID)
-
-    @register.filter
-    def getTransactions(self):
-        return self.transactions
+# class UserID():
+#     def __init__(self, userID):
+#         self.transactions = getRows(userID)
+#
+#     @register.filter
+#     def getTransactions(self):
+#         return self.transactions

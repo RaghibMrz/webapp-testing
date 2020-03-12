@@ -1,5 +1,5 @@
 python-dateutil
-django==3.0.1
+django==3.0.3
 django-crispy-forms==1.8.1
 django_cleanup==4.0.0
 Pillow==6.2.1

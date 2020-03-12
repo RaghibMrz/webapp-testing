@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from users.forms import UserUpdateForm, ProfileUpdateForm
 from .forms import ContactForm
-# auxilliary file I made to hold some of the logic
+# auxiliary file I made to hold some of the logic
 from .utils import *
 
 
@@ -17,7 +17,54 @@ def home(request):
     request.session.set_expiry(600)
     gotAccount = False
     if len(request.user.profile.getAccount()) > 0:
-        accountid = request.user.profile.getAccount()[0]
+        accountID = "All"
+        gotAccount = True
+    if request.method == 'POST':
+        accountID = request.POST.get('accountDropdown')
+        gotAccount = True
+
+    if not gotAccount:
+        accountID = "Null"
+    if not getRows(accountID) and accountID != "All":
+        context = {
+            'rows': [{
+                'TransactionInformation': 'Incorrect UserID linked',
+                'Amount': 'Update accountID',
+                'Currency': 'and try again',
+                'BookingDateTime': 'No Data Found',
+                'accountIDs': getStrAccountIDs(request.user.profile),
+                'selectedAccount': accountID
+            }]}
+        return render(request, 'transactions/home.html', context)
+
+    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
+    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
+
+    context = {
+        'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
+        'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
+        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+    }
+
+    if accountID == "All":
+        rows = getAllRows(getStrAccountIDs(request.user.profile))
+    else:
+        rows = getRows(accountID)
+
+    # get data from database, store into "context" dictionary
+    for transaction in rows:
+        context[getCategory(transaction['MCC'])].append(transaction)
+
+    context = updateContext(context, rows)
+    return render(request, 'transactions/home.html', context)
+
+
+@login_required
+def transactions(request):
+    request.session.set_expiry(600)
+    gotAccount = False
+    if len(request.user.profile.getAccount()) > 0:
+        accountid = "All"
         gotAccount = True
     if request.method == 'POST':
         accountid = request.POST.get('accountDropdown')
@@ -27,79 +74,7 @@ def home(request):
     # thus no error handling is required
     if not gotAccount:
         accountid = "Null"
-    if not getRows(accountid):
-        context = {
-            'rows': [{
-                'TransactionInformation': 'Incorrect UserID linked',
-                'Amount': 'Update accountID',
-                'Currency': 'and try again',
-                'BookingDateTime': 'No Data Found',
-                'accountIDs': getStrAccountIDs(request.user.profile),
-                'selectedAccount': accountid
-            }]}
-        return render(request, 'transactions/home.html', context)
-
-    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
-    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
-    totalList, spendIndicatorList, numOfTransactions = [], [], []
-
-    context = {
-        'one': bpList,
-        'two': tpList,
-        'three': groceryList,
-        'four': fcList,
-        'five': financesList,
-        'six': foodList,
-        'seven': genList,
-        'eight': entertainmentList,
-        'nine': lsList,
-        'zero': uncatList,
-        'totals': totalList,
-        'count': numOfTransactions,
-        'spendIndicatorList': spendIndicatorList,
-        'accountIDs': getStrAccountIDs(request.user.profile),
-        'selectedAccount': accountid
-    }
-
-    # get data from database, store into "context" dictionary
-    for transaction in getRows(accountid):
-        context[getCategory(transaction['MCC'])].append(transaction)
-
-    # gets number of transactions for treemap
-    for catList in context:
-        if catList == "totals":
-            break
-        numOfTransactions.append(len(context[catList]))
-
-    # works out totals spend for each category
-    for catList in context:
-        if catList == "totals":
-            break
-        total, spendIndicator = getTotal(context[catList])
-        spendIndicatorList.append(spendIndicator)
-        totalList.append(total)
-
-    print(context['accountIDs'])
-    return render(request, 'transactions/home.html', context)
-
-
-@login_required
-def transactions(request):
-    global accountid
-    request.session.set_expiry(600)
-    gotAccount = False
-    if len(request.user.profile.getAccount()) > 0:
-        accountid = request.user.profile.getAccount()[0]
-        gotAccount = True
-    if request.method == 'POST':
-        accountid = request.POST.get('accountDropdown')
-        gotAccount = True
-
-    # if not gotAccount, then if statement will execute before checking 2nd argument, else it will have an account
-    # thus no error handling is required
-    if not gotAccount:
-        accountid = "Error"
-    if not getRows(accountid):
+    if not getRows(accountid) and accountid != "All":
         context = {
             'rows': [{
                 'TransactionInformation': "Incorrect UserID linked",
@@ -112,14 +87,17 @@ def transactions(request):
         }
         return render(request, "transactions/transactions.html", context)
 
-    total, spendIndicator = getTotal(getRows(accountid))
-    context = {
-        'rows': getRows(accountid),
-        'total': total,
-        'spendIndicator': spendIndicator,
-        'accountIDs': getStrAccountIDs(request.user.profile),
-        'selectedAccount': accountid
-    }
+    if accountid == "All":
+        rows = getAllRows(getStrAccountIDs(request.user.profile))
+    else:
+        rows = getRows(accountid)
+
+    total, spendIndicator = getTotal(rows)
+
+    context = {'rows': rows, 'total': total, 'spendIndicator': spendIndicator,
+               'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountid,
+               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows)}
+
     return render(request, 'transactions/transactions.html', context)
 
 

@@ -7,10 +7,13 @@
       <w>currentbalance</w>
       <w>currentdate</w>
       <w>directdebit</w>
+      <w>dropdown</w>
       <w>nextpayment</w>
       <w>previouspayment</w>
       <w>raghib</w>
       <w>targetdate</w>
+      <w>treemap</w>
+      <w>uncat</w>
     </words>
   </dictionary>
 </component>

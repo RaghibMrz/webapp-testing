@@ -47,40 +47,6 @@ def getTotal(transactionList):
 # takes user bank accountID and returns a list of transactions.
 def getRows(accountID):
     row = []
-<<<<<<< HEAD
-    transactionAttributes = ["BookingDateTime", "TransactionInformation", "Amount", "Currency", "MCC"]
-    # for i in range(len(accountID)):
-    #     uid = str(accountID[i])
-    #     res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + uid + ".json", auth=me)
-    #     if res.status_code == 404:
-    #         continue
-    #     a = json.loads(res.text)
-    #     for transaction in a['Transaction']:
-    #         collecting = {
-    #             'BookingDateTime': '',
-    #             'TransactionInformation': '',
-    #             'Amount': '',
-    #             'Currency': '',
-    #             'MCC': ''
-    #         }
-    #         for attribute in transactionAttributes:
-    #             if attribute == "MCC":
-    #                 collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
-    #                 continue
-    #             if (attribute == "Amount") or (attribute == "Currency"):
-    #                 collecting[attribute] = transaction['Amount'][str(attribute)]
-    #                 if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
-    #                     continue
-    #                 if transaction["CreditDebitIndicator"] == "Debit":
-    #                     collecting['Amount'] = "-" + collecting['Amount']
-    #                 elif transaction["CreditDebitIndicator"] == "Credit":
-    #                     collecting['Amount'] = "+" + collecting['Amount']
-    #             else:
-    #                 collecting[attribute] = transaction[str(attribute)]
-    #             if collecting not in row:
-    #                 row.append(collecting)
-    # return row
-=======
     transactionAttributes = ["TransactionInformation", "Amount", "Currency", "BookingDateTime", "MCC"]
     a = getData(accountID)
     if not a:
@@ -125,7 +91,6 @@ def getAllRows(IDs):
         for collectingDict in getRows(accountID):
             row.append(collectingDict)
     return row
->>>>>>> 7070f0da6d8322052c3cf8f82f76e11d954f9b0c
 
     ##### Raghib code, easier debugging
     with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:

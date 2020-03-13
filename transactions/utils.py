@@ -44,6 +44,7 @@ def getTotal(transactionList):
     return round(float(total), 2), spendIndicator
 
 
+# function sorts all rows (of transactions) from latest transaction to oldest
 def sortedRows(rows):
     sortedRows = sorted(rows, key=lambda i: i['BookingDateTime'])
     sortedRows.reverse()
@@ -69,7 +70,8 @@ def getRows(accountID):
         for attribute in transactionAttributes:
             # make function to convert date into more pleasant format
             if attribute == "BookingDateTime":
-                collecting[attribute] = datetime.datetime.strptime(transaction[str(attribute)], "%Y-%m-%dT%H:%M:%S+00:00")
+                collecting[attribute] = datetime.datetime.strptime(transaction[str(attribute)],
+                                                                   "%Y-%m-%dT%H:%M:%S+00:00")
                 continue
             if attribute == "MCC":
                 collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
@@ -101,10 +103,20 @@ def getAllRows(IDs):
     return sortedRows(row)
 
 
+# our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
 def getStrAccountIDs(profile):
     accountList = []
     for accounts in profile.getAccount():
         accountList.append(str(accounts))
+    return accountList
+
+
+# our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
+def getAllAccounts(profile):
+    accountList = []
+    for accounts in profile.getAccount():
+        accountList.append(str(accounts))
+    accountList.append("All")
     return accountList
 
 
@@ -158,6 +170,7 @@ def getTransactionNum(context):
     return numOfTransactions
 
 
+# this function returns all given rows of transactions between the two dates given
 def getFilteredRows(rows, startDate, endDate):
     start = datetime.datetime.strptime(startDate, "%d/%m/%Y %H:%M ")
     end = datetime.datetime.strptime(endDate, " %d/%m/%Y %H:%M")

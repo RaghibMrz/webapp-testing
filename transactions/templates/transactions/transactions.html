@@ -145,7 +145,7 @@
                 });
               });
               </script>
-              <input type = "submit" name = "submit" value = "Enter">
+              <input type="submit" name="submit" value = "Enter">
             </form>
           </div>
           <div>
@@ -177,6 +177,22 @@
                   {% endfor %}
                 </tbody>
                 </table>
+            </div>
+            <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+              <form action="{% url 'transactions' %}" method="POST" style="margin-right: 10%">
+                {% csrf_token %}
+                <select class="custom-select w-auto" name="submit">
+                  <!--working with actual accounts-->
+                  {% for i in transPerPageList %}
+                    <option value="{{i}}" value="{{ i }}">{{ i }} elements per page</option>
+                  {% endfor %}
+                  <option value="All">Show all</option>
+                </select>
+                <input type="submit" value="Select">
+              </form>
+              {% for elem in elements %}
+                <a href="{% url 'transactions' %}" style="margin: 1%">{{ elem }}</a>
+              {% endfor %}
             </div>
             <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
               <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total }}</h6>

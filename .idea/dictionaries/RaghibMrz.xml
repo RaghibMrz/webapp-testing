@@ -7,6 +7,8 @@
       <w>currentbalance</w>
       <w>currentdate</w>
       <w>datepicker</w>
+      <w>daterangepicker</w>
+      <w>datetimes</w>
       <w>directdebit</w>
       <w>dropdown</w>
       <w>nextpayment</w>

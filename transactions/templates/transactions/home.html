@@ -12,7 +12,7 @@
       <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
-        <select class="custom-select w-auto" name="accountDropdown">
+        <select class="custom-select w-auto" name="submit">
           <!--working with actual accounts-->
           <option value="All">All Accounts</option>
           {% for account in accountIDs %}
@@ -118,12 +118,43 @@
     </div>
   </div>
   <!-- Content Row -->
-
   <div class="row">
-
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Categorical Spend</h6>
+          <div style="margin-left: 20%">
+            <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
+          </div>
+          <div>
+            <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+              <input type="text" name="datetimes"/>
+              <script>
+              $(function() {
+                $('input[name="datetimes"]').daterangepicker({
+                  timePicker: true,
+                  "timePicker24Hour": true,
+                  startDate: moment().startOf('hour'),
+                  endDate: moment().startOf('hour').add(32, 'hour'),
+                  locale: {
+                    format: 'DD/MM/YYYY hh:mm'
+                  }
+                });
+              });
+              </script>
+              <input type = "submit" name = "submit" value = "Enter">
+            </form>
+          </div>
+          <div>
+            {% if dateIndicator %}
+            <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
+            {% else %}
+            <h6 class="m-0 font-weight-bold text-secondary">Showing all transactions</h6>
+            {% endif %}
+            <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">Clear Dates</a>
+          </div>
+        </div>
         <!-- Card Header - Dropdown -->
         <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>

@@ -16,16 +16,11 @@ from .utils import *
 @login_required
 def home(request):
     request.session.set_expiry(600)
-    gotAccount = False
-    if len(request.user.profile.getAccount()) > 0:
-        accountID = "All"
-        gotAccount = True
-    if request.method == 'POST':
-        accountID = request.POST.get('accountDropdown')
-        gotAccount = True
-
-    if not gotAccount:
-        accountID = "Null"
+    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
+        request.user.profile.setAccountID("All")
+    if request.method == 'POST' and request.POST['submit'] in getAllAccounts(request.user.profile):
+        request.user.profile.setAccountID(request.POST.get('submit'))
+    accountID = request.user.profile.getAccountID()
     if not getRows(accountID) and accountID != "All":
         context = {
             'rows': [{
@@ -52,6 +47,13 @@ def home(request):
     else:
         rows = getRows(accountID)
 
+    if request.method == "POST" and request.POST['submit'] == "Enter":
+        rawDates = request.POST.get('datetimes').split("-")
+        startDate = rawDates[0]
+        endDate = rawDates[1]
+        rows = getFilteredRows(rows, startDate, endDate)
+        context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
+
     # get data from database, store into "context" dictionary
     for transaction in rows:
         context[getCategory(transaction['MCC'])].append(transaction)
@@ -63,18 +65,17 @@ def home(request):
 @login_required
 def transactions(request):
     request.session.set_expiry(600)
-    gotAccount = False
-    if len(request.user.profile.getAccount()) > 0:
-        accountid = "All"
-        gotAccount = True
-    if request.method == 'POST' and request.POST['submit'] != "Enter":
-        accountid = request.POST.get('accountDropdown')
-        gotAccount = True
+    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == 0:
+        request.user.profile.setAccountID("All")
 
-    # if not gotAccount, then if statement will execute before checking 2nd argument, else it will have an account
-    # thus no error handling is required
-    if not gotAccount:
-        accountid = "Null"
+    if request.method == 'POST':
+        print(request.POST['submit'])
+        print(request.POST.get('submit'))
+
+    if request.method == 'POST' and request.POST['submit'] in getAllAccounts(request.user.profile):
+        request.user.profile.setAccountID(request.POST.get('submit'))
+
+    accountid = request.user.profile.getAccountID()
     if not getRows(accountid) and accountid != "All":
         context = {
             'rows': [{
@@ -92,19 +93,24 @@ def transactions(request):
         rows = getAllRows(getStrAccountIDs(request.user.profile))
     else:
         rows = getRows(accountid)
+    dateIndicator = "All transactions"
+    if request.method == "POST" and request.POST['submit'] == "Enter":
+        rawDates = request.POST.get('datetimes').split("-")
+        startDate = rawDates[0]
+        endDate = rawDates[1]
+        rows = getFilteredRows(rows, startDate, endDate)
+        dateIndicator = "Transactions between " + str(startDate) + " - " + str(endDate)
+
+    if request.method == "POST" and request.POST['submit'] == "Select":
+        transPerPage = request.POST.get('elem')
+    else:
+        transPerPage = 10
 
     total, spendIndicator = getTotal(rows)
 
-    context = {'rows': rows, 'total': total, 'spendIndicator': spendIndicator,
-               'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountid,
-               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows)}
-
-    if request.method == "POST":
-        f = DateRangeForm(request.POST)
-        print(f.is_valid())
-    else:
-        f = DateRangeForm()
-    context['form'] = f
+    context = {'rows': rows, 'total': total, 'spendIndicator': spendIndicator, 'dateIndicator': dateIndicator,
+               'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountid, 'elements': ['Page 1', '<', 'Page x', '>', "Page "+str(((len(rows)) // transPerPage) + 1)],
+               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows), 'transPerPageList': [10, 15, 20, 50]}
 
     return render(request, 'transactions/transactions.html', context)
 

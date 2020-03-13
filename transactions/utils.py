@@ -44,6 +44,13 @@ def getTotal(transactionList):
     return round(float(total), 2), spendIndicator
 
 
+# function sorts all rows (of transactions) from latest transaction to oldest
+def sortedRows(rows):
+    sortedRows = sorted(rows, key=lambda i: i['BookingDateTime'])
+    sortedRows.reverse()
+    return sortedRows
+
+
 # takes user bank accountID and returns a list of transactions.
 def getRows(accountID):
     row = []
@@ -51,9 +58,6 @@ def getRows(accountID):
     a = getData(accountID)
     if not a:
         return False
-
-    # with open(os.path.join(sys.path[0], "aux_files/finalData.json"), 'r') as data:
-    #     a = json.load(data)
 
     for transaction in a['Transaction']:
         collecting = {
@@ -64,9 +68,15 @@ def getRows(accountID):
             'MCC': ''
         }
         for attribute in transactionAttributes:
+            # make function to convert date into more pleasant format
+            if attribute == "BookingDateTime":
+                collecting[attribute] = datetime.datetime.strptime(transaction[str(attribute)],
+                                                                   "%Y-%m-%dT%H:%M:%S+00:00")
+                continue
             if attribute == "MCC":
                 collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
                 continue
+            # appends "+/-" to indicate income/expenditure
             if (attribute == "Amount") or (attribute == "Currency"):
                 collecting[attribute] = transaction['Amount'][str(attribute)]
                 if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
@@ -79,7 +89,7 @@ def getRows(accountID):
                 collecting[attribute] = transaction[str(attribute)]
             if collecting not in row:
                 row.append(collecting)
-    return row
+    return sortedRows(row)
 
 
 # combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
@@ -90,7 +100,7 @@ def getAllRows(IDs):
             continue
         for collectingDict in getRows(accountID):
             row.append(collectingDict)
-    return row
+    return sortedRows(row)
 
     ##### Raghib code, easier debugging
     with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
@@ -123,10 +133,20 @@ def getAllRows(IDs):
     return row
 
 
+# our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
 def getStrAccountIDs(profile):
     accountList = []
     for accounts in profile.getAccount():
         accountList.append(str(accounts))
+    return accountList
+
+
+# our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
+def getAllAccounts(profile):
+    accountList = []
+    for accounts in profile.getAccount():
+        accountList.append(str(accounts))
+    accountList.append("All")
     return accountList
 
 
@@ -180,6 +200,20 @@ def getTransactionNum(context):
     return numOfTransactions
 
 
+# this function returns all given rows of transactions between the two dates given
+def getFilteredRows(rows, startDate, endDate):
+    start = datetime.datetime.strptime(startDate, "%d/%m/%Y %H:%M ")
+    end = datetime.datetime.strptime(endDate, " %d/%m/%Y %H:%M")
+    filteredRows = []
+    for row in rows:
+        if row['BookingDateTime'] > end:
+            continue
+        if row['BookingDateTime'] < start:
+            break
+        filteredRows.append(row)
+    return filteredRows
+
+
 def getAverageSpending(testDate, accountID):
     a = getData(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
@@ -230,33 +264,41 @@ def getIncome(rows):
     monthDict = {}
     for row in rows:
         amount = float(row['Amount'])
-        date = datetime.datetime.strptime(row['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+        date = row['BookingDateTime']
         if str(date.month) not in monthDict:
             monthDict[str(date.month)] = 0
         if amount > 0:
             monthDict[str(date.month)] += amount
-    return round(sum(monthDict.values()) / len(monthDict.values()), 2)
+    # round(sum(monthDict.values()) / len(monthDict.values()), 2)
+    if len(monthDict.values()) > 0:
+        return min(monthDict.values())
+    else:
+        return 0
 
 
 def getSpend(rows):
     monthDict = {}
     for row in rows:
         amount = float(row['Amount'])
-        date = datetime.datetime.strptime(row['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+        date = row['BookingDateTime']
         if str(date.month) not in monthDict:
             monthDict[str(date.month)] = 0
         if amount < 0:
             monthDict[str(date.month)] += amount
-    return round(sum(monthDict.values()) / -len(monthDict.values()), 2)
+    if len(monthDict.values()) > 0:
+        return -round(max(monthDict.values()), 2)
+    else:
+        return 0
 
 
 def calcExcess(rows):
     leftOver = []
     left = getIncome(rows) - getSpend(rows)
     if left >= 0:
-        leftOver.append("Excess income:")
+        leftOver.append("On track to save: ")
     else:
-        leftOver.append("Spend exceeds income by:")
+        left = -left
+        leftOver.append("Spends predicted to exceed income by:")
     leftOver.append(round(left, 2))
     return leftOver
 

@@ -120,29 +120,33 @@
   <!-- Content Row -->
 
   <div class="row">
-
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-12">
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
+        </div>
 
-          <div>
-            Choose date range:
-          <input type="text" name="datetimes"/>
-            <script>
-            $(function() {
-              $('input[name="datetimes"]').daterangepicker({
-                timePicker: true,
-                startDate: moment().startOf('hour'),
-                endDate: moment().startOf('hour').add(32, 'hour'),
-                locale: {
-                  format: 'M/DD hh:mm A'
-                }
+          <div class="card-header py-1 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
+            <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
+              <input type="text" name="datetimes"/>
+              <script>
+              $(function() {
+                $('input[name="datetimes"]').daterangepicker({
+                  timePicker: true,
+                  startDate: moment().startOf('hour'),
+                  endDate: moment().startOf('hour').add(32, 'hour'),
+                  locale: {
+                    format: 'DD/MM/YYYY hh:mm A'
+                  }
+                });
               });
-            });
-            </script>
+              <!-- "%Y-%m-%dT%H:%M:%S+00:00" -->
+              </script>
+              <input type = "submit" name = "submit" value = "Enter">
+            </form>
           </div>
 
           <!--View data between:-->
@@ -152,7 +156,6 @@
           <!--<input type = "submit" name = "submit" value = "Enter">-->
           <!--</form>-->
 
-        </div>
         <!-- Card Body -->
         <div class="card-body">
             <div class="table-responsive">

@@ -99,12 +99,10 @@ def transactions(request):
                'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountid,
                'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows)}
 
-    if request.method == "POST":
-        f = DateRangeForm(request.POST)
-        print(f.is_valid())
-    else:
-        f = DateRangeForm()
-    context['form'] = f
+    if request.method == "POST" and request.POST['submit'] == "Enter":
+        rawDates = request.POST.get('datetimes').split("-")
+        startDate = rawDates[0]
+        endDate = rawDates[1]
 
     return render(request, 'transactions/transactions.html', context)
 

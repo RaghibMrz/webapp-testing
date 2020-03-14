@@ -24,10 +24,16 @@ def home(request):
 
     # gets date range selected by user, parses it and then updates transactions+details displayed
     if request.method == "POST" and request.POST['submit'] == "Enter":
-        rawDates = request.POST.get('datetimes').split("-")
+        request.user.profile.setDateRange(request.POST.get('datetimes'))
+    if request.method == "POST" and request.POST['submit'] == "Clear":
+        request.user.profile.setUseDateFilter("0")
+    if request.user.profile.useDateFilter == "1":
+        rawDates = request.user.profile.getDateRange().split("-")
         startDate, endDate = rawDates[0], rawDates[1]
         rows = getFilteredRows(rows, startDate, endDate)
         context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
+    else:
+        context['dateIndicator'] = "All transactions"
 
     # get data from database, store into "context" dictionary
     for transaction in rows:
@@ -53,8 +59,7 @@ def transactions(request, pageElem, page):
 
     if request.user.profile.useDateFilter == "1":
         rawDates = request.user.profile.getDateRange().split("-")
-        startDate = rawDates[0]
-        endDate = rawDates[1]
+        startDate, endDate = rawDates[0], rawDates[1]
         rows = getFilteredRows(rows, startDate, endDate)
         dateIndicator = "Transactions between " + str(startDate) + " - " + str(endDate)
     else:

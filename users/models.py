@@ -9,7 +9,10 @@ class Profile(models.Model):
     accountID = models.CharField(max_length=14, blank=True,
                                  help_text="Enter Account ID to link us to your debit/credit card")
     accountIDList = models.CharField(max_length=128, blank=True)
-    gotAccount = models.CharField(max_length=1, blank=False)
+    gotAccount = models.CharField(max_length=1, blank=False, default="0")
+    transPerPage = models.CharField(max_length=14, blank=False, default="10")
+    dateRange = models.CharField(max_length=128, blank=False, default="None")
+    useDateFilter = models.CharField(max_length=1, blank=False, default="0")
 
     def __str__(self):
         return f'{self.user.username}\'s Profile'
@@ -48,6 +51,29 @@ class Profile(models.Model):
         if accountID == self.accountID:
             self.accountID = "Null"
             self.gotAccount = "0"
+
+    def getTransPerPage(self):
+        return self.transPerPage
+
+    def setTransPerPage(self, transactions):
+        self.transPerPage = transactions
+        self.save()
+
+    def getDateRange(self):
+        return self.dateRange
+
+    def setDateRange(self, data):
+        self.dateRange = data
+        self.useDateFilter = "1"
+        self.save()
+
+    def setUseDateFilter(self, data):
+        self.useDateFilter = data
+        self.dateRange = "None"
+        self.save()
+
+    def getUseDateFilter(self):
+        return self.useDateFilter
 
     # overriding save method to scale down any uploaded picture
     # optimises speed and saves space

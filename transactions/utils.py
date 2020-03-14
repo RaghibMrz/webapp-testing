@@ -2,7 +2,7 @@ import csv
 import datetime
 import os
 import sys
-
+from django.shortcuts import render
 import json
 import requests
 from dateutil.relativedelta import relativedelta
@@ -14,6 +14,57 @@ from users.models import Account
 register = template.Library()
 
 
+# gets the correct account ID from the database through the correct post request
+# default setting displays "All" account transactions aggregated into one,
+# selecting an account from the drop down menu filters to just the selected account
+def getAccount(request):
+    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
+        request.user.profile.setAccountID("All")
+    if request.method == 'POST' and request.POST['submit'] in getAllAccounts(request.user.profile):
+        request.user.profile.setAccountID(request.POST.get('submit'))
+    return request.user.profile.getAccountID()
+
+
+# checks if entered accountID produces a valid list of transactions, if not user is redirected with a page that displays
+# a user friendly message telling them to check the ID they entered.
+def validateID(request, accountID, page):
+    if not getRows(accountID) and accountID != "All":
+        context = {
+            'rows': [{
+                'TransactionInformation': 'Incorrect UserID linked',
+                'Amount': 'Update accountID',
+                'Currency': 'and try again',
+                'BookingDateTime': 'No Data Found',
+                'accountIDs': getStrAccountIDs(request.user.profile),
+                'selectedAccount': accountID
+            }]}
+        return render(request, 'transactions/' + page + '.html', context)
+
+
+# creates all the lists required to store categorical data, 10 lists for 10 categories
+# a couple other lists for supplementary data such as sums, these are then files into
+# the required context dictionary for later use
+def makeContext(request, accountID):
+    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
+    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
+    context = {
+        'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
+        'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
+        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+    }
+    return context
+
+
+# returns rows of userID selected, or aggregate rows if all selected
+def getSelectedAccountRows(request, accountID):
+    if accountID == "All":
+        rows = getAllRows(getStrAccountIDs(request.user.profile))
+    else:
+        rows = getRows(accountID)
+    return rows
+
+
+# helper function to get data from database/local file into python dictionaries
 def getData(accountID):
     # get from database
     # res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json",
@@ -44,6 +95,46 @@ def getTotal(transactionList):
     return round(float(total), 2), spendIndicator
 
 
+# function sorts all rows (of transactions) from latest transaction to oldest
+def sortedRows(rows):
+    sortedRows = sorted(rows, key=lambda i: i['BookingDateTime'])
+    sortedRows.reverse()
+    return sortedRows
+
+
+# handles POST request which gets correct data for pagination including actual data to display,
+# the key and the setting for number of items per page
+def getPaginationElements(request, transPerPage, page, rows, pageElem):
+    if request.user.profile.getTransPerPage() != "AllTransactions":
+        transPerPage = int(transPerPage)
+        if pageElem == "<":
+            pageElem = "Page " + str(int(page.split(" ")[1]) - 1)
+        elif pageElem == ">":
+            pageElem = "Page " + str(int(page.split(" ")[1]) + 1)
+        if pageElem == "Page 1":
+            elems = [pageElem, '>', "Page " + str(((len(rows)) // transPerPage) + 1)]
+        elif pageElem == ("Page " + str(((len(rows)) // transPerPage) + 1)):
+            elems = ['Page 1', '<', pageElem]
+        else:
+            elems = ['Page 1', '<', pageElem, '>', "Page " + str(((len(rows)) // 10) + 1)]
+    else:
+        elems = ['Page 1']
+    return pageElem, elems
+
+
+# close to identical context required in two methods, this function calculates and returns it
+def getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem):
+    context = {'rows': getPaginatedRows(rows, transPerPage, pageElem), 'total': getTotal(rows)[0],
+               'spendIndicator': getTotal(rows)[1],
+               'dateIndicator': dateIndicator,
+               'accountIDs': getStrAccountIDs(request.user.profile),
+               'selectedAccount': request.user.profile.getAccountID(), 'elements': elems,
+               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows),
+               'transPerPageList': transPerPageList, 'page': pageElem}
+
+    return context
+
+
 # takes user bank accountID and returns a list of transactions.
 def getRows(accountID):
     row = []
@@ -51,9 +142,6 @@ def getRows(accountID):
     a = getData(accountID)
     if not a:
         return False
-
-    # with open(os.path.join(sys.path[0], "aux_files/finalData.json"), 'r') as data:
-    #     a = json.load(data)
 
     for transaction in a['Transaction']:
         collecting = {
@@ -64,9 +152,15 @@ def getRows(accountID):
             'MCC': ''
         }
         for attribute in transactionAttributes:
+            # make function to convert date into more pleasant format
+            if attribute == "BookingDateTime":
+                collecting[attribute] = datetime.datetime.strptime(transaction[str(attribute)],
+                                                                   "%Y-%m-%dT%H:%M:%S+00:00")
+                continue
             if attribute == "MCC":
                 collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
                 continue
+            # appends "+/-" to indicate income/expenditure
             if (attribute == "Amount") or (attribute == "Currency"):
                 collecting[attribute] = transaction['Amount'][str(attribute)]
                 if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
@@ -79,7 +173,7 @@ def getRows(accountID):
                 collecting[attribute] = transaction[str(attribute)]
             if collecting not in row:
                 row.append(collecting)
-    return row
+    return sortedRows(row)
 
 
 # combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
@@ -90,13 +184,48 @@ def getAllRows(IDs):
             continue
         for collectingDict in getRows(accountID):
             row.append(collectingDict)
-    return row
+    return sortedRows(row)
 
 
+# takes an element of a list, and makes it the first element
+def makeFirstElement(element, elemList):
+    if elemList[0] == element:
+        return elemList
+    else:
+        elemList.remove(element)
+        elemList.reverse()
+        elemList.append(element)
+        elemList.reverse()
+        return elemList
+
+
+# takes a list of transactions, the page number and the number of transactions to display
+def getPaginatedRows(rows, transPerPage, page):
+    if transPerPage == "AllTransactions":
+        return rows
+    transPerPage = int(transPerPage)
+    p = int(page.split(" ")[1])
+    start = transPerPage * (p - 1)
+    end = (transPerPage * p) - 1
+    if end > len(rows):
+        end = len(rows)
+    return rows[start:end]
+
+
+# our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
 def getStrAccountIDs(profile):
     accountList = []
     for accounts in profile.getAccount():
         accountList.append(str(accounts))
+    return accountList
+
+
+# our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
+def getAllAccounts(profile):
+    accountList = []
+    for accounts in profile.getAccount():
+        accountList.append(str(accounts))
+    accountList.append("All")
     return accountList
 
 
@@ -150,6 +279,20 @@ def getTransactionNum(context):
             break
         numOfTransactions.append(len(context[catList]))
     return numOfTransactions
+
+
+# this function returns all given rows of transactions between the two dates given
+def getFilteredRows(rows, startDate, endDate):
+    start = datetime.datetime.strptime(startDate, "%d/%m/%Y %H:%M ")
+    end = datetime.datetime.strptime(endDate, " %d/%m/%Y %H:%M")
+    filteredRows = []
+    for row in rows:
+        if row['BookingDateTime'] > end:
+            continue
+        if row['BookingDateTime'] < start:
+            break
+        filteredRows.append(row)
+    return filteredRows
 
 
 def getAverageSpending(testDate, accountID):
@@ -214,33 +357,41 @@ def getIncome(rows):
     monthDict = {}
     for row in rows:
         amount = float(row['Amount'])
-        date = datetime.datetime.strptime(row['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+        date = row['BookingDateTime']
         if str(date.month) not in monthDict:
             monthDict[str(date.month)] = 0
         if amount > 0:
             monthDict[str(date.month)] += amount
-    return round(sum(monthDict.values()) / len(monthDict.values()), 2)
+    # round(sum(monthDict.values()) / len(monthDict.values()), 2)
+    if len(monthDict.values()) > 0:
+        return min(monthDict.values())
+    else:
+        return 0
 
 
 def getSpend(rows):
     monthDict = {}
     for row in rows:
         amount = float(row['Amount'])
-        date = datetime.datetime.strptime(row['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
+        date = row['BookingDateTime']
         if str(date.month) not in monthDict:
             monthDict[str(date.month)] = 0
         if amount < 0:
             monthDict[str(date.month)] += amount
-    return round(sum(monthDict.values()) / -len(monthDict.values()), 2)
+    if len(monthDict.values()) > 0:
+        return -round(max(monthDict.values()), 2)
+    else:
+        return 0
 
 
 def calcExcess(rows):
     leftOver = []
     left = getIncome(rows) - getSpend(rows)
     if left >= 0:
-        leftOver.append("Excess income:")
+        leftOver.append("On track to save: ")
     else:
-        leftOver.append("Spend exceeds income by:")
+        left = -left
+        leftOver.append("Spends predicted to exceed income by:")
     leftOver.append(round(left, 2))
     return leftOver
 

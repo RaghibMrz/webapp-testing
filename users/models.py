@@ -9,9 +9,28 @@ class Profile(models.Model):
     accountID = models.CharField(max_length=14, blank=True,
                                  help_text="Enter Account ID to link us to your debit/credit card")
     accountIDList = models.CharField(max_length=128, blank=True)
+    gotAccount = models.CharField(max_length=1, blank=False, default="0")
+    transPerPage = models.CharField(max_length=14, blank=False, default="10")
+    dateRange = models.CharField(max_length=128, blank=False, default="None")
+    useDateFilter = models.CharField(max_length=1, blank=False, default="0")
 
     def __str__(self):
         return f'{self.user.username}\'s Profile'
+
+    def getGotAccount(self):
+        return self.gotAccount
+
+    def setGotAccount(self, value):
+        self.gotAccount = value
+        self.save()
+
+    def setAccountID(self, accountID):
+        self.gotAccount = "1"
+        self.accountID = accountID
+        self.save()
+
+    def getAccountID(self):
+        return self.accountID
 
     def getAccount(self):
         return Account.objects.filter(user__username=self.user.username).values_list('accountid', flat=True)
@@ -23,10 +42,38 @@ class Profile(models.Model):
     def clearAccountList(self):
         for accountid in self.getAccount():
             Account.objects.filter(accountid=str(accountid), user=self.user).delete()
+        self.gotAccount = "0"
+        self.accountID = "Null"
 
     def deleteAccount(self, accountID):
         if accountID in self.getAccount():
             Account.objects.filter(accountid=str(accountID), user=self.user).delete()
+        if accountID == self.accountID:
+            self.accountID = "Null"
+            self.gotAccount = "0"
+
+    def getTransPerPage(self):
+        return self.transPerPage
+
+    def setTransPerPage(self, transactions):
+        self.transPerPage = transactions
+        self.save()
+
+    def getDateRange(self):
+        return self.dateRange
+
+    def setDateRange(self, data):
+        self.dateRange = data
+        self.useDateFilter = "1"
+        self.save()
+
+    def setUseDateFilter(self, data):
+        self.useDateFilter = data
+        self.dateRange = "None"
+        self.save()
+
+    def getUseDateFilter(self):
+        return self.useDateFilter
 
     # overriding save method to scale down any uploaded picture
     # optimises speed and saves space

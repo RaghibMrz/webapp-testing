@@ -3,7 +3,6 @@
 {% load static %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
     <h1 class="h3 mb-0 text-gray-800  mr-3">All Transactions</h1>
@@ -11,13 +10,13 @@
     <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-tachometer-alt text-white-50"></i> See Dashboard</a>
     <a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
-    <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
-      <select class="custom-select w-auto" name="accountDropdown">
+    <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
+      <select class="custom-select w-auto" name="submit">
         <!--working with actual accounts-->
+        <option value="All">All Accounts</option>
         {% for account in accountIDs %}
           <option value="{{account}}">Account: {{ account }}</option>
         {% endfor %}
-          <option value="All">All Accounts</option>
       </select>
       <input type="submit" value="Select" >
     </form>
@@ -50,7 +49,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Average Monthly Income</div>
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome}}</div>
             </div>
             <div class="col-auto">
@@ -67,7 +66,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Average Monthly Spend</div>
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Minimum Monthly Spend</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend}}</div>
             </div>
             <div class="col-auto">
@@ -121,47 +120,42 @@
   <!-- Content Row -->
 
   <div class="row">
-
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-12">
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
-          <div class="dropdown mb-0">
-            Sort By:  
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Date (Descending)
-            </button>
-            <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="">Date (Descending)</a>
-                <a class="dropdown-item" href="">Category</a>
-                <a class="dropdown-item" href="">Amount (Descending)</a>
-                <a class="dropdown-item" href="">Amount (Ascending)</a>
-            </div>
-            <!-- <select class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Date (Descending)
-            </select>
-            <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
-                <option value="Date (Descending)"><a class="dropdown-item" href="#">Date (Descending)</a></option>
-                <option value="Category"><a class="dropdown-item" href="#">Category</a></option>
-                <option value="Amount (Descending)"><a class="dropdown-item" href="#">Amount (Descending)</a></option>
-                <option value="Amount(Ascending)"><a class="dropdown-item" href="#">Amount (Ascending)</a></option>
-            </div> -->
+          <div style="margin-left: 20%">
+            <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
           </div>
-          <!-- <div class="dropdown no-arrow">
-            <a class="dropdown-toggle font-weight-bold text-primary" href="#" role="button" id="dropdownMenuLink"   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sort By: <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-              <div class="dropdown-header">Dropdown Header:</div>
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div> -->
+          <div>
+            <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
+              <input type="text" name="datetimes"/>
+              <script>
+              $(function() {
+                $('input[name="datetimes"]').daterangepicker({
+                  timePicker: true,
+                  "timePicker24Hour": true,
+                  startDate: moment().startOf('hour'),
+                  endDate: moment().startOf('hour').add(32, 'hour'),
+                  locale: {
+                    format: 'DD/MM/YYYY hh:mm'
+                  }
+                });
+              });
+              </script>
+              <input type="submit" name="submit" value = "Enter">
+            </form>
+          </div>
+          <div>
+            <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
+            <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
+              <input type="submit" name="submit" value="Clear" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+            </form>
+          </div>
         </div>
+
         <!-- Card Body -->
         <div class="card-body">
             <div class="table-responsive">
@@ -185,6 +179,27 @@
                   {% endfor %}
                 </tbody>
                 </table>
+            </div>
+            <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+              <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST" style="margin-right: 10%">
+                {% csrf_token %}
+                <select class="custom-select w-auto" name="submit">
+                  <!--working with actual accounts-->
+                  {% for i in transPerPageList %}
+                    <option value="{{ i }}">{{ i }} elements per page</option>
+                  {% endfor %}
+                  <option value="AllTransactions">Show all</option>
+                </select>
+                <input type="submit" value="submit">
+              </form>
+              
+              {% for pageElem in elements %}
+                {% if pageElem == page %}
+                  <h5 style="margin: 1%">{{ pageElem }}</h5>
+                {% else %}
+                  <a href="{% url 'transactions' pageElem page %}" style="margin: 1%">{{ pageElem }}</a>
+                {% endif %}
+              {% endfor %}
             </div>
             <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
               <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total }}</h6>

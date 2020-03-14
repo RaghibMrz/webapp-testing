@@ -7,17 +7,17 @@
     <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
       <h1 class="h3 mb-0 text-gray-800  mr-3">MyAccount</h1>
       <h4 class="h6 mb-0 text-gray-800  mr-3">(Account: {{ selectedAccount }})</h4>
-      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50"></i> See All Transactions</a>
+      <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50"></i> See All Transactions</a>
       <a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
       <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
-        <select class="custom-select w-auto" name="accountDropdown">
+        <select class="custom-select w-auto" name="submit">
           <!--working with actual accounts-->
+          <option value="All">All Accounts</option>
           {% for account in accountIDs %}
             <option value="{{account}}">Account: {{ account }}</option>
           {% endfor %}
-            <option value="All">All Accounts</option>
         </select>
         <input type="submit" value="Select">
       </form>
@@ -26,7 +26,7 @@
 
   <!-- Content Row -->
   <div class="row">
-    <!-- Balance Card -->
+   <!-- Balance Card -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-warning shadow h-100 py-2">
         <div class="card-body">
@@ -49,7 +49,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Average Monthly Income</div>
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome}}</div>
             </div>
             <div class="col-auto">
@@ -66,7 +66,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Average Monthly Spend</div>
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Minimum Monthly Spend</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend}}</div>
             </div>
             <div class="col-auto">
@@ -118,12 +118,43 @@
     </div>
   </div>
   <!-- Content Row -->
-
   <div class="row">
-
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Categorical Spend</h6>
+          <div style="margin-left: 20%">
+            <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
+          </div>
+          <div>
+            <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+              <input type="text" name="datetimes"/>
+              <script>
+              $(function() {
+                $('input[name="datetimes"]').daterangepicker({
+                  timePicker: true,
+                  "timePicker24Hour": true,
+                  startDate: moment().startOf('hour'),
+                  endDate: moment().startOf('hour').add(32, 'hour'),
+                  locale: {
+                    format: 'DD/MM/YYYY hh:mm'
+                  }
+                });
+              });
+              </script>
+              <input type = "submit" name = "submit" value = "Enter">
+            </form>
+          </div>
+          <div>
+            {% if dateIndicator %}
+            <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
+            {% else %}
+            <h6 class="m-0 font-weight-bold text-secondary">All transactions</h6>
+            {% endif %}
+            <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">Clear Dates</a>
+          </div>
+        </div>
         <!-- Card Header - Dropdown -->
         <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
@@ -182,7 +213,7 @@
                 </div>
                 <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                   <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: {{ totals.0 }}</h6>
-                  <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                  <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
                 </div>
               </div>
             </div>
@@ -227,7 +258,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: {{ totals.1 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -271,7 +302,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: {{ totals.2 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -315,7 +346,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: {{ totals.3 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -359,7 +390,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: {{ totals.4 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -403,7 +434,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: {{ totals.5 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -447,7 +478,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: {{ totals.6 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -492,7 +523,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: {{ totals.7 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -536,7 +567,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: {{ totals.8 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>
@@ -580,7 +611,7 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: {{ totals.9 }}</h6>
-                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 {% extends "transactions/base.html" %}
 {% block ctt %}
 {% load static %}
+{% load humanize %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
   <!-- Page Heading -->
@@ -12,7 +13,7 @@
       <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
-        <select class="custom-select w-auto" name="submit">
+        <select class="custom-select w-auto" name="accountDropdown">
           <!--working with actual accounts-->
           <option value="All">All Accounts</option>
           {% for account in accountIDs %}
@@ -26,7 +27,7 @@
 
   <!-- Content Row -->
   <div class="row">
-   <!-- Balance Card -->
+    <!-- Balance Card -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-warning shadow h-100 py-2">
         <div class="card-body">
@@ -49,8 +50,8 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome}}</div>
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Average Monthly Income</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -66,8 +67,8 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Minimum Monthly Spend</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend}}</div>
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Average Monthly Spend</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-pound-sign fa-2x text-gray-300"></i>
@@ -86,7 +87,7 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ leftOver.0 }}</div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ leftOver.1 }}</div>
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ leftOver.1 |floatformat:2| intcomma}}</div>
                 </div>
                 <!--<div class="col">-->
                   <!--<div class="progress progress-sm mr-2">-->
@@ -118,43 +119,12 @@
     </div>
   </div>
   <!-- Content Row -->
+
   <div class="row">
+
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Categorical Spend</h6>
-          <div style="margin-left: 20%">
-            <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
-          </div>
-          <div>
-            <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-              <input type="text" name="datetimes"/>
-              <script>
-              $(function() {
-                $('input[name="datetimes"]').daterangepicker({
-                  timePicker: true,
-                  "timePicker24Hour": true,
-                  startDate: moment().startOf('hour'),
-                  endDate: moment().startOf('hour').add(32, 'hour'),
-                  locale: {
-                    format: 'DD/MM/YYYY hh:mm'
-                  }
-                });
-              });
-              </script>
-              <input type = "submit" name = "submit" value = "Enter">
-            </form>
-          </div>
-          <div>
-            {% if dateIndicator %}
-            <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
-            {% else %}
-            <h6 class="m-0 font-weight-bold text-secondary">All transactions</h6>
-            {% endif %}
-            <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">Clear Dates</a>
-          </div>
-        </div>
         <!-- Card Header - Dropdown -->
         <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
@@ -203,7 +173,7 @@
                       <tr>
                       <td>{{ row.BookingDateTime }}</td>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       </tr>
                     {% endfor %}
@@ -212,7 +182,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -225,7 +195,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
                 </div>
                 <div class="col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.0}}: £{{totals.0}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.0}}: £{{totals.0|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
               <!-- <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
@@ -248,7 +218,7 @@
                     {% for row in one %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -257,7 +227,7 @@
                   </table>
                 </div>
                 <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: £{{ totals.0 }}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: £{{ totals.0 |floatformat:2| intcomma}}</h6>
                   <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
                 </div>
               </div>
@@ -271,7 +241,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Transport</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.1}}: £{{totals.1}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.1}}: £{{totals.1|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -292,7 +262,7 @@
                     {% for row in two %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -302,7 +272,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: £{{ totals.1 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -315,7 +285,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Groceries</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.2}}: £{{totals.2}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.2}}: £{{totals.2|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -336,7 +306,7 @@
                     {% for row in three %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -346,7 +316,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: £{{ totals.2 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: £{{ totals.2 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -359,7 +329,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Fashion & Cosmetics</h6>
                 </div>
                 <div class="col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.3}}: £{{totals.3}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.3}}: £{{totals.3|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -380,7 +350,7 @@
                   {% for row in four %}
                     <tr>
                     <td>{{ row.TransactionInformation }}</td>
-                    <td>{{ row.Amount }}</td>
+                    <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                     <td>{{ row.Currency }}</td>
                     <td>{{ row.BookingDateTime }}</td>
                     </tr>
@@ -390,7 +360,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: £{{ totals.3 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: £{{ totals.3 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -403,7 +373,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Finances</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.4}}: £{{totals.4}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.4}}: £{{totals.4|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -424,7 +394,7 @@
                     {% for row in five %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -434,7 +404,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: £{{ totals.4 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: £{{ totals.4 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -447,7 +417,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Food</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.5}}: £{{totals.5}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.5}}: £{{totals.5|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -468,7 +438,7 @@
                     {% for row in six %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -478,7 +448,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: £{{ totals.5 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: £{{ totals.5 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -491,7 +461,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">General</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.6}}: £{{totals.6}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.6}}: £{{totals.6|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -512,7 +482,7 @@
                     {% for row in seven %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -522,7 +492,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: £{{ totals.6 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: £{{ totals.6 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -536,7 +506,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Entertainment</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.7}}: £{{totals.7}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.7}}: £{{totals.7|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -557,7 +527,7 @@
                     {% for row in eight %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -567,7 +537,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: £{{ totals.7 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: £{{ totals.7 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -580,7 +550,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Leisure & Self-Care</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.8}}: £{{totals.8}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.8}}: £{{totals.8|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -601,7 +571,7 @@
                     {% for row in nine %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -611,7 +581,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: £{{ totals.8 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: £{{ totals.8 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -624,7 +594,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Other</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.9}}: £{{totals.9}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.9}}: £{{totals.9|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -645,7 +615,7 @@
                     {% for row in zero %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -655,7 +625,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: £{{ totals.9 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: £{{ totals.9 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -841,6 +811,17 @@
                 title: {
                   display: true,
                   text: "Amount Spent"
+                },
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']]
+                    },
+                    label: function(tooltipItem, data) {
+                      var label = data.datasets[tooltipItem.datasetIndex].label;
+                      return label + ": " + Number(data.datasets[0].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                    }
+                  }
                 }
                 // width: 100,
                 // height: 300,
@@ -852,7 +833,7 @@
                 //   }]
                 // }
               }
-            })
+            });
           </script>
 
 

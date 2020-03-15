@@ -2,7 +2,7 @@ import csv
 import datetime
 import os
 import sys
-
+from django.shortcuts import render
 import json
 import requests
 from dateutil.relativedelta import relativedelta
@@ -14,6 +14,57 @@ from users.models import Account
 register = template.Library()
 
 
+# gets the correct account ID from the database through the correct post request
+# default setting displays "All" account transactions aggregated into one,
+# selecting an account from the drop down menu filters to just the selected account
+def getAccount(request):
+    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
+        request.user.profile.setAccountID("All")
+    if request.method == 'POST' and request.POST['submit'] in getAllAccounts(request.user.profile):
+        request.user.profile.setAccountID(request.POST.get('submit'))
+    return request.user.profile.getAccountID()
+
+
+# checks if entered accountID produces a valid list of transactions, if not user is redirected with a page that displays
+# a user friendly message telling them to check the ID they entered.
+def validateID(request, accountID, page):
+    if not getRows(accountID) and accountID != "All":
+        context = {
+            'rows': [{
+                'TransactionInformation': 'Incorrect UserID linked',
+                'Amount': 'Update accountID',
+                'Currency': 'and try again',
+                'BookingDateTime': 'No Data Found',
+                'accountIDs': getStrAccountIDs(request.user.profile),
+                'selectedAccount': accountID
+            }]}
+        return render(request, 'transactions/' + page + '.html', context)
+
+
+# creates all the lists required to store categorical data, 10 lists for 10 categories
+# a couple other lists for supplementary data such as sums, these are then files into
+# the required context dictionary for later use
+def makeContext(request, accountID):
+    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
+    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
+    context = {
+        'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
+        'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
+        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+    }
+    return context
+
+
+# returns rows of userID selected, or aggregate rows if all selected
+def getSelectedAccountRows(request, accountID):
+    if accountID == "All":
+        rows = getAllRows(getStrAccountIDs(request.user.profile))
+    else:
+        rows = getRows(accountID)
+    return rows
+
+
+# helper function to get data from database/local file into python dictionaries
 def getData(accountID):
     # get from database
     # res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json",
@@ -49,6 +100,39 @@ def sortedRows(rows):
     sortedRows = sorted(rows, key=lambda i: i['BookingDateTime'])
     sortedRows.reverse()
     return sortedRows
+
+
+# handles POST request which gets correct data for pagination including actual data to display,
+# the key and the setting for number of items per page
+def getPaginationElements(request, transPerPage, page, rows, pageElem):
+    if request.user.profile.getTransPerPage() != "AllTransactions":
+        transPerPage = int(transPerPage)
+        if pageElem == "<":
+            pageElem = "Page " + str(int(page.split(" ")[1]) - 1)
+        elif pageElem == ">":
+            pageElem = "Page " + str(int(page.split(" ")[1]) + 1)
+        if pageElem == "Page 1":
+            elems = [pageElem, '>', "Page " + str(((len(rows)) // transPerPage) + 1)]
+        elif pageElem == ("Page " + str(((len(rows)) // transPerPage) + 1)):
+            elems = ['Page 1', '<', pageElem]
+        else:
+            elems = ['Page 1', '<', pageElem, '>', "Page " + str(((len(rows)) // 10) + 1)]
+    else:
+        elems = ['Page 1']
+    return pageElem, elems
+
+
+# close to identical context required in two methods, this function calculates and returns it
+def getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem):
+    context = {'rows': getPaginatedRows(rows, transPerPage, pageElem), 'total': getTotal(rows)[0],
+               'spendIndicator': getTotal(rows)[1],
+               'dateIndicator': dateIndicator,
+               'accountIDs': getStrAccountIDs(request.user.profile),
+               'selectedAccount': request.user.profile.getAccountID(), 'elements': elems,
+               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows),
+               'transPerPageList': transPerPageList, 'page': pageElem}
+
+    return context
 
 
 # takes user bank accountID and returns a list of transactions.
@@ -133,6 +217,31 @@ def getAllRows(IDs):
     return row
 
 
+# takes an element of a list, and makes it the first element
+def makeFirstElement(element, elemList):
+    if elemList[0] == element:
+        return elemList
+    else:
+        elemList.remove(element)
+        elemList.reverse()
+        elemList.append(element)
+        elemList.reverse()
+        return elemList
+
+
+# takes a list of transactions, the page number and the number of transactions to display
+def getPaginatedRows(rows, transPerPage, page):
+    if transPerPage == "AllTransactions":
+        return rows
+    transPerPage = int(transPerPage)
+    p = int(page.split(" ")[1])
+    start = transPerPage * (p - 1)
+    end = (transPerPage * p) - 1
+    if end > len(rows):
+        end = len(rows)
+    return rows[start:end]
+
+
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
 def getStrAccountIDs(profile):
     accountList = []
@@ -163,12 +272,14 @@ def getDataForAccount(accountID):
                     resultDic["BillingDate"] = month + '-' + day
                 current.append(item)
             resultDic[key] = current
-    result = json.dumps(resultDic)
-    print(type(result))
-    url = "http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json"
-    headers = {'Content-Type': 'application/json'}
-    r = requests.put(url, data=json.dumps(result), headers=headers, auth=auth.HTTPDigestAuth("admin", "admin"))
-    print(r.status_code)
+    with open(os.path.join(sys.path[0], "aux_files/" + accountID + "new.json"), 'w') as outfile:
+        json.dump(resultDic, outfile)
+    # result = json.dumps(resultDic)
+    # print(type(result))
+    # url = "http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json"
+    # headers = {'Content-Type': 'application/json'}
+    # r = requests.put(url, data=json.dumps(result), headers=headers, auth=auth.HTTPDigestAuth("admin", "admin"))
+    # print(r.status_code)
 
 
 # works out totals spend for each category
@@ -226,7 +337,6 @@ def getFilteredRows(rows, startDate, endDate):
 def getAverageSpending(testDate, accountID):
     a = getData(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
-    print(billingdate)
     if billingdate <= testDate:
         startdate = billingdate - relativedelta(months=1)
         enddate = billingdate
@@ -236,7 +346,8 @@ def getAverageSpending(testDate, accountID):
     totalamount = 0
     for transaction in a['Transaction']:
         bookingdate = datetime.datetime.strptime(transaction['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
-        if enddate > bookingdate > startdate and transaction['ProprietaryBankTransactionCode']['Code'] != "DirectDebit":
+        if enddate > bookingdate > startdate and transaction['ProprietaryBankTransactionCode']['Code'] != "DirectDebit" and transaction['CreditDebitIndicator'] == 'Debit':
+            print (transaction)
             totalamount += float(transaction['Amount']['Amount'])
     print(startdate)
     print(enddate)
@@ -248,24 +359,36 @@ def prediction(testDate, accountID):
     a = getData(accountID)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     averagespending = getAverageSpending(testDate, accountID)
-    if testDate.day() > billingdate.day():
+    if testDate.day > billingdate.day:
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
-    currentbalance = float(a['Balance']['Amount']['Amount'])
+    currentbalance = float(a['Balance'][0]['Amount']['Amount'])
     prediction = {}
-    currentdate = testDate.date
-    while currentdate < targetdate.date:
-        currentdate += relativedelta(days=1)
-        currentbalance -= averagespending
-        prediction[currentdate] = currentbalance
+    currentdate = testDate.date()
+    timeInterval = targetdate - testDate
+    directDebitToPay = {}
     for directdebit in a['DirectDebit']:
         if directdebit['DirectDebitStatusCode'] == "Active":
             previouspayment = datetime.datetime.strptime(directdebit['PreviousPaymentDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
             nextpayment = previouspayment + relativedelta(months=1)
-            if nextpayment.date in prediction:
-                prediction[nextpayment.date] -= float(directdebit['PreviousPaymentAmount']['Amount'])
+            print(nextpayment, targetdate, testDate)
+            if nextpayment <= targetdate and nextpayment > testDate:
+                if nextpayment.date() in directDebitToPay:
+                    directDebitToPay[nextpayment.date()] += float(directdebit['PreviousPaymentAmount']['Amount'])
+                else:
+                    directDebitToPay[nextpayment.date()] = float(directdebit['PreviousPaymentAmount']['Amount'])
+    print(directDebitToPay)
+    print(timeInterval.days)
+    daysPredicted = 0 
+    while daysPredicted < timeInterval.days:
+        currentdate += relativedelta(days=1)
+        currentbalance -= averagespending
+        if currentdate in directDebitToPay:
+            currentbalance-= directDebitToPay[currentdate]
+        prediction[currentdate] = currentbalance
+        daysPredicted +=1
     return prediction
 
 

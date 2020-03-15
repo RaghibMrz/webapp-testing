@@ -16,45 +16,27 @@ from .utils import *
 @login_required
 def home(request):
     request.session.set_expiry(600)
-    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
-        request.user.profile.setAccountID("All")
-    if request.method == 'POST' and request.POST['submit'] in getAllAccounts(request.user.profile):
-        request.user.profile.setAccountID(request.POST.get('submit'))
-    accountID = request.user.profile.getAccountID()
-    if not getRows(accountID) and accountID != "All":
-        context = {
-            'rows': [{
-                'TransactionInformation': 'Incorrect UserID linked',
-                'Amount': 'Update accountID',
-                'Currency': 'and try again',
-                'BookingDateTime': 'No Data Found',
-                'accountIDs': getStrAccountIDs(request.user.profile),
-                'selectedAccount': accountID
-            }]}
-        return render(request, 'transactions/home.html', context)
 
-    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
-    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
+    accountID = getAccount(request)
+    validateID(request, accountID, 'home')
 
-    context = {
-        'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
-        'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
-        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
-    }
+    context, rows = makeContext(request, accountID), getSelectedAccountRows(request, accountID)
 
-    if accountID == "All":
-        rows = getAllRows(getStrAccountIDs(request.user.profile))
-    else:
-        rows = getRows(accountID)
-
+    # gets date range selected by user, parses it and then updates transactions+details displayed
     if request.method == "POST" and request.POST['submit'] == "Enter":
-        rawDates = request.POST.get('datetimes').split("-")
-        startDate = rawDates[0]
-        endDate = rawDates[1]
+        request.user.profile.setDateRange(request.POST.get('datetimes'))
+    if request.method == "POST" and request.POST['submit'] == "Clear":
+        request.user.profile.setUseDateFilter("0")
+    if request.user.profile.useDateFilter == "1":
+        rawDates = request.user.profile.getDateRange().split("-")
+        startDate, endDate = rawDates[0], rawDates[1]
         rows = getFilteredRows(rows, startDate, endDate)
         context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
+    else:
+        context['dateIndicator'] = "All transactions"
 
     # get data from database, store into "context" dictionary
+    print(prediction(datetime.datetime(2020,2,10),"22289"))
     for transaction in rows:
         context[getCategory(transaction['MCC'])].append(transaction)
 
@@ -63,56 +45,38 @@ def home(request):
 
 
 @login_required
-def transactions(request):
+def transactions(request, pageElem, page):
     request.session.set_expiry(600)
-    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == 0:
-        request.user.profile.setAccountID("All")
 
-    if request.method == 'POST':
-        print(request.POST['submit'])
-        print(request.POST.get('submit'))
+    accountID = getAccount(request)
+    validateID(request, accountID, 'transactions')
+    rows = getSelectedAccountRows(request, accountID)
 
-    if request.method == 'POST' and request.POST['submit'] in getAllAccounts(request.user.profile):
-        request.user.profile.setAccountID(request.POST.get('submit'))
-
-    accountid = request.user.profile.getAccountID()
-    if not getRows(accountid) and accountid != "All":
-        context = {
-            'rows': [{
-                'TransactionInformation': "Incorrect UserID linked",
-                'Amount': "Update accountID and try again",
-                'Currency': "Error",
-                'BookingDateTime': "No Data Found",
-                'accountIDs': getStrAccountIDs(request.user.profile),
-                'selectedAccount': accountid
-            }]
-        }
-        return render(request, "transactions/transactions.html", context)
-
-    if accountid == "All":
-        rows = getAllRows(getStrAccountIDs(request.user.profile))
-    else:
-        rows = getRows(accountid)
-    dateIndicator = "All transactions"
+    # get date range selected by user, parse it and then update transactions+details displayed
     if request.method == "POST" and request.POST['submit'] == "Enter":
-        rawDates = request.POST.get('datetimes').split("-")
-        startDate = rawDates[0]
-        endDate = rawDates[1]
+        request.user.profile.setDateRange(request.POST.get('datetimes'))
+    if request.method == "POST" and request.POST['submit'] == "Clear":
+        request.user.profile.setUseDateFilter("0")
+
+    if request.user.profile.useDateFilter == "1":
+        rawDates = request.user.profile.getDateRange().split("-")
+        startDate, endDate = rawDates[0], rawDates[1]
         rows = getFilteredRows(rows, startDate, endDate)
         dateIndicator = "Transactions between " + str(startDate) + " - " + str(endDate)
-
-    if request.method == "POST" and request.POST['submit'] == "Select":
-        transPerPage = request.POST.get('elem')
     else:
-        transPerPage = 10
+        dateIndicator = "All transactions"
 
-    total, spendIndicator = getTotal(rows)
-
-    context = {'rows': rows, 'total': total, 'spendIndicator': spendIndicator, 'dateIndicator': dateIndicator,
-               'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountid, 'elements': ['Page 1', '<', 'Page x', '>', "Page "+str(((len(rows)) // transPerPage) + 1)],
-               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows), 'transPerPageList': [10, 15, 20, 50]}
-
-    return render(request, 'transactions/transactions.html', context)
+    # allows you to edit number of transactions per page
+    # fetches all attributes required to allow for pagination
+    transPerPageList = ["10", "15", "20", "50", "AllTransactions"]
+    if request.method == "POST" and (request.POST['submit'] in transPerPageList):
+        request.user.profile.setTransPerPage(request.POST.get('submit'))
+    transPerPage = request.user.profile.getTransPerPage()
+    transPerPageList = makeFirstElement(transPerPage, transPerPageList)
+    pageElem, elems = getPaginationElements(request, transPerPage, page, rows, pageElem)
+    transPerPageList.pop(transPerPageList.index("AllTransactions"))
+    return render(request, 'transactions/transactions.html',
+                  getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem))
 
 
 @login_required

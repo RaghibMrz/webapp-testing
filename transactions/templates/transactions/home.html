@@ -1,6 +1,7 @@
 {% extends "transactions/base.html" %}
 {% block ctt %}
 {% load static %}
+{% load humanize %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
   <!-- Page Heading -->
@@ -12,7 +13,7 @@
       <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
-        <select class="custom-select w-auto" name="submit">
+        <select class="custom-select w-auto" name="accountDropdown">
           <!--working with actual accounts-->
           <option value="All">All Accounts</option>
           {% for account in accountIDs %}
@@ -26,7 +27,7 @@
 
   <!-- Content Row -->
   <div class="row">
-   <!-- Balance Card -->
+    <!-- Balance Card -->
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-warning shadow h-100 py-2">
         <div class="card-body">
@@ -49,8 +50,8 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome}}</div>
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Average Monthly Income</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -66,8 +67,8 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Minimum Monthly Spend</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend}}</div>
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Average Monthly Spend</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-pound-sign fa-2x text-gray-300"></i>
@@ -86,7 +87,7 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ leftOver.0 }}</div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ leftOver.1 }}</div>
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ leftOver.1 |floatformat:2| intcomma}}</div>
                 </div>
                 <!--<div class="col">-->
                   <!--<div class="progress progress-sm mr-2">-->
@@ -118,43 +119,12 @@
     </div>
   </div>
   <!-- Content Row -->
+
   <div class="row">
+
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Categorical Spend</h6>
-          <div style="margin-left: 20%">
-            <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
-          </div>
-          <div>
-            <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-              <input type="text" name="datetimes"/>
-              <script>
-              $(function() {
-                $('input[name="datetimes"]').daterangepicker({
-                  timePicker: true,
-                  "timePicker24Hour": true,
-                  startDate: moment().startOf('hour'),
-                  endDate: moment().startOf('hour').add(32, 'hour'),
-                  locale: {
-                    format: 'DD/MM/YYYY hh:mm'
-                  }
-                });
-              });
-              </script>
-              <input type = "submit" name = "submit" value = "Enter">
-            </form>
-          </div>
-          <div>
-            {% if dateIndicator %}
-            <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
-            {% else %}
-            <h6 class="m-0 font-weight-bold text-secondary">All transactions</h6>
-            {% endif %}
-            <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">Clear Dates</a>
-          </div>
-        </div>
         <!-- Card Header - Dropdown -->
         <!-- <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Transactions</h6>
@@ -173,6 +143,51 @@
         </div> -->
         <!-- Card Body -->
         <div class="card-body">
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedCreditCardTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedCreditCardTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Credit Cards</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedCreditCardTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Date</th>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in two %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
+                <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+              </div>
+            </div>
+          </div>
+
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
             <a href="#collapsedBPTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedBPTransactions">
               <div class="row">
@@ -180,7 +195,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
                 </div>
                 <div class="col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.0}}: £{{totals.0|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
               <!-- <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
@@ -203,7 +218,7 @@
                     {% for row in one %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -212,7 +227,7 @@
                   </table>
                 </div>
                 <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: {{ totals.0 }}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: £{{ totals.0 |floatformat:2| intcomma}}</h6>
                   <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
                 </div>
               </div>
@@ -226,7 +241,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Transport</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.1}}: £{{totals.1|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -247,7 +262,7 @@
                     {% for row in two %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -257,7 +272,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: {{ totals.1 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -270,7 +285,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Groceries</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.2}}: £{{totals.2|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -291,7 +306,7 @@
                     {% for row in three %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -301,7 +316,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: {{ totals.2 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: £{{ totals.2 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -314,7 +329,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Fashion & Cosmetics</h6>
                 </div>
                 <div class="col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.3}}: £{{totals.3|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -335,7 +350,7 @@
                   {% for row in four %}
                     <tr>
                     <td>{{ row.TransactionInformation }}</td>
-                    <td>{{ row.Amount }}</td>
+                    <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                     <td>{{ row.Currency }}</td>
                     <td>{{ row.BookingDateTime }}</td>
                     </tr>
@@ -345,7 +360,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: {{ totals.3 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: £{{ totals.3 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -358,7 +373,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Finances</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.4}}: £{{totals.4|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -379,7 +394,7 @@
                     {% for row in five %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -389,7 +404,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: {{ totals.4 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: £{{ totals.4 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -402,7 +417,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Food</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.5}}: £{{totals.5|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -423,7 +438,7 @@
                     {% for row in six %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -433,7 +448,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: {{ totals.5 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: £{{ totals.5 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -446,7 +461,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">General</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.6}}: £{{totals.6|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -467,7 +482,7 @@
                     {% for row in seven %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -477,7 +492,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: {{ totals.6 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: £{{ totals.6 |floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -491,7 +506,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Entertainment</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.7}}: £{{totals.7|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -512,7 +527,7 @@
                     {% for row in eight %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -522,7 +537,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: {{ totals.7 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: £{{totals.7|floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -535,7 +550,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Leisure & Self-Care</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.8}}: £{{totals.8|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -556,7 +571,7 @@
                     {% for row in nine %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -566,7 +581,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: {{ totals.8 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: £{{totals.8|floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -579,7 +594,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Other</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.9}}: £{{totals.9|floatformat:2| intcomma}}</h6>
                 </div>
               </div>
             </a>
@@ -600,7 +615,7 @@
                     {% for row in zero %}
                       <tr>
                       <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       <td>{{ row.BookingDateTime }}</td>
                       </tr>
@@ -610,7 +625,7 @@
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: {{ totals.9 }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: £{{totals.9|floatformat:2| intcomma}}</h6>
                 <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               </div>
             </div>
@@ -647,7 +662,7 @@
           </div> -->
         </div>
         <!-- Card Body -->
-        <div class="card-body" style="position: relative; height: 40vh;">
+        <div class="card-body" style="position: relative; height: 50vh;">
           <!-- <img src="{% static 'transactions/img/SquarePie.jpg' %}" style="max-width:100%;"> -->
 
 
@@ -754,9 +769,12 @@
               type: 'pie',
               data: {
                 labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+                // labels: "Amount Spent",
                 datasets: [{
                   // data: resData,
                   // data: [5,5,5,5,5,5,5,5,5,5],  //test
+                  label: "Amount Spent",
+                  // label: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                   data: [bpTotal, tpTotal, groceryTotal, fcTotal, financesTotal, foodTotal, genTotal, entertainmentTotal, lsTotal, uncatTotal],
 
                   backgroundColor: [
@@ -773,7 +791,7 @@
                     
                   ],
                   borderColor: [
-                  'rgba(78, 115, 223, 1)',
+                    'rgba(78, 115, 223, 1)',
                     'rgba(231, 74, 59, 1)',
                     'rgba(253, 126, 20, 1)',
                     'rgba(232, 62, 140, 1)',
@@ -790,6 +808,21 @@
               },
               options: {
                 maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: "Amount Spent"
+                },
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']]
+                    },
+                    label: function(tooltipItem, data) {
+                      var label = data.datasets[tooltipItem.datasetIndex].label;
+                      return label + ": " + Number(data.datasets[0].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                    }
+                  }
+                }
                 // width: 100,
                 // height: 300,
                 // scales: {
@@ -800,7 +833,7 @@
                 //   }]
                 // }
               }
-            })
+            });
           </script>
 
 
@@ -846,7 +879,7 @@
           </div> -->
         </div>
         <!-- Card Body -->
-        <div class="card-body" style="position: relative; height: 40vh;">
+        <div class="card-body" style="position: relative; height: 50vh;">
           <!-- <img src="{% static 'transactions/img/SquareBar.jpg' %}" style="max-width:100%;"> -->
 
 
@@ -863,38 +896,9 @@
 
             //   },
             // })
-
-            var ctxTree = document.getElementById("treeChart").getContext('2d');
-
-
-            // var myTreeChart = new Chart(ctxTree,{
-            //   type: 'bar',
-            //   data: {
-            //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            //     datasets: [{
-            //       label: '# of Votes',
-            //       data: [12, 19, 3, 5, 2, 3],
-            //       backgroundColor: [
-            //         'rgba(255, 99, 132, 0.2)',
-            //         'rgba(54, 162, 235, 0.2)',
-            //         'rgba(255, 206, 86, 0.2)',
-            //         'rgba(75, 192, 192, 0.2)',
-            //         'rgba(153, 102, 255, 0.2)',
-            //         'rgba(255, 159, 64, 0.2)'
-            //       ],
-            //       borderColor: [
-            //         'rgba(255, 99, 132, 1)',
-            //         'rgba(54, 162, 235, 1)',
-            //         'rgba(255, 206, 86, 1)',
-            //         'rgba(75, 192, 192, 1)',
-            //         'rgba(153, 102, 255, 1)',
-            //         'rgba(255, 159, 64, 1)'
-            //       ],
-            //       borderWidth: 1
-            //     }]
-            //   },
             
-
+            var ctxTree = document.getElementById("treeChart").getContext('2d');
+            
             var bpTotal = "{{totals.0}}";
             var tpTotal = "{{totals.1}}";
             var groceryTotal = "{{totals.2}}";
@@ -916,63 +920,195 @@
             var entertainmentCount = "{{count.7}}";
             var lsCount = "{{count.8}}";
             var uncatCount = "{{count.9}}";
-
+            
             var myTreeChart = new Chart(ctxTree,{
-              type: 'treemap',
+              type: 'bar',
               data: {
                 labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                 datasets: [{
-                  label: 'Color Density: Amount Spent    Size: Number of Transactions',
-                  tree: [bpCount, tpCount, groceryCount, fcCount, financesCount, foodCount, genCount, entertainmentCount, lsCount, uncatCount],
-                  // fontColor: '#000000',
-                  // fontFamily: 'serif',
-                  // fontSize: 12,
-                  // fontStyle: 'normal',
-                  backgroundColor: function(myTreeMapChart) {
-                        var value = myTreeMapChart.dataset.tree[myTreeMapChart.dataIndex];
-                        var alpha = (value + 3) / 10;
-                        return Color('rgba(231, 74, 59)').alpha(alpha).rgbString();
-                  },
-                  borderColor: function(myTreeMapChart) {
-                        var value = myTreeMapChart.dataset.tree[myTreeMapChart.dataIndex];
-                        var alpha = (value + 3) / 5;
-                        return Color('rgba(231, 74, 59)').alpha(alpha).rgbString();
-                  },
+                  // label: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+                  label: "Number of Transactions",
+                  data: [bpCount, tpCount, groceryCount, fcCount, financesCount, foodCount, genCount, entertainmentCount, lsCount, uncatCount],
+
+                  backgroundColor: [
+                    'rgba(78, 115, 223, 0.5)', //blue
+                    'rgba(231, 74, 59, 0.5)',  //red
+                    'rgba(253, 126, 20, 0.5)',  //orange
+                    'rgba(232, 62, 140, 0.5)',  //pink
+                    'rgba(28, 200, 138, 0.5)',  //green
+                    'rgba(246, 194, 62, 0.5)',  //yellow
+                    'rgba(90, 92, 105, 0.5)',  //gray-dark
+                    'rgba(102, 16, 242, 0.5)',  //indigo
+                    'rgba(54, 185, 204, 0.5)',  //cyan
+                    'rgba(133, 135, 150, 0.5)',  //gray
+                  ],
+                  borderColor: [
+                    'rgba(78, 115, 223, 1)',
+                    'rgba(231, 74, 59, 1)',
+                    'rgba(253, 126, 20, 1)',
+                    'rgba(232, 62, 140, 1)',
+                    'rgba(28, 200, 138, 1)',
+                    'rgba(246, 194, 62, 1)',
+                    'rgba(90, 92, 105, 1)',
+                    'rgba(102, 16, 242, 1)',
+                    'rgba(54, 185, 204, 1)',
+                    'rgba(133, 135, 150, 1)',
+                  ],
                   borderWidth: 1
                 }]
               },
               options: {
                 maintainAspectRatio: false,
-                // title: {
-                //   display: true,
-                //   // text: "Treemap Sample"
-                // },
-                tooltips: {
-                  callbacks: {
-                    title: function(item, data) {
-                      return '';
-                    },
-                    label: function(item, data) {
-                      var dataset = data.datasets[item.datasetIndex];
-                      var dataItem = dataset.data[item.index];
-                      return dataItem.v;
-                    },
-                  },
+                title: {
+                  display: true,
+                  text: "Number of transactions",
                 },
-              },
-              // options: {
-              //   maintainAspectRatio: false,
-              //   // scales: {
-              //   //   yAxes: [{
-              //   //     ticks: {
-              //   //       beginAtZero: true
-              //   //     }
-              //   //   }]
-              //   // }
-              // }
-
-
+                legend: {
+                  display: false,
+                },
+                responsive: true,
+              }
             });
+
+
+            var treemapData = [
+              {
+                category: "Bills & Payments",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: bpCount,
+                transactionTotal: bpTotal
+              },
+              {
+                category: "Transport",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: tpCount,
+                transactionTotal: tpTotal
+              },
+              {
+                category: "Groceries",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: groceryCount,
+                transactionTotal: groceryTotal
+              },
+              {
+                category: "Fashion & Cosmetics",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: fcCount,
+                transactionTotal: fcTotal
+              },
+              {
+                category: "Finances",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: financesCount,
+                transactionTotal: financesTotal
+              },
+              {
+                category: "Food",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: foodCount,
+                transactionTotal: foodTotal
+              },
+              {
+                category: "General",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: genCount,
+                transactionTotal: genTotal
+              },
+              {
+                category: "Entertainment",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: entertainmentCount,
+                transactionTotal: entertainmentTotal
+              },
+              {
+                category: "Leisure & Self-Care",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: lsCount,
+                transactionTotal: lsTotal
+              },
+              {
+                category: "Other",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: uncatCount,
+                transactionTotal: uncatTotal
+              }
+            ]
+
+            // var myTreeChart = new Chart(ctxTree,{
+            //   type: 'treemap',
+            //   data: {
+            //     // labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+            //     datasets: [{
+            //       label: 'Color Density: Amount Spent    Size: Number of Transactions',
+            //       tree: treemapData,
+            //       // tree: [bpCount,tpCount,groceryCount,fcCount,financesCount,foodCount,genCount,entertainmentCount,lsCount,uncatCount],
+            //       // groups: ["transactionCount", "transactionTotal"],
+            //       groups: "category",
+            //       key: "transactionTotal",
+            //       fontColor: '#FFF',
+            //       fontFamily: 'Verdana',
+            //       fontSize: 20,
+            //       fontStyle: 'bold',
+            //       backgroundColor: "#000",
+            //       // backgroundColor: function(ctxTree) {
+            //       //       var value = ctxTree.dataset.data[ctxTree.dataIndex];
+            //       //       var alpha = value.v/(value.gs || value.s) / 2 + 0.5;
+            //       //       return Color('rgba(231, 74, 59)').alpha(alpha).rgbString();
+            //       // },
+            //       // borderColor: function(myTreeMapChart) {
+            //       //       var value = myTreeMapChart.dataset.tree[myTreeMapChart.dataIndex];
+            //       //       var alpha = (value + 3) / 5;
+            //       //       return Color('rgba(231, 74, 59)').alpha(alpha).rgbString();
+            //       // },
+            //       spacing: 2,
+            //       borderColor: "rgba(160,160,160,0.5)", 
+            //       borderWidth: 1
+            //     }]
+            //   },
+            //   options: {
+            //     maintainAspectRatio: false,
+            //     title: {
+            //       display: true,
+            //       text: "Treemap Sample"
+            //     },
+            //     tooltips: {
+            //       callbacks: {
+            //         title: function(item, data) {
+            //           return data.datasets[item[0].datasetIndex].key;
+            //         },
+            //         label: function(item, data) {
+            //           var dataset = data.datasets[item.datasetIndex];
+            //           var dataItem = dataset.data[item.index];
+            //           var obj = dataItem._data;
+            //           var label = obj.category;
+            //           return label + ': ' + dataItem.v;
+            //         }
+            //       }  
+            //     },
+            //   },
+            //   // options: {
+            //   //   maintainAspectRatio: false,
+            //   //   // scales: {
+            //   //   //   yAxes: [{
+            //   //   //     ticks: {
+            //   //   //       beginAtZero: true
+            //   //   //     }
+            //   //   //   }]
+            //   //   // }
+            //   // }
+
+
+            // });
           </script>
 
 

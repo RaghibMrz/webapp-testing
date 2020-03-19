@@ -307,7 +307,7 @@ def getTransactionNum(context):
     # print(context)
     for catList in context:
         # print(catList)
-        if catList != "accountIDs" and catList != "selectedAccount":
+        if catList != "accountIDs" and catList != "selectedAccount" and catList != "dateIndicator":
             if catList == "totals":
                 break
             if context[catList][0]['TransactionInformation'] == "None" and len(context[catList]) == 1:

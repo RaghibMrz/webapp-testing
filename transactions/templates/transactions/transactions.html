@@ -131,27 +131,6 @@
           <div style="margin-left: 20%">
             <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
           </div>
-<<<<<<< HEAD
-          <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
-            <input class="custom-select w-auto" type="text" name="datetimes"/>
-            <script>
-            $(function() {
-              $('input[name="datetimes"]').daterangepicker({
-                timePicker: true,
-                "timePicker24Hour": true,
-                startDate: moment().startOf('hour'),
-                endDate: moment().startOf('hour').add(32, 'hour'),
-                locale: {
-                  format: 'DD/MM/YYYY hh:mm'
-                }
-              });
-            });
-            </script>
-            <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" type="submit" name="submit" value = "Enter">
-          </form>
-          <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
-          <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">Clear Dates</a>
-=======
           <div>
             <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
               <input type="text" name="datetimes"/>
@@ -177,7 +156,6 @@
               <input type="submit" name="submit" value="Clear" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
             </form>
           </div>
->>>>>>> 8396013b8ece0c2c545a630457feb5a605bf6376
         </div>
 
         <!-- Card Body -->

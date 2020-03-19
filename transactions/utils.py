@@ -186,36 +186,6 @@ def getAllRows(IDs):
             row.append(collectingDict)
     return sortedRows(row)
 
-    ##### Raghib code, easier debugging
-    with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
-        a = json.load(data)
-    
-    for transaction in a['Data']['Transaction']:
-        collecting = {
-            'TransactionInformation': '',
-            'Amount': '',
-            'Currency': '',
-            'BookingDateTime': '',
-            'MCC': ''
-        }
-        for attribute in transactionAttributes:
-            if attribute == "MCC":
-                collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
-                continue
-            if (attribute == "Amount") or (attribute == "Currency"):
-                collecting[attribute] = transaction['Amount'][str(attribute)]
-                if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
-                    continue
-                if transaction["CreditDebitIndicator"] == "Debit":
-                    collecting['Amount'] = "-" + collecting['Amount']
-                elif transaction["CreditDebitIndicator"] == "Credit":
-                    collecting['Amount'] = "+" + collecting['Amount']
-            else:
-                collecting[attribute] = transaction[str(attribute)]
-            if collecting not in row:
-                row.append(collecting)
-    return row
-
 
 # takes an element of a list, and makes it the first element
 def makeFirstElement(element, elemList):
@@ -304,19 +274,10 @@ def getCategoricalTotal(context):
 # gets number of transactions for visualisation
 def getTransactionNum(context):
     numOfTransactions = []
-    # print(context)
     for catList in context:
-        # print(catList)
-        if catList != "accountIDs" and catList != "selectedAccount" and catList != "dateIndicator":
-            if catList == "totals":
-                break
-            if context[catList][0]['TransactionInformation'] == "None" and len(context[catList]) == 1:
-                numOfTransactions.append(0)
-            else:
-                numOfTransactions.append(len(context[catList]))
-        else:
-            continue
-            
+        if catList == "totals":
+            break
+        numOfTransactions.append(len(context[catList]))
     return numOfTransactions
 
 

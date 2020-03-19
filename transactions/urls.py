@@ -8,4 +8,7 @@ urlpatterns = [
     path('report', views.report, name='report'),
     path('help', views.helpPage, name='help'),
     path('delete', views.delete, name='delete'),
+    # path('api/chart/data/', views.ChartData.as_view()),
+    path('api/chart/data/', views.home, name='home'),
+
 ]

@@ -186,36 +186,6 @@ def getAllRows(IDs):
             row.append(collectingDict)
     return sortedRows(row)
 
-    ##### Raghib code, easier debugging
-    with open(os.path.join(sys.path[0], "aux_files/data.json"), 'r') as data:
-        a = json.load(data)
-    
-    for transaction in a['Data']['Transaction']:
-        collecting = {
-            'TransactionInformation': '',
-            'Amount': '',
-            'Currency': '',
-            'BookingDateTime': '',
-            'MCC': ''
-        }
-        for attribute in transactionAttributes:
-            if attribute == "MCC":
-                collecting[attribute] = transaction["MerchantDetails"]["MerchantCategoryCode"]
-                continue
-            if (attribute == "Amount") or (attribute == "Currency"):
-                collecting[attribute] = transaction['Amount'][str(attribute)]
-                if collecting['Amount'][0] == "+" or collecting['Amount'][0] == "-":
-                    continue
-                if transaction["CreditDebitIndicator"] == "Debit":
-                    collecting['Amount'] = "-" + collecting['Amount']
-                elif transaction["CreditDebitIndicator"] == "Credit":
-                    collecting['Amount'] = "+" + collecting['Amount']
-            else:
-                collecting[attribute] = transaction[str(attribute)]
-            if collecting not in row:
-                row.append(collecting)
-    return row
-
 
 # takes an element of a list, and makes it the first element
 def makeFirstElement(element, elemList):
@@ -304,19 +274,10 @@ def getCategoricalTotal(context):
 # gets number of transactions for visualisation
 def getTransactionNum(context):
     numOfTransactions = []
-    # print(context)
     for catList in context:
-        # print(catList)
-        if catList != "accountIDs" and catList != "selectedAccount" and catList != "dateIndicator":
-            if catList == "totals":
-                break
-            if context[catList][0]['TransactionInformation'] == "None" and len(context[catList]) == 1:
-                numOfTransactions.append(0)
-            else:
-                numOfTransactions.append(len(context[catList]))
-        else:
-            continue
-            
+        if catList == "totals":
+            break
+        numOfTransactions.append(len(context[catList]))
     return numOfTransactions
 
 
@@ -347,16 +308,10 @@ def getAverageSpending(testDate, accountID):
     for transaction in a['Transaction']:
         bookingdate = datetime.datetime.strptime(transaction['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
         if enddate > bookingdate > startdate and transaction['ProprietaryBankTransactionCode']['Code'] != "DirectDebit" and transaction['CreditDebitIndicator'] == 'Debit':
-            print (transaction)
             totalamount += float(transaction['Amount']['Amount'])
-    print(startdate)
-    print(enddate)
-    print("{0:.2f}".format(totalamount / (enddate - startdate).days))
     return totalamount / (enddate - startdate).days
 
-
-def prediction(testDate, accountID):
-    a = getData(accountID)
+def getPredictionForCurrent(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     averagespending = getAverageSpending(testDate, accountID)
     if testDate.day > billingdate.day:
@@ -389,6 +344,56 @@ def prediction(testDate, accountID):
             currentbalance-= directDebitToPay[currentdate]
         prediction[currentdate] = currentbalance
         daysPredicted +=1
+    return prediction
+
+def getPredictionForCreditCard(a, testDate, accountID):
+    billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
+    averagespending = getAverageSpending(testDate, accountID)
+    interest = 0 
+    balance = 0 #float(a['Balance']['Amount']['Amount'])
+    if testDate.day > billingdate.day:
+        targetdate = billingdate + relativedelta(months=1)
+    else:
+        targetdate = billingdate
+
+    #chargedDate is the date before which all the purchases will be charged the interest
+    chargedDate = targetdate -  relativedelta(days= int(a['Product'][0]['CCC']['CoreProduct']['MaxPurchaseInterestFreeLengthDays']))
+
+    #check if the credit card is still in promotion
+    for marketingState in a['Product'][0]['CCC']['CCCMarketingState']:
+        if marketingState['Identification'] == "P1":
+            startDate = datetime.datetime.strptime(a[Account][0]['OpeningDate'],
+                                                         "%d-%m-%Y")
+            if startDate + relativedelta(months=int(marketingState['StateTenureLength'])) > testDate:
+                return({"Interest" : "Still in promotion, the interest is 0."})
+        elif marketingState['Identification'] == "R1":
+            minRepaymentRate = float(marketingState['Repayment']['MinBalanceRepaymentRate'])
+            nonRepaymentCharge = float(marketingState['Repayment']['NonRepaymentFeeCharges'][0]['NonRepaymentFeeChargeDetail'][0]['FeeAmount'])
+            for charge in marketingState['OtherFeesCharges']:
+                if charge['FeeType'] == "Purchase":
+                    purchaseRate = float(charge['FeeRate'])
+    for transaction in a['Transaction']:
+        if transaction['TransactionId'] == a['Balance']['LastPaidTransaction']:
+            lastPaymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
+                                                         "%Y-%m-%dT%H:%M:%S+00:00")
+    for transaction in a['Transaction']:
+        paymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
+                                                         "%Y-%m-%dT%H:%M:%S+00:00")
+        if paymentTime > lastPaymentTime:
+            if paymentTime.date()< chargedDate:
+                balance += float(transaction['Amount']['Amount'])
+                interest += (chargedDate - paymentTime.date()).days * purchaseRate / 365
+
+
+
+    
+
+def prediction(testDate, accountID):
+    a = getData(accountID)
+    if a['Account'][0]['AccountSubType'] == 'CurrentAccount':
+        prediction = getPredictionForCurrent(a, testDate, accountID)
+    elif a['Account']['AccountSubType'] == 'CreditCard':
+        prediction = getPredictionForCreditCard(a, testDate, accountID)
     return prediction
 
 

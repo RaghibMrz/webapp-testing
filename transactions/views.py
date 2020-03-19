@@ -36,6 +36,7 @@ def home(request):
         context['dateIndicator'] = "All transactions"
 
     # get data from database, store into "context" dictionary
+    print(prediction(datetime.datetime(2020,2,10),"22289"))
     for transaction in rows:
         context[getCategory(transaction['MCC'])].append(transaction)
 

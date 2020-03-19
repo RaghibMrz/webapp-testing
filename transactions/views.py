@@ -74,6 +74,7 @@ def transactions(request, pageElem, page):
     transPerPageList = makeFirstElement(transPerPage, transPerPageList)
     pageElem, elems = getPaginationElements(request, transPerPage, page, rows, pageElem)
     transPerPageList.pop(transPerPageList.index("AllTransactions"))
+
     return render(request, 'transactions/transactions.html',
                   getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem))
 

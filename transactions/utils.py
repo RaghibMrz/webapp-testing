@@ -385,7 +385,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
             if paymentTime.date()< chargedDate:
                 balance += float(transaction['Amount']['Amount'])
                 interest += (chargedDate - paymentTime.date()).days * purchaseRate / 365
-
+    return {"Interest": interest}
 
 
     

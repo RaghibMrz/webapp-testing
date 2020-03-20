@@ -19,7 +19,7 @@
           <option value="{{account}}">Account: {{ account }}</option>
         {% endfor %}
       </select>
-      <input type="submit" value="Select" >
+      <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
     </form>
   </div>
 
@@ -87,7 +87,7 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ leftOver.0 }}</div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ leftOver.1 |floatformat:2| intcomma}}</div>
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ leftOver.1 |floatformat:2| intcomma}}</div>
                 </div>
                 <!--<div class="col">-->
                   <!--<div class="progress progress-sm mr-2">-->
@@ -191,7 +191,7 @@
                   {% endfor %}
                   <option value="AllTransactions">Show all</option>
                 </select>
-                <input type="submit" value="submit">
+                <input type="submit" value="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
               </form>
               
               {% for pageElem in elements %}

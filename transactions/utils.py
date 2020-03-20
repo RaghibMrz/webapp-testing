@@ -277,9 +277,16 @@ def getCategoricalTotal(context):
 def getTransactionNum(context):
     numOfTransactions = []
     for catList in context:
-        if catList == "totals":
-            break
-        numOfTransactions.append(len(context[catList]))
+        if catList != "accountIDs" and catList != "selectedAccount" and catList != "dateIndicator":
+            if catList == "totals":
+                break
+            if context[catList][0]['TransactionInformation'] == "None" and len(context[catList]) == 1:
+                numOfTransactions.append(0)
+            else:
+                numOfTransactions.append(len(context[catList]))
+        else:
+            continue
+            
     return numOfTransactions
 
 

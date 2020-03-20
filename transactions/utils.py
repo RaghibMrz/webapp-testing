@@ -75,6 +75,8 @@ def getData(accountID):
 
     # get locally
     try:
+        print("here")
+        print(accountID)
         with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
             jsonData = json.load(data)
         return jsonData
@@ -398,19 +400,20 @@ def prediction(testDate, accountID):
 
 
 def getIncome(rows):
-    monthDict = {}
-    for row in rows:
-        amount = float(row['Amount'])
-        date = row['BookingDateTime']
-        if str(date.month) not in monthDict:
-            monthDict[str(date.month)] = 0
-        if amount > 0:
-            monthDict[str(date.month)] += amount
-    # round(sum(monthDict.values()) / len(monthDict.values()), 2)
-    if len(monthDict.values()) > 0:
-        return min(monthDict.values())
-    else:
-        return 0
+    if rows != False:
+        monthDict = {}
+        for row in rows:
+            amount = float(row['Amount'])
+            date = row['BookingDateTime']
+            if str(date.month) not in monthDict:
+                monthDict[str(date.month)] = 0
+            if amount > 0:
+                monthDict[str(date.month)] += amount
+        # round(sum(monthDict.values()) / len(monthDict.values()), 2)
+        if len(monthDict.values()) > 0:
+            return min(monthDict.values())
+        else:
+            return 0
 
 
 def getSpend(rows):
@@ -445,9 +448,10 @@ def updateContext(context, rows):
     context['count'] = getTransactionNum(context)
     context['totals'] = totalList
     context['spendIndicatorList'] = spendIndicatorList
-    context['monthlyIncome'] = getIncome(rows)
-    context['monthlySpend'] = getSpend(rows)
-    context['leftOver'] = calcExcess(rows)
+    if rows != False:
+        context['monthlyIncome'] = getIncome(rows)
+        context['monthlySpend'] = getSpend(rows)
+        context['leftOver'] = calcExcess(rows)
     return context
 
 

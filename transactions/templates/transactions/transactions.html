@@ -585,17 +585,17 @@
 
             <canvas id="lineChart"></canvas>
             <script>
-              var endpoint = '/home/api/chart/data/'
-              $.ajax({
-                method: "GET",
-                url: endpoint,
-                success: function(data){
+              // var endpoint = '/home/api/chart/data/'
+              // $.ajax({
+              //   method: "GET",
+              //   url: endpoint,
+              //   success: function(data){
                   
-                },
-                error: function(error_data){
+              //   },
+              //   error: function(error_data){
 
-                },
-              })
+              //   },
+              // })
 
               var ctxLine = document.getElementById("lineChart")
               var myLineChart = new Chart(ctxLine,{

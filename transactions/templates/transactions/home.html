@@ -214,7 +214,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#creditCardCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="creditCardCap" tabindex="-1" role="dialog" aria-labelledby="creditCardCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="creditCardCapTitle">Credit Card Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -259,7 +298,46 @@
                 </div>
                 <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                   <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: {{ totals.0 |floatformat:2| intcomma}}</h6>
-                  <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                  <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#bpCap">
+                    <i class="fas fa-tachometer-alt"></i> Set Cap
+                  </button>
+  
+                  <!-- Modal -->
+                  <div class="modal fade" id="bpCap" tabindex="-1" role="dialog" aria-labelledby="bpCapTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="bpCapTitle">Bills & Payments Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -304,7 +382,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: {{ totals.1 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#transportCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="transportCap" tabindex="-1" role="dialog" aria-labelledby="transportCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="transportCapTitle">Transport Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -348,7 +465,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: {{ totals.2 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#groceriesCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="groceriesCap" tabindex="-1" role="dialog" aria-labelledby="groceriesCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="groceriesCapTitle">Groceries Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -392,7 +548,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: {{ totals.3 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#fcCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="fcCap" tabindex="-1" role="dialog" aria-labelledby="fcCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="fcCapTitle">Fashion & Cosmetics Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -436,7 +631,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: {{ totals.4 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#financesCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="financesCap" tabindex="-1" role="dialog" aria-labelledby="financesCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="financesCapTitle">Finances Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -480,7 +714,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: {{ totals.5 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#foodCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="foodCap" tabindex="-1" role="dialog" aria-labelledby="foodCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="foodCapTitle">Food Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -524,7 +797,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: {{ totals.6 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#generalCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="generalCap" tabindex="-1" role="dialog" aria-labelledby="generalCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="generalCapTitle">General Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -569,7 +881,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: {{ totals.7 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#entertainmentCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="entertainmentCap" tabindex="-1" role="dialog" aria-labelledby="entertainmentCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="entertainmentCapTitle">Entertainment Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -613,7 +964,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: {{ totals.8 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#lsCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="lsCap" tabindex="-1" role="dialog" aria-labelledby="lsCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="lsCapTitle">Leisure & Self-Care Cap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -657,7 +1047,46 @@
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
                 <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: {{ totals.9 |floatformat:2| intcomma}}</h6>
-                <a href="{% url 'transactions' 'Page 1' 'Page 2' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#otherCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="otherCap" tabindex="-1" role="dialog" aria-labelledby="otherCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="otherCapTitle">Other</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="input-group mb-3 input-group-lg">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                          </div>
+                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                          <div class="input-group-append">
+                            <span class="input-group-text">.00</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                          </div>
+                          <div class="col-xl-6">
+                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1184,17 +1613,17 @@
 
           <canvas id='lineChart'></canvas>
           <script>
-            var endpoint = '/home/api/chart/data/'
-            $.ajax({
-              method: "GET",
-              url: endpoint,
-              success: function(data){
+            // var endpoint = '/home/api/chart/data/'
+            // $.ajax({
+            //   method: "GET",
+            //   url: endpoint,
+            //   success: function(data){
                 
-              },
-              error: function(error_data){
+            //   },
+            //   error: function(error_data){
 
-              },
-            })
+            //   },
+            // })
 
             var ctxLine = document.getElementById("lineChart")
             var myLineChart = new Chart(ctxLine,{

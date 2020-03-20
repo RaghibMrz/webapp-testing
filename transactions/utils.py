@@ -75,8 +75,6 @@ def getData(accountID):
 
     # get locally
     try:
-        print("here")
-        print(accountID)
         with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
             jsonData = json.load(data)
         return jsonData

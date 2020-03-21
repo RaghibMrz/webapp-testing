@@ -275,9 +275,16 @@ def getCategoricalTotal(context):
 def getTransactionNum(context):
     numOfTransactions = []
     for catList in context:
-        if catList == "totals":
-            break
-        numOfTransactions.append(len(context[catList]))
+        if catList != "accountIDs" and catList != "selectedAccount" and catList != "dateIndicator":
+            if catList == "totals":
+                break
+            if context[catList][0]['TransactionInformation'] == "None" and len(context[catList]) == 1:
+                numOfTransactions.append(0)
+            else:
+                numOfTransactions.append(len(context[catList]))
+        else:
+            continue
+            
     return numOfTransactions
 
 
@@ -383,7 +390,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
             if paymentTime.date()< chargedDate:
                 balance += float(transaction['Amount']['Amount'])
                 interest += (chargedDate - paymentTime.date()).days * purchaseRate / 365
-
+    return {"Interest": interest}
 
 
     
@@ -398,19 +405,20 @@ def prediction(testDate, accountID):
 
 
 def getIncome(rows):
-    monthDict = {}
-    for row in rows:
-        amount = float(row['Amount'])
-        date = row['BookingDateTime']
-        if str(date.month) not in monthDict:
-            monthDict[str(date.month)] = 0
-        if amount > 0:
-            monthDict[str(date.month)] += amount
-    # round(sum(monthDict.values()) / len(monthDict.values()), 2)
-    if len(monthDict.values()) > 0:
-        return min(monthDict.values())
-    else:
-        return 0
+    if rows != False:
+        monthDict = {}
+        for row in rows:
+            amount = float(row['Amount'])
+            date = row['BookingDateTime']
+            if str(date.month) not in monthDict:
+                monthDict[str(date.month)] = 0
+            if amount > 0:
+                monthDict[str(date.month)] += amount
+        # round(sum(monthDict.values()) / len(monthDict.values()), 2)
+        if len(monthDict.values()) > 0:
+            return min(monthDict.values())
+        else:
+            return 0
 
 
 def getSpend(rows):
@@ -445,9 +453,10 @@ def updateContext(context, rows):
     context['count'] = getTransactionNum(context)
     context['totals'] = totalList
     context['spendIndicatorList'] = spendIndicatorList
-    context['monthlyIncome'] = getIncome(rows)
-    context['monthlySpend'] = getSpend(rows)
-    context['leftOver'] = calcExcess(rows)
+    if rows != False:
+        context['monthlyIncome'] = getIncome(rows)
+        context['monthlySpend'] = getSpend(rows)
+        context['leftOver'] = calcExcess(rows)
     return context
 
 

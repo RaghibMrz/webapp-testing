@@ -1,6 +1,7 @@
 {% extends "transactions/base.html" %}
 {% block ctt %}
 {% load static %}
+{% load humanize %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
   <!-- Page Heading -->
@@ -18,7 +19,7 @@
           <option value="{{account}}">Account: {{ account }}</option>
         {% endfor %}
       </select>
-      <input type="submit" value="Select" >
+      <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
     </form>
   </div>
 
@@ -50,7 +51,7 @@
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome}}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -67,7 +68,7 @@
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Minimum Monthly Spend</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend}}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlySpend|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-pound-sign fa-2x text-gray-300"></i>
@@ -86,7 +87,7 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ leftOver.0 }}</div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ leftOver.1 }}</div>
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ leftOver.1 |floatformat:2| intcomma}}</div>
                 </div>
                 <!--<div class="col">-->
                   <!--<div class="progress progress-sm mr-2">-->
@@ -131,7 +132,7 @@
           </div>
           <div>
             <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
-              <input type="text" name="datetimes"/>
+              <input class="custom-select" type="text" name="datetimes"/>
               <script>
               $(function() {
                 $('input[name="datetimes"]').daterangepicker({
@@ -145,7 +146,7 @@
                 });
               });
               </script>
-              <input type="submit" name="submit" value = "Enter">
+              <input type="submit" name="submit" value = "Enter" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
             </form>
           </div>
           <div>
@@ -172,7 +173,7 @@
                   {% for row in rows %}
                     <tr>
                     <td>{{ row.TransactionInformation }}</td>
-                    <td>{{ row.Amount }}</td>
+                    <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                     <td>{{ row.Currency }}</td>
                     <td>{{ row.BookingDateTime }}</td>
                     </tr>
@@ -190,7 +191,7 @@
                   {% endfor %}
                   <option value="AllTransactions">Show all</option>
                 </select>
-                <input type="submit" value="submit">
+                <input type="submit" value="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
               </form>
               
               {% for pageElem in elements %}
@@ -202,7 +203,7 @@
               {% endfor %}
             </div>
             <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-              <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total }}</h6>
+              <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total |floatformat:2| intcomma}}</h6>
               <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" id="capPrompt"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
               <script>src="jquery.min.js"</script>
             </div>
@@ -232,22 +233,100 @@
           </div> -->
         </div>
         <!-- Card Body -->
-        <div class="card-body">
+        <div class="card-body" style="position: relative; height: 50vh;">
           <!-- <img src="{% static 'transactions/img/SquarePie.jpg' %}" style="max-width:100%;"> -->
 
           <canvas id="pieChart"></canvas>
           <script>
-            var endpoint = '/home/api/chart/data/'
-            $.ajax({
-              method: "GET",
-              url: endpoint,
-              success: function(data){
-                
-              },
-              error: function(error_data){
 
-              },
-            })
+            // var bpTotal = "{{total.0}}";
+            // var tpTotal = "{{total.1}}";
+            // var groceryTotal = "{{total.2}}";
+            // var fcTotal = "{{total.3}}";
+            // var financesTotal = "{{total.4}}";
+            // var foodTotal = "{{total.5}}";
+            // var genTotal = "{{total.6}}";
+            // var entertainmentTotal = "{{total.7}}";
+            // var lsTotal = "{{total.8}}";
+            // var uncatTotal = "{{total.9}}";
+
+            // var ctxPie = document.getElementById("pieChart")
+            // var myPieChart = new Chart(ctxPie,{
+            //   type: 'pie',
+            //   data: {
+            //     labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+            //     // labels: "Amount Spent",
+            //     datasets: [{
+            //       // data: resData,
+            //       // data: [5,5,5,5,5,5,5,5,5,5],  //test
+            //       label: "Amount Spent",
+            //       // label: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+            //       data: [bpTotal, tpTotal, groceryTotal, fcTotal, financesTotal, foodTotal, genTotal, entertainmentTotal, lsTotal, uncatTotal],
+
+            //       backgroundColor: [
+            //         'rgba(78, 115, 223, 0.5)', //blue
+            //         'rgba(231, 74, 59, 0.5)',  //red
+            //         'rgba(253, 126, 20, 0.5)',  //orange
+            //         'rgba(232, 62, 140, 0.5)',  //pink
+            //         'rgba(28, 200, 138, 0.5)',  //green
+            //         'rgba(246, 194, 62, 0.5)',  //yellow
+            //         'rgba(90, 92, 105, 0.5)',  //gray-dark
+            //         'rgba(102, 16, 242, 0.5)',  //indigo
+            //         'rgba(54, 185, 204, 0.5)',  //cyan
+            //         'rgba(133, 135, 150, 0.5)',  //gray
+                    
+            //       ],
+            //       borderColor: [
+            //         'rgba(78, 115, 223, 1)',
+            //         'rgba(231, 74, 59, 1)',
+            //         'rgba(253, 126, 20, 1)',
+            //         'rgba(232, 62, 140, 1)',
+            //         'rgba(28, 200, 138, 1)',
+            //         'rgba(246, 194, 62, 1)',
+            //         'rgba(90, 92, 105, 1)',
+            //         'rgba(102, 16, 242, 1)',
+            //         'rgba(54, 185, 204, 1)',
+            //         'rgba(133, 135, 150, 1)',
+            //       ],
+            //       borderWidth: 1
+
+            //     }]
+            //   },
+            //   options: {
+            //     maintainAspectRatio: false,
+            //     title: {
+            //       display: true,
+            //       text: "Amount Spent"
+            //     },
+            //     tooltips: {
+            //       callbacks: {
+            //         title: function(tooltipItem, data) {
+            //           return data['labels'][tooltipItem[0]['index']]
+            //         },
+            //         label: function(tooltipItem, data) {
+            //           var label = data.datasets[tooltipItem.datasetIndex].label;
+            //           return label + ": " + Number(data.datasets[0].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+            //         }
+            //       }
+            //     }
+            //   }
+            // });
+
+
+
+
+
+            // var endpoint = '/home/api/chart/data/'
+            // $.ajax({
+            //   method: "GET",
+            //   url: endpoint,
+            //   success: function(data){
+                
+            //   },
+            //   error: function(error_data){
+
+            //   },
+            // })
 
             var ctxPie = document.getElementById("pieChart")
             var myPieChart = new Chart(ctxPie,{
@@ -276,15 +355,9 @@
                   borderWidth: 1
                 }]
               },
-              // options: {
-              //   scales: {
-              //     yAxes: [{
-              //       ticks: {
-              //         beginAtZero: true
-              //       }
-              //     }]
-              //   }
-              // }
+              options: {
+                maintainAspectRatio: false
+              }
             });
           </script>
 
@@ -329,23 +402,101 @@
           </div> -->
         </div>
         <!-- Card Body -->
-        <div class="card-body">
+        <div class="card-body" style="position: relative; height: 50vh;">
           <!-- <img src="{% static 'transactions/img/SquareBar.jpg' %}" style="max-width:100%;"> -->
 
 
           <canvas id="barChart"></canvas>
+          <!-- <canvas id="treeChart"></canvas> -->
           <script>
-            var endpoint = '/home/api/chart/data/'
-            $.ajax({
-              method: "GET",
-              url: endpoint,
-              success: function(data){
-                
-              },
-              error: function(error_data){
+            // var ctxTree = document.getElementById("treeChart").getContext('2d');
+            
+            // var bpTotal = "{{totals.0}}";
+            // var tpTotal = "{{totals.1}}";
+            // var groceryTotal = "{{totals.2}}";
+            // var fcTotal = "{{totals.3}}";
+            // var financesTotal = "{{totals.4}}";
+            // var foodTotal = "{{totals.5}}";
+            // var genTotal = "{{totals.6}}";
+            // var entertainmentTotal = "{{totals.7}}";
+            // var lsTotal = "{{totals.8}}";
+            // var uncatTotal = "{{totals.9}}";
 
-              },
-            })
+            // var bpCount = "{{count.0}}";
+            // var tpCount = "{{count.1}}";
+            // var groceryCount = "{{count.2}}";
+            // var fcCount = "{{count.3}}";
+            // var financesCount = "{{count.4}}";
+            // var foodCount = "{{count.5}}";
+            // var genCount = "{{count.6}}";
+            // var entertainmentCount = "{{count.7}}";
+            // var lsCount = "{{count.8}}";
+            // var uncatCount = "{{count.9}}";
+            
+            // var myTreeChart = new Chart(ctxTree,{
+            //   type: 'bar',
+            //   data: {
+            //     labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+            //     datasets: [{
+            //       // label: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+            //       label: "Number of Transactions",
+            //       data: [bpCount, tpCount, groceryCount, fcCount, financesCount, foodCount, genCount, entertainmentCount, lsCount, uncatCount],
+
+            //       backgroundColor: [
+            //         'rgba(78, 115, 223, 0.5)', //blue
+            //         'rgba(231, 74, 59, 0.5)',  //red
+            //         'rgba(253, 126, 20, 0.5)',  //orange
+            //         'rgba(232, 62, 140, 0.5)',  //pink
+            //         'rgba(28, 200, 138, 0.5)',  //green
+            //         'rgba(246, 194, 62, 0.5)',  //yellow
+            //         'rgba(90, 92, 105, 0.5)',  //gray-dark
+            //         'rgba(102, 16, 242, 0.5)',  //indigo
+            //         'rgba(54, 185, 204, 0.5)',  //cyan
+            //         'rgba(133, 135, 150, 0.5)',  //gray
+            //       ],
+            //       borderColor: [
+            //         'rgba(78, 115, 223, 1)',
+            //         'rgba(231, 74, 59, 1)',
+            //         'rgba(253, 126, 20, 1)',
+            //         'rgba(232, 62, 140, 1)',
+            //         'rgba(28, 200, 138, 1)',
+            //         'rgba(246, 194, 62, 1)',
+            //         'rgba(90, 92, 105, 1)',
+            //         'rgba(102, 16, 242, 1)',
+            //         'rgba(54, 185, 204, 1)',
+            //         'rgba(133, 135, 150, 1)',
+            //       ],
+            //       borderWidth: 1
+            //     }]
+            //   },
+            //   options: {
+            //     maintainAspectRatio: false,
+            //     title: {
+            //       display: true,
+            //       text: "Number of transactions",
+            //     },
+            //     legend: {
+            //       display: false,
+            //     },
+            //     responsive: true,
+            //   }
+            // });
+
+
+
+
+
+            // var endpoint = '/home/api/chart/data/'
+            // $.ajax({
+            //   method: "GET",
+            //   url: endpoint,
+            //   success: function(data){
+                
+            //   },
+            //   error: function(error_data){
+
+            //   },
+            // })
 
             var ctxBar = document.getElementById("barChart")
             var myBarChart = new Chart(ctxBar,{
@@ -374,15 +525,9 @@
                   borderWidth: 1
                 }]
               },
-              // options: {
-              //   scales: {
-              //     yAxes: [{
-              //       ticks: {
-              //         beginAtZero: true
-              //       }
-              //     }]
-              //   }
-              // }
+              options: {
+                maintainAspectRatio:false
+              }
             });
           </script>
 
@@ -440,17 +585,17 @@
 
             <canvas id="lineChart"></canvas>
             <script>
-              var endpoint = '/home/api/chart/data/'
-              $.ajax({
-                method: "GET",
-                url: endpoint,
-                success: function(data){
+              // var endpoint = '/home/api/chart/data/'
+              // $.ajax({
+              //   method: "GET",
+              //   url: endpoint,
+              //   success: function(data){
                   
-                },
-                error: function(error_data){
+              //   },
+              //   error: function(error_data){
 
-                },
-              })
+              //   },
+              // })
 
               var ctxLine = document.getElementById("lineChart")
               var myLineChart = new Chart(ctxLine,{

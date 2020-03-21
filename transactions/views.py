@@ -36,11 +36,12 @@ def home(request):
         context['dateIndicator'] = "All transactions"
 
     # get data from database, store into "context" dictionary
-    print(prediction(datetime.datetime(2020,2,10),"22289"))
-    for transaction in rows:
-        context[getCategory(transaction['MCC'])].append(transaction)
+    # print(prediction(datetime.datetime(2020,2,10),"22289"))
+    if rows != False:
+        for transaction in rows:
+            context[getCategory(transaction['MCC'])].append(transaction)
 
-    context = updateContext(context, rows)
+        context = updateContext(context, rows)
     return render(request, 'transactions/home.html', context)
 
 
@@ -145,17 +146,3 @@ def delete(request):
         elif idToRemove in getStrAccountIDs(request.user.profile):
             request.user.profile.deleteAccount(idToRemove)
         return redirect('profile')
-
-# class ChartData(LoginRequiredMixin, APIView):
-#     authentication_classes = []
-#     permission_classes = []
-#
-#     def get(self, request, format=None):
-#         labels = ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General',
-#                   'Entertainment', 'Leisure & Self-Care', 'Other']
-#         default_items = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-#         data = {
-#             "labels": labels,
-#             "default": default_items,
-#         }
-#         return Response(data)

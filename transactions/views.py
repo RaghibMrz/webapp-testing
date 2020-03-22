@@ -44,7 +44,7 @@ def home(request):
     if rows != False:
         for transaction in rows:
             context[getCategory(transaction['MCC'])].append(transaction)
-        context = updateContext(context, rows, request)
+        context = updateContext(context, rows, request, accountID)
     return render(request, 'transactions/home.html', context)
 
 
@@ -81,7 +81,7 @@ def transactions(request, pageElem, page):
     transPerPageList.pop(transPerPageList.index("AllTransactions"))
 
     return render(request, 'transactions/transactions.html',
-                  getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem))
+                  getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem, prediction))
 
 
 @login_required

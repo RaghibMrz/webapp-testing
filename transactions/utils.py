@@ -1,5 +1,6 @@
 import csv
 import datetime
+import time
 import os
 import sys
 from django.shortcuts import render
@@ -124,14 +125,14 @@ def getPaginationElements(request, transPerPage, page, rows, pageElem):
 
 
 # close to identical context required in two methods, this function calculates and returns it
-def getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem):
+def getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem, predction):
     context = {'rows': getPaginatedRows(rows, transPerPage, pageElem), 'total': getTotal(rows)[0],
                'spendIndicator': getTotal(rows)[1],
                'dateIndicator': dateIndicator,
                'accountIDs': getStrAccountIDs(request.user.profile),
                'selectedAccount': request.user.profile.getAccountID(), 'elements': elems,
                'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows),
-               'transPerPageList': transPerPageList, 'page': pageElem}
+               'transPerPageList': transPerPageList, 'page': pageElem, 'prediction': prediction}
 
     return context
 
@@ -323,13 +324,17 @@ def getAverageSpending(testDate, accountID):
 
 def getPredictionForCurrent(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
+    print(billingdate)
     averagespending = getAverageSpending(testDate, accountID)
     if testDate.day > billingdate.day:
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
     currentbalance = float(a['Balance'][0]['Amount']['Amount'])
-    prediction = {}
+    prediction = {
+        "date": [],
+        "value": []
+    }
     currentdate = testDate.date()
     timeInterval = targetdate - testDate
     directDebitToPay = {}
@@ -351,9 +356,11 @@ def getPredictionForCurrent(a, testDate, accountID):
         currentdate += relativedelta(days=1)
         currentbalance -= averagespending
         if currentdate in directDebitToPay:
-            currentbalance -= directDebitToPay[currentdate]
-        prediction[currentdate] = currentbalance
-        daysPredicted += 1
+            currentbalance-= directDebitToPay[currentdate]
+        # prediction[time.mktime(currentdate.timetuple()) * 1000] = currentbalance
+        prediction["date"].append(time.mktime(currentdate.timetuple()) * 1000)
+        prediction["value"].append(currentbalance)
+        daysPredicted +=1
     return prediction
 
 
@@ -465,11 +472,12 @@ def updateCaps(request):
 
 # the context dictionary needs to be updated with all sorts of different information retrieved from different
 # methods, this function collates those variables and adds them to the context.
-def updateContext(context, rows, request):
+def updateContext(context, rows, request, accountID):
     totalList, spendIndicatorList, context = getCategoricalTotal(context)
     context['count'] = getTransactionNum(context)
     context['totals'] = totalList
     context['spendIndicatorList'] = spendIndicatorList
+    context['prediction'] = prediction(datetime.datetime(2020,2,10), accountID)
     if rows != False:
         context['monthlyIncome'] = getIncome(rows)
         context['monthlySpend'] = getSpend(rows)
@@ -518,7 +526,7 @@ def getCategory(mcc):
         return getLetters[d[mcc]]
     else:
         return "zero"
-
+        
 # class UserID():
 #     def __init__(self, userID):
 #         self.transactions = getRows(userID)

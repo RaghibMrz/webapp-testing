@@ -206,19 +206,8 @@
                       <td>{{ row.Amount |floatformat:2| intcomma}}</td>
                       <td>{{ row.Currency }}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in two %}
-                        <tr>
-                          <td>{{ row.BookingDateTime }}</td>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
+                    {% endfor %}
                   </table>
-                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">

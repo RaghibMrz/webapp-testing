@@ -148,12 +148,10 @@
             </form>
           </div>
           <div>
-            {% if dateIndicator %}
             <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
-            {% else %}
-            <h6 class="m-0 font-weight-bold text-secondary">All transactions</h6>
-            {% endif %}
-            <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">Clear Dates</a>
+            <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+              <input type="submit" name="submit" value="Clear" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+            </form>
           </div>
         </div>
         <!-- Card Header - Dropdown -->
@@ -172,6 +170,7 @@
             </div>
           </div>
         </div> -->
+        
         <!-- Card Body -->
         <div class="card-body">
 
@@ -193,10 +192,10 @@
                   <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
                       <th>Transaction</th>
                       <th>Amount</th>
                       <th>Currency</th>
+                      <th>Date</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -221,37 +220,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="creditCardCap" tabindex="-1" role="dialog" aria-labelledby="creditCardCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="creditCardCapTitle">Credit Card Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="creditCardCapTitle">Credit Card Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueCC" value="{{ caps.0 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -304,7 +305,8 @@
   
                   <!-- Modal -->
                   <div class="modal fade" id="bpCap" tabindex="-1" role="dialog" aria-labelledby="bpCapTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="bpCapTitle">Bills & Payments Cap</h5>
@@ -317,7 +319,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                            <input type="text" class="form-control" name="getValueBP" value="{{ caps.1 }}">
                             <div class="input-group-append">
                               <span class="input-group-text">.00</span>
                             </div>
@@ -333,14 +335,15 @@
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary">Save changes</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
           </div>
 
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
@@ -389,37 +392,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="transportCap" tabindex="-1" role="dialog" aria-labelledby="transportCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="transportCapTitle">Transport Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="transportCapTitle">Transport Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueTP" value="{{ caps.2 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -472,37 +477,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="groceriesCap" tabindex="-1" role="dialog" aria-labelledby="groceriesCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="groceriesCapTitle">Groceries Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="groceriesCapTitle">Groceries Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.3 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -555,37 +562,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="fcCap" tabindex="-1" role="dialog" aria-labelledby="fcCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="fcCapTitle">Fashion & Cosmetics Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="fcCapTitle">Fashion & Cosmetics Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueFC" value="{{ caps.4 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -638,37 +647,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="financesCap" tabindex="-1" role="dialog" aria-labelledby="financesCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="financesCapTitle">Finances Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="financesCapTitle">Finances Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueFSC" value="{{ caps.5 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -721,37 +732,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="foodCap" tabindex="-1" role="dialog" aria-labelledby="foodCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="foodCapTitle">Food Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="foodCapTitle">Food Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueFoodC" value="{{ caps.6 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -804,43 +817,44 @@
                 <!-- Modal -->
                 <div class="modal fade" id="generalCap" tabindex="-1" role="dialog" aria-labelledby="generalCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="generalCapTitle">General Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="generalCapTitle">General Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.7 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
 
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
             <a href="#collapsedEntertainmentTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedEntertainmentTransactions">
@@ -888,37 +902,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="entertainmentCap" tabindex="-1" role="dialog" aria-labelledby="entertainmentCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="entertainmentCapTitle">Entertainment Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="entertainmentCapTitle">Entertainment Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueEC" value="{{ caps.8 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -971,37 +987,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="lsCap" tabindex="-1" role="dialog" aria-labelledby="lsCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="lsCapTitle">Leisure & Self-Care Cap</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="lsCapTitle">Leisure & Self-Care Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueLSC" value="{{ caps.9 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -1054,37 +1072,39 @@
                 <!-- Modal -->
                 <div class="modal fade" id="otherCap" tabindex="-1" role="dialog" aria-labelledby="otherCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="otherCapTitle">Other</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="input-group mb-3 input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">£</span>
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="otherCapTitle">Other</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueOC" value="{{ caps.10 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
                           </div>
-                          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                          </div>
-                          <div class="col-xl-6">
-                            <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>

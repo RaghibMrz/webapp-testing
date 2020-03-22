@@ -8,7 +8,6 @@ class Profile(models.Model):
     img = models.ImageField(default='default.png', upload_to='profilePics')
     accountID = models.CharField(max_length=14, blank=True,
                                  help_text="Enter Account ID to link us to your debit/credit card")
-    accountIDList = models.CharField(max_length=128, blank=True)
     gotAccount = models.CharField(max_length=1, blank=False, default="0")
     transPerPage = models.CharField(max_length=14, blank=False, default="10")
     dateRange = models.CharField(max_length=128, blank=False, default="None")
@@ -17,6 +16,23 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username}\'s Profile'
 
+    # below are the methods for getting/setting categorical caps
+    def getCap(self, name):
+        if name not in self.getCapNames():
+            return [0]
+        return CategoryCap.objects.filter(name=name, accountid=self.getAccountID(), user=self.user).values_list('amount', flat=True)
+
+    def setCap(self, name, value):
+        if name not in self.getCapNames():
+            CategoryCap.objects.create(amount=value, name=name, accountid=self.getAccountID(), user=self.user)
+        else:
+            CategoryCap.objects.filter(name=name, accountid=self.getAccountID(), user=self.user).delete()
+            CategoryCap.objects.create(amount=value, name=name, accountid=self.getAccountID(), user=self.user)
+
+    def getCapNames(self):
+        return CategoryCap.objects.filter(accountid=self.getAccountID(), user__username=self.user.username).values_list('name', flat=True)
+
+    # below are the methods for accessing a user's bank accountID's
     def getGotAccount(self):
         return self.gotAccount
 
@@ -86,6 +102,15 @@ class Profile(models.Model):
             image.save(self.img.path)
 
 
+# Auxiliary class with a user field, and accountID field to allow one "IcyBank" user to connect multiple accountIDs
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     accountid = models.CharField(max_length=20)
+
+
+# Same principle as list of accountIDs used to give one account multiple caps
+class CategoryCap(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    accountid = models.CharField(max_length=20)
+    name = models.CharField(max_length=64, blank=False)
+    amount = models.CharField(max_length=64, blank=False, default="0")

@@ -20,8 +20,9 @@ register = template.Library()
 def getAccount(request):
     if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
         request.user.profile.setAccountID("All")
-    if request.method == 'POST' and request.POST['submit'] in getAllAccounts(request.user.profile):
-        request.user.profile.setAccountID(request.POST.get('submit'))
+    if request.method == 'POST' and 'submit' in request.POST:
+        if request.POST['submit'] in getAllAccounts(request.user.profile):
+            request.user.profile.setAccountID(request.POST.get('submit'))
     return request.user.profile.getAccountID()
 
 
@@ -284,7 +285,7 @@ def getTransactionNum(context):
                 numOfTransactions.append(len(context[catList]))
         else:
             continue
-            
+
     return numOfTransactions
 
 
@@ -314,9 +315,11 @@ def getAverageSpending(testDate, accountID):
     totalamount = 0
     for transaction in a['Transaction']:
         bookingdate = datetime.datetime.strptime(transaction['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
-        if enddate > bookingdate > startdate and transaction['ProprietaryBankTransactionCode']['Code'] != "DirectDebit" and transaction['CreditDebitIndicator'] == 'Debit':
+        if enddate > bookingdate > startdate and transaction['ProprietaryBankTransactionCode'][
+            'Code'] != "DirectDebit" and transaction['CreditDebitIndicator'] == 'Debit':
             totalamount += float(transaction['Amount']['Amount'])
     return totalamount / (enddate - startdate).days
+
 
 def getPredictionForCurrent(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
@@ -343,39 +346,42 @@ def getPredictionForCurrent(a, testDate, accountID):
                     directDebitToPay[nextpayment.date()] = float(directdebit['PreviousPaymentAmount']['Amount'])
     print(directDebitToPay)
     print(timeInterval.days)
-    daysPredicted = 0 
+    daysPredicted = 0
     while daysPredicted < timeInterval.days:
         currentdate += relativedelta(days=1)
         currentbalance -= averagespending
         if currentdate in directDebitToPay:
-            currentbalance-= directDebitToPay[currentdate]
+            currentbalance -= directDebitToPay[currentdate]
         prediction[currentdate] = currentbalance
-        daysPredicted +=1
+        daysPredicted += 1
     return prediction
+
 
 def getPredictionForCreditCard(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     averagespending = getAverageSpending(testDate, accountID)
-    interest = 0 
-    balance = 0 #float(a['Balance']['Amount']['Amount'])
+    interest = 0
+    balance = 0  # float(a['Balance']['Amount']['Amount'])
     if testDate.day > billingdate.day:
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
 
-    #chargedDate is the date before which all the purchases will be charged the interest
-    chargedDate = targetdate -  relativedelta(days= int(a['Product'][0]['CCC']['CoreProduct']['MaxPurchaseInterestFreeLengthDays']))
+    # chargedDate is the date before which all the purchases will be charged the interest
+    chargedDate = targetdate - relativedelta(
+        days=int(a['Product'][0]['CCC']['CoreProduct']['MaxPurchaseInterestFreeLengthDays']))
 
-    #check if the credit card is still in promotion
+    # check if the credit card is still in promotion
     for marketingState in a['Product'][0]['CCC']['CCCMarketingState']:
         if marketingState['Identification'] == "P1":
             startDate = datetime.datetime.strptime(a[Account][0]['OpeningDate'],
-                                                         "%d-%m-%Y")
+                                                   "%d-%m-%Y")
             if startDate + relativedelta(months=int(marketingState['StateTenureLength'])) > testDate:
-                return({"Interest" : "Still in promotion, the interest is 0."})
+                return ({"Interest": "Still in promotion, the interest is 0."})
         elif marketingState['Identification'] == "R1":
             minRepaymentRate = float(marketingState['Repayment']['MinBalanceRepaymentRate'])
-            nonRepaymentCharge = float(marketingState['Repayment']['NonRepaymentFeeCharges'][0]['NonRepaymentFeeChargeDetail'][0]['FeeAmount'])
+            nonRepaymentCharge = float(
+                marketingState['Repayment']['NonRepaymentFeeCharges'][0]['NonRepaymentFeeChargeDetail'][0]['FeeAmount'])
             for charge in marketingState['OtherFeesCharges']:
                 if charge['FeeType'] == "Purchase":
                     purchaseRate = float(charge['FeeRate'])
@@ -385,15 +391,13 @@ def getPredictionForCreditCard(a, testDate, accountID):
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
     for transaction in a['Transaction']:
         paymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
-                                                         "%Y-%m-%dT%H:%M:%S+00:00")
+                                                 "%Y-%m-%dT%H:%M:%S+00:00")
         if paymentTime > lastPaymentTime:
-            if paymentTime.date()< chargedDate:
+            if paymentTime.date() < chargedDate:
                 balance += float(transaction['Amount']['Amount'])
                 interest += (chargedDate - paymentTime.date()).days * purchaseRate / 365
     return {"Interest": interest}
 
-
-    
 
 def prediction(testDate, accountID):
     a = getData(accountID)
@@ -448,7 +452,20 @@ def calcExcess(rows):
     return leftOver
 
 
-def updateContext(context, rows):
+# check if post request has been sent to update a certain cap
+def updateCaps(request):
+    possibleCapSetOn = ["getValueCC", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+                        "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
+
+    if request.method == "POST" and any(cap in request.POST for cap in possibleCapSetOn):
+        chosenCapName = str(list(dict(request.POST).keys())[1])
+        capValue = request.POST[chosenCapName]
+        request.user.profile.setCap(chosenCapName, capValue)
+
+
+# the context dictionary needs to be updated with all sorts of different information retrieved from different
+# methods, this function collates those variables and adds them to the context.
+def updateContext(context, rows, request):
     totalList, spendIndicatorList, context = getCategoricalTotal(context)
     context['count'] = getTransactionNum(context)
     context['totals'] = totalList
@@ -457,7 +474,18 @@ def updateContext(context, rows):
         context['monthlyIncome'] = getIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
+    context['caps'] = getAllCaps(request)
     return context
+
+
+# gets all the numerical values of the caps set on each category
+def getAllCaps(request):
+    possibleCapSetOn = ["getValueCC", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+                        "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
+    capValues = []
+    for caps in possibleCapSetOn:
+        capValues.append((request.user.profile.getCap(caps)[0]))
+    return capValues
 
 
 # performs lookup from Merchant Category Code file- maps it to a defined category

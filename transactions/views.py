@@ -16,17 +16,21 @@ from .utils import *
 @login_required
 def home(request):
     request.session.set_expiry(600)
-
     accountID = getAccount(request)
     validateID(request, accountID, 'home')
+
+    # update categorical caps if necessary
+    updateCaps(request)
 
     context, rows = makeContext(request, accountID), getSelectedAccountRows(request, accountID)
 
     # gets date range selected by user, parses it and then updates transactions+details displayed
-    if request.method == "POST" and request.POST['submit'] == "Enter":
-        request.user.profile.setDateRange(request.POST.get('datetimes'))
-    if request.method == "POST" and request.POST['submit'] == "Clear":
-        request.user.profile.setUseDateFilter("0")
+    if request.method == "POST" and 'submit' in request.POST:
+        if request.POST['submit'] == "Enter":
+            request.user.profile.setDateRange(request.POST.get('datetimes'))
+        if request.POST['submit'] == "Clear":
+            request.user.profile.setUseDateFilter("0")
+
     if request.user.profile.useDateFilter == "1":
         rawDates = request.user.profile.getDateRange().split("-")
         startDate, endDate = rawDates[0], rawDates[1]
@@ -40,8 +44,7 @@ def home(request):
     if rows != False:
         for transaction in rows:
             context[getCategory(transaction['MCC'])].append(transaction)
-
-        context = updateContext(context, rows)
+        context = updateContext(context, rows, request)
     return render(request, 'transactions/home.html', context)
 
 

@@ -125,7 +125,7 @@
       <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Categorical Spend</h6>
-          <div style="margin-left: 20%">
+          <div style="margin-left: 10%">
             <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
           </div>
           <div>
@@ -172,6 +172,10 @@
             </div>
           </div>
         </div> -->
+
+        
+
+
         <!-- Card Body -->
         <div class="card-body">
 
@@ -190,26 +194,27 @@
             <div class="collapse hide" id="collapsedCreditCardTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Date</th>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
+                        <th>Date</th>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in two %}
-                      <tr>
-                      <td>{{ row.BookingDateTime }}</td>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in two %}
+                        <tr>
+                          <td>{{ row.BookingDateTime }}</td>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
@@ -275,7 +280,7 @@
             <div class="collapse hide" id="collapsedBPTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable1" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="bpTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
                       <th>Transaction</th>
@@ -283,21 +288,22 @@
                       <th>Currency</th>
                       <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in one %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in one %}
+                        <tr>
+                        <td>{{ row.TransactionInformation }}</td>
+                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                        <td>{{ row.Currency }}</td>
+                        <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  <br>
                 </div>
                 <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: {{ totals.0 |floatformat:2| intcomma}}</h6>
+                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: £{{ totals.0 |floatformat:2| intcomma}}</h6>
                   <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#bpCap">
                     <i class="fas fa-tachometer-alt"></i> Set Cap
                   </button>
@@ -358,7 +364,7 @@
             <div class="collapse hide" id="collapsedTransportTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable2" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="transportTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
                       <th>Transaction</th>
@@ -366,22 +372,23 @@
                       <th>Currency</th>
                       <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in two %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in two %}
+                        <tr>
+                        <td>{{ row.TransactionInformation }}</td>
+                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                        <td>{{ row.Currency }}</td>
+                        <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: {{ totals.1 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#transportCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -441,7 +448,7 @@
             <div class="collapse hide" id="collapsedGroceriesTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable3" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="groceriesTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
                       <th>Transaction</th>
@@ -449,22 +456,23 @@
                       <th>Currency</th>
                       <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in three %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in three %}
+                        <tr>
+                        <td>{{ row.TransactionInformation }}</td>
+                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                        <td>{{ row.Currency }}</td>
+                        <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: {{ totals.2 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: £{{ totals.2 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#groceriesCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -524,30 +532,31 @@
             <div class="collapse hide" id="collapsedFCTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable4" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="fcTable" width="100%" cellspacing="0">
                     <thead>
-                    <tr>
-                    <th>Transaction</th>
-                    <th>Amount</th>
-                    <th>Currency</th>
-                    <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  {% for row in four %}
-                    <tr>
-                    <td>{{ row.TransactionInformation }}</td>
-                    <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                    <td>{{ row.Currency }}</td>
-                    <td>{{ row.BookingDateTime }}</td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
+                      <tr>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in four %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: {{ totals.3 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: £{{ totals.3 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#fcCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -607,30 +616,31 @@
             <div class="collapse hide" id="collapsedFinancesTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable5" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="financesTable" width="100%" cellspacing="0">
                     <thead>
-                      <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in five %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                        <tr>
+                          <th>Transaction</th>
+                          <th>Amount</th>
+                          <th>Currency</th>
+                          <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in five %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: {{ totals.4 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: £{{ totals.4 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#financesCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -690,30 +700,31 @@
             <div class="collapse hide" id="collapsedFoodTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable6" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="foodTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in six %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in six %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: {{ totals.5 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: £{{ totals.5 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#foodCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -773,30 +784,31 @@
             <div class="collapse hide" id="collapsedGeneralTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable7" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="generalTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in seven %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in seven %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: {{ totals.6 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: £{{ totals.6 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#generalCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -857,30 +869,31 @@
             <div class="collapse hide" id="collapsedEntertainmentTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable8" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="entertainmentTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in eight %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in eight %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: {{ totals.7 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: £{{ totals.7 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#entertainmentCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -940,30 +953,31 @@
             <div class="collapse hide" id="collapsedLSTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable9" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="lsTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in nine %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in nine %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: {{ totals.8 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: £{{ totals.8 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#lsCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -1023,30 +1037,31 @@
             <div class="collapse hide" id="collapsedOtherTransactions">
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-bordered" id="datatable0" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="otherTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in zero %}
-                      <tr>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      <td>{{ row.BookingDateTime }}</td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
+                    </thead>
+                    <tbody>
+                      {% for row in zero %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
                   </table>
+                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: {{ totals.9 |floatformat:2| intcomma}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: £{{ totals.9 |floatformat:2| intcomma}}</h6>
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#otherCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -1665,7 +1680,75 @@
             });
           </script>
 
-
+          <!-- DataTables Script -->
+          <script>
+            $(document).ready(function() {
+              $('#ccTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#bpTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#transportTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#groceriesTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#fcTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#financesTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#foodTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#generalTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#entertainmentTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#lsTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+            $(document).ready(function() {
+              $('#otherTable').DataTable({
+                "iDisplayLength": 10,
+                "ordering": false
+              });
+            });
+          </script>
         </div>
       </div>
     </div>

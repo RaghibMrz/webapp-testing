@@ -41,7 +41,7 @@ def home(request):
         for transaction in rows:
             context[getCategory(transaction['MCC'])].append(transaction)
 
-        context = updateContext(context, rows)
+        context = updateContext(context, rows, "22289")
     return render(request, 'transactions/home.html', context)
 
 
@@ -76,8 +76,9 @@ def transactions(request, pageElem, page):
     transPerPageList = makeFirstElement(transPerPage, transPerPageList)
     pageElem, elems = getPaginationElements(request, transPerPage, page, rows, pageElem)
     transPerPageList.pop(transPerPageList.index("AllTransactions"))
+    # prediction = prediction(datetime.datetime(2020,2,10), "22289")
     return render(request, 'transactions/transactions.html',
-                  getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem))
+                  getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem, prediction))
 
 
 @login_required

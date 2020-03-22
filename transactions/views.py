@@ -42,6 +42,11 @@ def home(request):
             context[getCategory(transaction['MCC'])].append(transaction)
 
         context = updateContext(context, rows, "22289")
+    # print("start")
+    # print(context["prediction"])
+    # print("end")
+    # predictionDates = context["prediction"].keys()
+    # predictionValues = context["prediction"].values()
     return render(request, 'transactions/home.html', context)
 
 

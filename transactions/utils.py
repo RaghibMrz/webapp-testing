@@ -1,5 +1,6 @@
 import csv
 import datetime
+import time
 import os
 import sys
 from django.shortcuts import render
@@ -327,7 +328,10 @@ def getPredictionForCurrent(a, testDate, accountID):
     else:
         targetdate = billingdate
     currentbalance = float(a['Balance'][0]['Amount']['Amount'])
-    prediction = {}
+    prediction = {
+        "date": [],
+        "value": []
+    }
     currentdate = testDate.date()
     timeInterval = targetdate - testDate
     directDebitToPay = {}
@@ -350,7 +354,9 @@ def getPredictionForCurrent(a, testDate, accountID):
         currentbalance -= averagespending
         if currentdate in directDebitToPay:
             currentbalance-= directDebitToPay[currentdate]
-        prediction[currentdate] = currentbalance
+        # prediction[time.mktime(currentdate.timetuple()) * 1000] = currentbalance
+        prediction["date"].append(time.mktime(currentdate.timetuple()) * 1000)
+        prediction["value"].append(currentbalance)
         daysPredicted +=1
     return prediction
 
@@ -492,7 +498,7 @@ def getCategory(mcc):
         return getLetters[d[mcc]]
     else:
         return "zero"
-
+        
 # class UserID():
 #     def __init__(self, userID):
 #         self.transactions = getRows(userID)

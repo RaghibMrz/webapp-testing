@@ -22,7 +22,9 @@ def home(request):
     # update categorical caps if necessary
     updateCaps(request)
 
-    context, rows = makeContext(request, accountID), getSelectedAccountRows(request, accountID)
+    print(getSalaryData(getRows(request, "10567")))
+
+    context, rows = makeContext(request, accountID), getRows(request, accountID)
 
     # gets date range selected by user, parses it and then updates transactions+details displayed
     if request.method == "POST" and 'submit' in request.POST:
@@ -54,7 +56,7 @@ def transactions(request, pageElem, page):
 
     accountID = getAccount(request)
     validateID(request, accountID, 'transactions')
-    rows = getSelectedAccountRows(request, accountID)
+    rows = getRows(request, accountID)
 
     # get date range selected by user, parse it and then update transactions+details displayed
     if request.method == "POST" and request.POST['submit'] == "Enter":

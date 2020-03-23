@@ -306,13 +306,8 @@ def getFilteredRows(rows, startDate, endDate):
 
 def getAverageSpending(testDate, accountID):
     a = getData(accountID)
-    billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
-    if billingdate <= testDate:
-        startdate = billingdate - relativedelta(months=1)
-        enddate = billingdate
-    else:
-        startdate = billingdate - relativedelta(months=2)
-        enddate = billingdate - relativedelta(months=1)
+    startdate = testDate - relativedelta(months= 1)
+    enddate = testDate
     totalamount = 0
     for transaction in a['Transaction']:
         bookingdate = datetime.datetime.strptime(transaction['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
@@ -322,6 +317,7 @@ def getAverageSpending(testDate, accountID):
     return totalamount / (enddate - startdate).days
 
 
+# prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
 def getPredictionForCurrent(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     print(billingdate)
@@ -364,9 +360,12 @@ def getPredictionForCurrent(a, testDate, accountID):
     return prediction
 
 
+# prediction for cc returns a dictionary with different attributes being the total amount of interest a user needs to pay,
+# amount a user needs to pay to avoid cc fee
+# minimum payment amount
+# and it check the status of a cc if it's still in promotion 
 def getPredictionForCreditCard(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
-    averagespending = getAverageSpending(testDate, accountID)
     interest = 0
     balance = 0  # float(a['Balance']['Amount']['Amount'])
     if testDate.day > billingdate.day:

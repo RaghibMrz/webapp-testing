@@ -22,7 +22,7 @@ def getAccount(request):
     if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
         request.user.profile.setAccountID("All")
     if request.method == 'POST' and 'submit' in request.POST:
-        if request.POST['submit'] in getAllAccounts(request.user.profile):
+        if request.POST['submit'] in getAccountsFromQuerySet(request.user.profile):
             request.user.profile.setAccountID(request.POST.get('submit'))
     return request.user.profile.getAccountID()
 
@@ -30,7 +30,7 @@ def getAccount(request):
 # checks if entered accountID produces a valid list of transactions, if not user is redirected with a page that displays
 # a user friendly message telling them to check the ID they entered.
 def validateID(request, accountID, page):
-    if not getRows(accountID) and accountID != "All":
+    if not getSingleAccountRows(accountID) and accountID != "All":
         context = {
             'rows': [{
                 'TransactionInformation': 'Incorrect UserID linked',
@@ -58,11 +58,11 @@ def makeContext(request, accountID):
 
 
 # returns rows of userID selected, or aggregate rows if all selected
-def getSelectedAccountRows(request, accountID):
+def getRows(request, accountID):
     if accountID == "All":
         rows = getAllRows(getStrAccountIDs(request.user.profile))
     else:
-        rows = getRows(accountID)
+        rows = getSingleAccountRows(accountID)
     return rows
 
 
@@ -125,20 +125,24 @@ def getPaginationElements(request, transPerPage, page, rows, pageElem):
 
 
 # close to identical context required in two methods, this function calculates and returns it
-def getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem, predction):
+def getAccountBalance():
+    pass
+
+
+def getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem, prediction):
     context = {'rows': getPaginatedRows(rows, transPerPage, pageElem), 'total': getTotal(rows)[0],
                'spendIndicator': getTotal(rows)[1],
                'dateIndicator': dateIndicator,
                'accountIDs': getStrAccountIDs(request.user.profile),
                'selectedAccount': request.user.profile.getAccountID(), 'elements': elems,
                'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows),
-               'transPerPageList': transPerPageList, 'page': pageElem, 'prediction': prediction}
+               'transPerPageList': transPerPageList, 'page': pageElem, 'prediction': prediction, 'balance': getAccountBalance()}
 
     return context
 
 
 # takes user bank accountID and returns a list of transactions.
-def getRows(accountID):
+def getSingleAccountRows(accountID):
     row = []
     transactionAttributes = ["TransactionInformation", "Amount", "Currency", "BookingDateTime", "MCC"]
     a = getData(accountID)
@@ -180,11 +184,11 @@ def getRows(accountID):
 
 # combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
 def getAllRows(IDs):
-    row = getRows(IDs[0])
+    row = getSingleAccountRows(IDs[0])
     for accountID in IDs:
         if accountID == IDs[0]:
             continue
-        for collectingDict in getRows(accountID):
+        for collectingDict in getSingleAccountRows(accountID):
             row.append(collectingDict)
     return sortedRows(row)
 
@@ -223,7 +227,7 @@ def getStrAccountIDs(profile):
 
 
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
-def getAllAccounts(profile):
+def getAccountsFromQuerySet(profile):
     accountList = []
     for accounts in profile.getAccount():
         accountList.append(str(accounts))
@@ -306,13 +310,8 @@ def getFilteredRows(rows, startDate, endDate):
 
 def getAverageSpending(testDate, accountID):
     a = getData(accountID)
-    billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
-    if billingdate <= testDate:
-        startdate = billingdate - relativedelta(months=1)
-        enddate = billingdate
-    else:
-        startdate = billingdate - relativedelta(months=2)
-        enddate = billingdate - relativedelta(months=1)
+    startdate = testDate - relativedelta(months= 1)
+    enddate = testDate
     totalamount = 0
     for transaction in a['Transaction']:
         bookingdate = datetime.datetime.strptime(transaction['BookingDateTime'], "%Y-%m-%dT%H:%M:%S+00:00")
@@ -322,6 +321,39 @@ def getAverageSpending(testDate, accountID):
     return totalamount / (enddate - startdate).days
 
 
+# Works out the data of an account's salary, and returns a dictionary with the date and amount
+def getSalaryData(rows):
+    monthDict = {}
+    fullDateDict = {}
+    if rows != False:
+        for row in rows:
+            if float(row['Amount']) <= 0.0:
+                continue
+            date = row['BookingDateTime']
+            amount = float(row['Amount'])
+            if str(date.month) not in monthDict:
+                monthDict[str(date.month)] = amount
+                fullDateDict[str(date)] = amount
+            elif amount > monthDict[str(date.month)]:
+                monthDict[str(date.month)] = amount
+                fullDateDict[str(date)] = amount
+
+    salList = list(monthDict.values())
+    modalValue = max(set(salList), key=salList.count)
+    for item in fullDateDict:
+        if fullDateDict[item] != modalValue:
+            del fullDateDict[item]
+
+    salaryDates = list(fullDateDict.keys())
+    totalOfDays = 0
+    for date in salaryDates:
+        totalOfDays += int(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S").day)
+
+    averageDay = totalOfDays//len(salaryDates)
+    return [modalValue, averageDay]
+
+
+# prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
 def getPredictionForCurrent(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     print(billingdate)
@@ -364,9 +396,12 @@ def getPredictionForCurrent(a, testDate, accountID):
     return prediction
 
 
+# prediction for cc returns a dictionary with different attributes being the total amount of interest a user needs to pay,
+# amount a user needs to pay to avoid cc fee
+# minimum payment amount
+# and it check the status of a cc if it's still in promotion 
 def getPredictionForCreditCard(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
-    averagespending = getAverageSpending(testDate, accountID)
     interest = 0
     balance = 0  # float(a['Balance']['Amount']['Amount'])
     if testDate.day > billingdate.day:
@@ -406,12 +441,18 @@ def getPredictionForCreditCard(a, testDate, accountID):
     return {"Interest": interest}
 
 
-def prediction(testDate, accountID):
+def prediction(testDate, accountID, request):
     a = getData(accountID)
+    # b = getAllAccountRows(request, accountID)
+    # print(a)
+    # print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    # print(b)
+    # print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
     if a['Account'][0]['AccountSubType'] == 'CurrentAccount':
         prediction = getPredictionForCurrent(a, testDate, accountID)
     elif a['Account']['AccountSubType'] == 'CreditCard':
         prediction = getPredictionForCreditCard(a, testDate, accountID)
+    # print(prediction)
     return prediction
 
 
@@ -477,7 +518,7 @@ def updateContext(context, rows, request, accountID):
     context['count'] = getTransactionNum(context)
     context['totals'] = totalList
     context['spendIndicatorList'] = spendIndicatorList
-    context['prediction'] = prediction(datetime.datetime(2020,2,10), accountID)
+    context['prediction'] = prediction(datetime.datetime(2020,2,10), accountID, request)
     if rows != False:
         context['monthlyIncome'] = getIncome(rows)
         context['monthlySpend'] = getSpend(rows)

@@ -43,20 +43,6 @@ def validateID(request, accountID, page):
         return render(request, 'transactions/' + page + '.html', context)
 
 
-# creates all the lists required to store categorical data, 10 lists for 10 categories
-# a couple other lists for supplementary data such as sums, these are then files into
-# the required context dictionary for later use
-def makeContext(request, accountID):
-    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
-    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
-    context = {
-        'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
-        'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
-        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
-    }
-    return context
-
-
 # returns rows of userID selected, or aggregate rows if all selected
 def getRows(request, accountID):
     if accountID == "All":
@@ -104,40 +90,54 @@ def sortedRows(rows):
     return sortedRows
 
 
-# handles POST request which gets correct data for pagination including actual data to display,
-# the key and the setting for number of items per page
-def getPaginationElements(request, transPerPage, page, rows, pageElem):
-    if request.user.profile.getTransPerPage() != "AllTransactions":
-        transPerPage = int(transPerPage)
-        if pageElem == "<":
-            pageElem = "Page " + str(int(page.split(" ")[1]) - 1)
-        elif pageElem == ">":
-            pageElem = "Page " + str(int(page.split(" ")[1]) + 1)
-        if pageElem == "Page 1":
-            elems = [pageElem, '>', "Page " + str(((len(rows)) // transPerPage) + 1)]
-        elif pageElem == ("Page " + str(((len(rows)) // transPerPage) + 1)):
-            elems = ['Page 1', '<', pageElem]
-        else:
-            elems = ['Page 1', '<', pageElem, '>', "Page " + str(((len(rows)) // 10) + 1)]
-    else:
-        elems = ['Page 1']
-    return pageElem, elems
-
-
 # close to identical context required in two methods, this function calculates and returns it
 def getAccountBalance():
     pass
 
 
-def getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem, prediction):
-    context = {'rows': getPaginatedRows(rows, transPerPage, pageElem), 'total': getTotal(rows)[0],
-               'spendIndicator': getTotal(rows)[1],
-               'dateIndicator': dateIndicator,
-               'accountIDs': getStrAccountIDs(request.user.profile),
-               'selectedAccount': request.user.profile.getAccountID(), 'elements': elems,
-               'monthlyIncome': getIncome(rows), 'monthlySpend': getSpend(rows), 'leftOver': calcExcess(rows),
-               'transPerPageList': transPerPageList, 'page': pageElem, 'prediction': prediction, 'balance': getAccountBalance()}
+# creates all the lists required to store categorical data, 10 lists for 10 categories
+# a couple other lists for supplementary data such as sums, these are then filed into
+# the required context dictionary for later use
+def makeCatContext(request, accountID):
+    bpList, tpList, groceryList, fcList, financesList = [], [], [], [], []
+    foodList, genList, entertainmentList, lsList, uncatList = [], [], [], [], []
+    context = {
+        'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
+        'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
+        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+    }
+    return context
 
+
+# creates all the lists required to store aggregate data,
+# a couple other lists for supplementary data such as sums, these are then filed into
+# the required context dictionary for later use
+def makeAggContext(request, accountID):
+    context = {
+        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+    }
+    return context
+
+
+# the context dictionary needs to be updated with all sorts of different information retrieved from different
+# methods, this function collates those variables and adds them to the context.
+def updateContext(context, rows, request, accountID, home):
+    if home:
+        totalList, spendIndicatorList, context = getCategoricalTotal(context)
+        context['count'] = getTransactionNum(context)
+        context['totals'] = totalList
+        context['caps'] = getAllCaps(request)
+        context['spendIndicatorList'] = spendIndicatorList
+    else:
+        context['total'] = getTotal(rows)[0]
+        context['spendIndicator'] = getTotal(rows)[1]
+    # context['balance'] = getAccountBalance()
+    if accountID != "All":
+        context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+    if rows != False:
+        context['monthlyIncome'] = getIncome(rows)
+        context['monthlySpend'] = getSpend(rows)
+        context['leftOver'] = calcExcess(rows)
     return context
 
 
@@ -310,7 +310,7 @@ def getFilteredRows(rows, startDate, endDate):
 
 def getAverageSpending(testDate, accountID):
     a = getData(accountID)
-    startdate = testDate - relativedelta(months= 1)
+    startdate = testDate - relativedelta(months=1)
     enddate = testDate
     totalamount = 0
     for transaction in a['Transaction']:
@@ -349,14 +349,14 @@ def getSalaryData(rows):
     for date in salaryDates:
         totalOfDays += int(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S").day)
 
-    averageDay = totalOfDays//len(salaryDates)
+    averageDay = totalOfDays // len(salaryDates)
     return [modalValue, averageDay]
 
 
 # prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
 def getPredictionForCurrent(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
-    print(billingdate)
+    # print(billingdate)
     averagespending = getAverageSpending(testDate, accountID)
     if testDate.day > billingdate.day:
         targetdate = billingdate + relativedelta(months=1)
@@ -381,25 +381,25 @@ def getPredictionForCurrent(a, testDate, accountID):
                     directDebitToPay[nextpayment.date()] += float(directdebit['PreviousPaymentAmount']['Amount'])
                 else:
                     directDebitToPay[nextpayment.date()] = float(directdebit['PreviousPaymentAmount']['Amount'])
-    print(directDebitToPay)
-    print(timeInterval.days)
+    # print(directDebitToPay)
+    # print(timeInterval.days)
     daysPredicted = 0
     while daysPredicted < timeInterval.days:
         currentdate += relativedelta(days=1)
         currentbalance -= averagespending
         if currentdate in directDebitToPay:
-            currentbalance-= directDebitToPay[currentdate]
+            currentbalance -= directDebitToPay[currentdate]
         # prediction[time.mktime(currentdate.timetuple()) * 1000] = currentbalance
         prediction["date"].append(time.mktime(currentdate.timetuple()) * 1000)
         prediction["value"].append(currentbalance)
-        daysPredicted +=1
+        daysPredicted += 1
     return prediction
 
 
 # prediction for cc returns a dictionary with different attributes being the total amount of interest a user needs to pay,
 # amount a user needs to pay to avoid cc fee
 # minimum payment amount
-# and it check the status of a cc if it's still in promotion 
+# and it check the status of a cc if it's still in promotion
 def getPredictionForCreditCard(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     interest = 0
@@ -441,13 +441,11 @@ def getPredictionForCreditCard(a, testDate, accountID):
     return {"Interest": interest}
 
 
-def prediction(testDate, accountID, request):
+def prediction(testDate, accountID):
+    if not getData(accountID):
+        # no data found
+        return
     a = getData(accountID)
-    # b = getAllAccountRows(request, accountID)
-    # print(a)
-    # print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
-    # print(b)
-    # print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
     if a['Account'][0]['AccountSubType'] == 'CurrentAccount':
         prediction = getPredictionForCurrent(a, testDate, accountID)
     elif a['Account']['AccountSubType'] == 'CreditCard':
@@ -511,22 +509,6 @@ def updateCaps(request):
         request.user.profile.setCap(chosenCapName, capValue)
 
 
-# the context dictionary needs to be updated with all sorts of different information retrieved from different
-# methods, this function collates those variables and adds them to the context.
-def updateContext(context, rows, request, accountID):
-    totalList, spendIndicatorList, context = getCategoricalTotal(context)
-    context['count'] = getTransactionNum(context)
-    context['totals'] = totalList
-    context['spendIndicatorList'] = spendIndicatorList
-    context['prediction'] = prediction(datetime.datetime(2020,2,10), accountID, request)
-    if rows != False:
-        context['monthlyIncome'] = getIncome(rows)
-        context['monthlySpend'] = getSpend(rows)
-        context['leftOver'] = calcExcess(rows)
-    context['caps'] = getAllCaps(request)
-    return context
-
-
 # gets all the numerical values of the caps set on each category
 def getAllCaps(request):
     possibleCapSetOn = ["getValueCC", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
@@ -567,7 +549,41 @@ def getCategory(mcc):
         return getLetters[d[mcc]]
     else:
         return "zero"
-        
+
+
+# handles POST request which gets correct data for pagination including actual data to display,
+# the key and the setting for number of items per page
+## no longer in use, replaced by more elegant solution
+def getPaginationElements(request, transPerPage, page, rows, pageElem):
+    if request.user.profile.getTransPerPage() != "AllTransactions":
+        transPerPage = int(transPerPage)
+        if pageElem == "<":
+            pageElem = "Page " + str(int(page.split(" ")[1]) - 1)
+        elif pageElem == ">":
+            pageElem = "Page " + str(int(page.split(" ")[1]) + 1)
+        if pageElem == "Page 1":
+            elems = [pageElem, '>', "Page " + str(((len(rows)) // transPerPage) + 1)]
+        elif pageElem == ("Page " + str(((len(rows)) // transPerPage) + 1)):
+            elems = ['Page 1', '<', pageElem]
+        else:
+            elems = ['Page 1', '<', pageElem, '>', "Page " + str(((len(rows)) // 10) + 1)]
+    else:
+        elems = ['Page 1']
+
+    # This is the code to put in a views.py method to use the above method
+        # allows you to edit number of transactions per page
+        # fetches all attributes required to allow for pagination
+        # transPerPageList = ["10", "15", "20", "50", "AllTransactions"]
+        # if request.method == "POST" and (request.POST['submit'] in transPerPageList):
+        #     request.user.profile.setTransPerPage(request.POST.get('submit'))
+        #
+        # transPerPage = request.user.profile.getTransPerPage()
+        # transPerPageList = makeFirstElement(transPerPage, transPerPageList)
+        # pageElem, elems = getPaginationElements(request, transPerPage, page, rows, pageElem)
+        # transPerPageList.pop(transPerPageList.index("AllTransactions"))
+
+    return pageElem, elems
+
 # class UserID():
 #     def __init__(self, userID):
 #         self.transactions = getRows(userID)

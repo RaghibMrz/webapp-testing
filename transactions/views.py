@@ -16,16 +16,15 @@ from .utils import *
 @login_required
 def home(request):
     request.session.set_expiry(600)
+
     accountID = getAccount(request)
     validateID(request, accountID, 'home')
+    context, rows = makeCatContext(request, accountID), getRows(request, accountID)
 
     # update categorical caps if necessary
     updateCaps(request)
 
-
     # print(getSalaryData(getRows(request, "10567")))
-
-    context, rows = makeContext(request, accountID), getRows(request, accountID)
 
     # gets date range selected by user, parses it and then updates transactions+details displayed
     if request.method == "POST" and 'submit' in request.POST:
@@ -43,21 +42,21 @@ def home(request):
         context['dateIndicator'] = "All transactions"
 
     # get data from database, store into "context" dictionary
-    # print(prediction(datetime.datetime(2020,2,10),"22289"))
     if rows != False:
         for transaction in rows:
             context[getCategory(transaction['MCC'])].append(transaction)
-        context = updateContext(context, rows, request, "22289")
-    return render(request, 'transactions/home.html', context)
+
+    return render(request, 'transactions/home.html', updateContext(context, rows, request, accountID, True))
 
 
 @login_required
-def transactions(request, pageElem, page):
+def transactions(request):
     request.session.set_expiry(600)
+    # profile = request.user.profile
 
     accountID = getAccount(request)
     validateID(request, accountID, 'transactions')
-    rows = getRows(request, accountID)
+    context, rows = makeAggContext(request, accountID), getRows(request, accountID)
 
     # get date range selected by user, parse it and then update transactions+details displayed
     if request.method == "POST" and request.POST['submit'] == "Enter":
@@ -69,22 +68,13 @@ def transactions(request, pageElem, page):
         rawDates = request.user.profile.getDateRange().split("-")
         startDate, endDate = rawDates[0], rawDates[1]
         rows = getFilteredRows(rows, startDate, endDate)
-        dateIndicator = "Transactions between " + str(startDate) + " - " + str(endDate)
+        context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
     else:
-        dateIndicator = "All transactions"
+        context['dateIndicator'] = "All transactions"
 
-    # allows you to edit number of transactions per page
-    # fetches all attributes required to allow for pagination
-    transPerPageList = ["10", "15", "20", "50", "AllTransactions"]
-    if request.method == "POST" and (request.POST['submit'] in transPerPageList):
-        request.user.profile.setTransPerPage(request.POST.get('submit'))
-    transPerPage = request.user.profile.getTransPerPage()
-    transPerPageList = makeFirstElement(transPerPage, transPerPageList)
-    pageElem, elems = getPaginationElements(request, transPerPage, page, rows, pageElem)
-    transPerPageList.pop(transPerPageList.index("AllTransactions"))
+    context['rows'] = rows
 
-    return render(request, 'transactions/transactions.html',
-                  getFinalContext(request, rows, transPerPageList, elems, dateIndicator, transPerPage, pageElem, prediction))
+    return render(request, 'transactions/transactions.html', updateContext(context, rows, request, accountID, False))
 
 
 @login_required

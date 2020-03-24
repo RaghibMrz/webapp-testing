@@ -480,7 +480,7 @@ def getPredictionForCurrent(a, testDate, accountID):
 def getPredictionForCreditCard(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     interest = 0
-    balance = 0  # float(a['Balance']['Amount']['Amount'])
+    balance = 0  # float(a['Balance'][0]['Amount']['Amount'])
     if testDate.day > billingdate.day:
         targetdate = billingdate + relativedelta(months=1)
     else:
@@ -494,8 +494,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
     # check if the credit card is still in promotion
     for marketingState in a['Product'][0]['CCC'][0]['CCCMarketingState']:
         if marketingState['Identification'] == "P1":
-            return
-            startDate = datetime.datetime.strptime(a[Account][0]['OpeningDate'],
+            startDate = datetime.datetime.strptime(a['Account'][0]['OpeningDate'],
                                                    "%d-%m-%Y")
             if startDate + relativedelta(months=int(marketingState['StateTenureLength'])) > testDate:
                 return ({"Interest": "Still in promotion, the interest is 0."})
@@ -503,21 +502,26 @@ def getPredictionForCreditCard(a, testDate, accountID):
             minRepaymentRate = float(marketingState['Repayment']['MinBalanceRepaymentRate'])
             nonRepaymentCharge = float(
                 marketingState['Repayment']['NonRepaymentFeeCharges'][0]['NonRepaymentFeeChargeDetail'][0]['FeeAmount'])
-            for charge in marketingState['OtherFeesCharges']:
+            for charge in marketingState['OtherFeesCharges']['FeeChargeDetail']:
                 if charge['FeeType'] == "Purchase":
                     purchaseRate = float(charge['FeeRate'])
     for transaction in a['Transaction']:
-        if transaction['TransactionId'] == a['Balance']['LastPaidTransaction']:
+        if transaction['TransactionId'] == a['Balance'][0]['LastPaidTransaction']:
             lastPaymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
     for transaction in a['Transaction']:
         paymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
                                                  "%Y-%m-%dT%H:%M:%S+00:00")
         if paymentTime > lastPaymentTime:
-            if paymentTime.date() < chargedDate:
+            if paymentTime < chargedDate:
                 balance += float(transaction['Amount']['Amount'])
-                interest += (chargedDate - paymentTime.date()).days * purchaseRate / 365
-    return {"Interest": interest}
+                interest += (chargedDate.date() - paymentTime.date()).days * purchaseRate / 365
+    result = {}
+    result['BalanceWithInterest'] = balance
+    result["Interest"]= interest
+    result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
+    print(result)
+    return result
 
 
 def prediction(testDate, accountID):

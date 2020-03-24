@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 from django import template
 from requests import auth
 
-from users.models import Account
+# from users.models import Account
 
 register = template.Library()
 
@@ -19,8 +19,12 @@ register = template.Library()
 # default setting displays "All" account transactions aggregated into one,
 # selecting an account from the drop down menu filters to just the selected account
 def getAccount(request):
-    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
-        request.user.profile.setAccountID("All")
+    if len(request.user.profile.getAccountIDList()) > 0 and request.user.profile.getGotAccount() == "0":
+        accountList = getAccountIDsFromModel(request.user.profile)
+        if len(accountList) > 0:
+            request.user.profile.setAccountID(accountList[0])
+        else:
+            request.user.profile.setAccountID("None")
     if request.method == 'POST' and 'submit' in request.POST:
         if request.POST['submit'] in getAccountsForDropDown(request.user.profile):
             request.user.profile.setAccountID(request.POST.get('submit'))
@@ -29,18 +33,15 @@ def getAccount(request):
 
 # checks if entered accountID produces a valid list of transactions, if not user is redirected with a page that displays
 # a user friendly message telling them to check the ID they entered.
-def validateID(request, accountID, page):
-    if not getSingleAccountRows(accountID) and accountID != "All":
+def validateID(request, accountID):
+    if not getRows(request, accountID):
         context = {
-            'rows': [{
-                'TransactionInformation': 'Incorrect UserID linked',
-                'Amount': 'Update accountID',
-                'Currency': 'and try again',
-                'BookingDateTime': 'No Data Found',
-                'accountIDs': getAccountIDsFromModel(request.user.profile),
-                'selectedAccount': accountID
-            }]}
-        return render(request, 'transactions/' + page + '.html', context)
+            'accountID': accountID,
+            'noRows': True,
+            'accountIDs': getAccountIDsFromModel(request.user.profile)
+        }
+        return request, 'transactions/home.html', context
+    return True
 
 
 # returns rows of userID selected, or aggregate rows if all selected
@@ -96,7 +97,7 @@ def sortedRows(rows):
 # Takes an account id, returns the balance on it, if "All accounts are selected, then it shows all
 def getCurrAccountBalance(request, accountID):
     if accountID == "All":
-        return
+        return False
     elif accountID == "AllCurr":
         total = 0
         for account in getAccountIDsFromModel(request.user.profile):
@@ -156,6 +157,27 @@ def getAccountType(accountID):
             return "Current Account"
 
 
+# gets minimum payment for a credit account, returns false if current account
+def getMinPayment(profile, accountID):
+    if accountID == "AllCC":
+        totalMp = 0.0
+        for account in getAccountIDsFromModel(profile):
+            if isCreditAccount(account):
+                minimumRepaymentRate = float(
+                    getData(account)['Product'][0]['CCC'][0]['CCCMarketingState'][1]['Repayment'][
+                        'MinBalanceRepaymentRate'])
+                mp = float(getData(account)['Balance'][0]['Amount']['Amount']) * minimumRepaymentRate / 100.0
+                totalMp += mp
+        return totalMp
+
+    if isCreditAccount(accountID):
+        minimumRepaymentRate = float(
+            getData(accountID)['Product'][0]['CCC'][0]['CCCMarketingState'][1]['Repayment']['MinBalanceRepaymentRate'])
+        mp = float(getData(accountID)['Balance'][0]['Amount']['Amount']) * minimumRepaymentRate / 100.0
+        return mp
+    return False
+
+
 # the context dictionary needs to be updated with all sorts of different information retrieved from different
 # methods, this function collates those variables and adds them to the context.
 def updateContext(context, rows, request, accountID, home):
@@ -170,20 +192,18 @@ def updateContext(context, rows, request, accountID, home):
         context['spendIndicator'] = getTotal(rows)[1]
     context['balance'] = getCurrAccountBalance(request, accountID)
     context['accountType'] = getAccountType(accountID)
-    if accountID != "All":
-        context['credit'] = getAccountType(accountID) == "Credit-Card"
+
+    if getAccountType(accountID) == "Credit-Card":
+        context['minPayment'] = getMinPayment(request.user.profile, accountID)
         context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+    if getAccountType(accountID) == "Current Account":
+        # whatever u need for current accounts only
+        context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+
     if rows != False:
         context['monthlyIncome'] = getIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
-
-    accountsss = {
-        "10567": "Credit",
-        "22289": "Current"
-    }
-    context['myacc'] = accountsss
-
     return context
 
 
@@ -296,7 +316,7 @@ def makeFirstElement(element, elemList):
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
 def getAccountIDsFromModel(profile):
     accountList = []
-    for accounts in profile.getAccount():
+    for accounts in profile.getAccountIDList():
         accountList.append(str(accounts))
     return accountList
 
@@ -304,9 +324,9 @@ def getAccountIDsFromModel(profile):
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
 def getAccountsForDropDown(profile):
     accountList = []
-    for accounts in profile.getAccount():
+    for accounts in profile.getAccountIDList():
         accountList.append(str(accounts))
-    accountList.append("All")
+    # accountList.append("All")
     accountList.append("AllCurr")
     accountList.append("AllCC")
     return accountList
@@ -452,7 +472,7 @@ def getPredictionForCurrent(a, testDate, accountID):
             previouspayment = datetime.datetime.strptime(directdebit['PreviousPaymentDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
             nextpayment = previouspayment + relativedelta(months=1)
-            print(nextpayment, targetdate, testDate)
+            # print(nextpayment, targetdate, testDate)
             if nextpayment <= targetdate and nextpayment > testDate:
                 if nextpayment.date() in directDebitToPay:
                     directDebitToPay[nextpayment.date()] += float(directdebit['PreviousPaymentAmount']['Amount'])
@@ -518,9 +538,9 @@ def getPredictionForCreditCard(a, testDate, accountID):
                 interest += (chargedDate.date() - paymentTime.date()).days * purchaseRate / 365
     result = {}
     result['BalanceWithInterest'] = balance
-    result["Interest"]= interest
+    result["Interest"] = interest
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
-    print(result)
+    # print(result)
     return result
 
 

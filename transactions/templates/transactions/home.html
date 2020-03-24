@@ -3,11 +3,44 @@
 {% load static %}
 {% load humanize %}
 <!-- Begin Page Content -->
+{% if noRows %}
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+    {% if accountID == "None" or accountID == "AllCur" or accountID == "AllCC" %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">No Account found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Please go to your profile and add one</h4>
+    {% else %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">AccountID "{{accountID}}" not found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Delete this ID and try again</h4>
+    {% endif %}
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="submit">
+          <!--working with actual accounts-->
+          <option value="none" selected disabled hidden>Switch accounts</option>
+          {% for account in accountIDs %}
+            <option value="{{account}}">{{ account }}</option>
+          {% endfor %}
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
+        </select>
+        <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+      </form>
+    </div>
+</div>
+{% else %}
 <div class="container-fluid">
   <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+      {% if selectedAccount == "AllCurr" %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">All Current Accounts</h4>
+      {% elif selectedAccount == "AllCC" %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">All Credit Accounts</h4>
+      {% else %}
       <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
       <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
+      {% endif %}
       <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
       <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
       
@@ -35,7 +68,11 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Balance</div>
+              {% if accountType == "Credit-Card" %}
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Outstanding balance</div>
+              {% else %}
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Account Balance</div>
+              {% endif %}
               <div class="h5 mb-0 font-weight-bold text-gray-800">{{ balance }}</div>
             </div>
             <div class="col-auto">
@@ -52,8 +89,13 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
+              {% if accountType == "Credit-Card" %}
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Minimum Payment</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{minPayment|floatformat:2| intcomma}}</div>
+              {% else %}
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome|floatformat:2| intcomma}}</div>
+              {% endif %}
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -159,89 +201,90 @@
         
         <!-- Card Body -->
         <div class="card-body">
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedCreditCardTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedCreditCardTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Credit Cards</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedCreditCardTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    {% for row in two %}
-                      <tr>
-                      <td>{{ row.BookingDateTime }}</td>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
-                      </tr>
-                    {% endfor %}
-                  </table>
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#creditCardCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
+          <!--<div class="card shadow mb-2 ml-3 mr-3 mt-2">-->
+            <!--<a href="#collapsedCreditCardTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedCreditCardTransactions">-->
+              <!--<div class="row">-->
+                <!--<div class = "col-xl-6">-->
+                  <!--<h6 class="m-0 font-weight-bold text-primary">Credit Cards</h6>-->
+                <!--</div>-->
+                <!--<div class = "col-xl-6">-->
+                  <!--<h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</a>-->
+            <!---->
+            <!--&lt;!&ndash; Card Content - Collapse &ndash;&gt;-->
+            <!--<div class="collapse hide" id="collapsedCreditCardTransactions">-->
+              <!--<div class="card-body">-->
+                <!--<div class="table-responsive">-->
+                  <!--<table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">-->
+                    <!--<thead>-->
+                      <!--<tr>-->
+                      <!--<th>Transaction</th>-->
+                      <!--<th>Amount</th>-->
+                      <!--<th>Currency</th>-->
+                      <!--<th>Date</th>-->
+                      <!--</tr>-->
+                  <!--</thead>-->
+                  <!--<tbody>-->
+                    <!--{% for row in two %}-->
+                      <!--<tr>-->
+                      <!--<td>{{ row.BookingDateTime }}</td>-->
+                      <!--<td>{{ row.TransactionInformation }}</td>-->
+                      <!--<td>{{ row.Amount |floatformat:2| intcomma}}</td>-->
+                      <!--<td>{{ row.Currency }}</td>-->
+                      <!--</tr>-->
+                    <!--{% endfor %}-->
+                  <!--</table>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="d-sm-flex align-items-center justify-content-sm-end mb-4">-->
+                <!--<h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>-->
+                <!--<button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#creditCardCap">-->
+                  <!--<i class="fas fa-tachometer-alt"></i> Set Cap-->
+                <!--</button>-->
 
-                <!-- Modal -->
-                <div class="modal fade" id="creditCardCap" tabindex="-1" role="dialog" aria-labelledby="creditCardCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="creditCardCapTitle">Credit Card Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueCC" value="{{ caps.0 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                <!--&lt;!&ndash; Modal &ndash;&gt;-->
+                <!--<div class="modal fade" id="creditCardCap" tabindex="-1" role="dialog" aria-labelledby="creditCardCapTitle" aria-hidden="true">-->
+                  <!--<div class="modal-dialog modal-dialog-centered" role="document">-->
+                    <!--<form action="{% url 'home' %}" method="POST">{% csrf_token %}-->
+                      <!--<div class="modal-content">-->
+                        <!--<div class="modal-header">-->
+                          <!--<h5 class="modal-title" id="creditCardCapTitle">Credit Card Cap</h5>-->
+                          <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                            <!--<span aria-hidden="true">&times;</span>-->
+                          <!--</button>-->
+                        <!--</div>-->
+                        <!--<div class="modal-body">-->
+                          <!--<div class="input-group mb-3 input-group-lg">-->
+                            <!--<div class="input-group-prepend">-->
+                              <!--<span class="input-group-text">£</span>-->
+                            <!--</div>-->
+                            <!--<input type="text" class="form-control" name="getValueCC" value="{{ caps.0 }}">-->
+                            <!--<div class="input-group-append">-->
+                              <!--<span class="input-group-text">.00</span>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!--<div class="row">-->
+                            <!--<div class="col-xl-6">-->
+                              <!--<button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>-->
+                            <!--</div>-->
+                            <!--<div class="col-xl-6">-->
+                              <!--<button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="modal-footer">-->
+                          <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                          <!--<button type="submit" class="btn btn-primary">Save changes</button>-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    <!--</form>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
 
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
             <a href="#collapsedBPTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedBPTransactions">
@@ -1572,25 +1615,6 @@
 
             // });
           </script>
-
-
-<!--           <div class="mt-4 text-center small">
-            <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Food
-            </span>
-            <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Groceries
-            </span>
-            <span class="mr-2">
-              <i class="fas fa-circle text-info"></i> Entertainment
-            </span>
-            <span class="mr-2">
-              <i class="fas fa-circle text-japanese-indigo"></i> Bills
-            </span>
-            <span class="mr-2">
-              <i class="fas fa-circle text-pastel-blue"></i> Transport
-            </span>
-          </div> -->
         </div>
       </div>
     </div>
@@ -1745,4 +1769,5 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock ctt %} 

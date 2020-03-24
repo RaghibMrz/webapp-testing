@@ -3,14 +3,17 @@
 {% load static %}
 {% load humanize %}
 <!-- Begin Page Content -->
+{% if noRows %}
 <div class="container-fluid">
-  <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
-      <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
-      <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
-      <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 5px"></i>Sort by Category</a>
-      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
-      
+    {% if accountID == "None" or accountID == "AllCur" or accountID == "AllCC" %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">No Account found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Please go to your profile and add one</h4>
+    {% else %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">AccountID "{{accountID}}" not found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Delete this ID and try again</h4>
+    {% endif %}
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
         <select class="custom-select w-auto" name="submit">
@@ -19,15 +22,46 @@
           {% for account in accountIDs %}
             <option value="{{account}}">{{ account }}</option>
           {% endfor %}
-          <option value="All">Show all</option>
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
     </div>
+</div>
+{% else %}
+<div class="container-fluid">
+  <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+      {% if selectedAccount == "AllCurr" %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">All Current Accounts</h4>
+      {% elif selectedAccount == "AllCC" %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">All Credit Accounts</h4>
+      {% else %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
+      <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
+      {% endif %}
+      <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 5px"></i>Sort by Category</a>
+      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
+      
+      <form action="{% url 'transactions' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="submit">
+          <!--working with actual accounts-->
+          <option value="none" selected disabled hidden>Switch accounts</option>
+          {% for account in accountIDs %}
+            <option value="{{account}}">{{ account }}</option>
+          {% endfor %}
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
+        </select>
+        <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+      </form>
+    </div>
+  
 
   <!-- Content Row -->
   <div class="row">
-
     <!-- Earnings (Monthly) Card Example -->
     <!-- Balance Card -->
     <div class="col-xl-3 col-md-6 mb-4">
@@ -35,8 +69,12 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Balance</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£340,002</div>
+              {% if accountType == "Credit-Card" %}
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Outstanding balance</div>
+              {% else %}
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Account Balance</div>
+              {% endif %}
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ balance }}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -52,8 +90,13 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
+              {% if accountType == "Credit-Card" %}
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Minimum Payment</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{minPayment|floatformat:2| intcomma}}</div>
+              {% else %}
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome|floatformat:2| intcomma}}</div>
+              {% endif %}
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -643,4 +686,5 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock ctt %} 

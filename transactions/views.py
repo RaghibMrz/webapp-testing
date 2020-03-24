@@ -1,82 +1,79 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
-from django.template.context_processors import csrf
-from django.utils import timezone
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.shortcuts import redirect
+
 from users.forms import UserUpdateForm, ProfileUpdateForm
 from .forms import *
 # auxiliary file I made to hold some of the logic
 from .utils import *
 
 
+# noinspection PySimplifyBooleanCheck
 @login_required
 def home(request):
     request.session.set_expiry(600)
-
     accountID = getAccount(request)
-    print(accountID)
-    validateID(request, accountID, 'home')
-    context, rows = makeCatContext(request, accountID), getRows(request, accountID)
 
-    # update categorical caps if necessary
-    updateCaps(request)
+    if validateID(request, accountID) == True:
+        context, rows = makeCatContext(request, accountID), getRows(request, accountID)
 
-    # print(getSalaryData(getRows(request, "10567")))
+        # update categorical caps if necessary
+        updateCaps(request)
 
-    # gets date range selected by user, parses it and then updates transactions+details displayed
-    if request.method == "POST" and 'submit' in request.POST:
-        if request.POST['submit'] == "Enter":
-            request.user.profile.setDateRange(request.POST.get('datetimes'))
-        if request.POST['submit'] == "Clear":
-            request.user.profile.setUseDateFilter("0")
+        # gets date range selected by user, parses it and then updates transactions+details displayed
+        if request.method == "POST" and 'submit' in request.POST:
+            if request.POST['submit'] == "Enter":
+                request.user.profile.setDateRange(request.POST.get('datetimes'))
+            if request.POST['submit'] == "Clear":
+                request.user.profile.setUseDateFilter("0")
 
-    if request.user.profile.useDateFilter == "1":
-        rawDates = request.user.profile.getDateRange().split("-")
-        startDate, endDate = rawDates[0], rawDates[1]
-        rows = getFilteredRows(rows, startDate, endDate)
-        context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
+        if request.user.profile.useDateFilter == "1":
+            rawDates = request.user.profile.getDateRange().split("-")
+            startDate, endDate = rawDates[0], rawDates[1]
+            rows = getFilteredRows(rows, startDate, endDate)
+            context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
+        else:
+            context['dateIndicator'] = "All transactions"
+
+        # get data from database, store into "context" dictionary
+        # print(rows)
+        if rows != False:
+            for transaction in rows:
+                context[getCategory(transaction['MCC'])].append(transaction)
+
+        return render(request, 'transactions/home.html', updateContext(context, rows, request, accountID, True))
     else:
-        context['dateIndicator'] = "All transactions"
-
-    # get data from database, store into "context" dictionary
-    print(rows)
-    if rows != False:
-        for transaction in rows:
-            context[getCategory(transaction['MCC'])].append(transaction)
-
-    return render(request, 'transactions/home.html', updateContext(context, rows, request, accountID, True))
+        return render(validateID(request, accountID)[0], validateID(request, accountID)[1], validateID(request, accountID)[2])
 
 
+# noinspection PySimplifyBooleanCheck
 @login_required
 def transactions(request):
     request.session.set_expiry(600)
-    # profile = request.user.profile
-
     accountID = getAccount(request)
-    validateID(request, accountID, 'transactions')
-    context, rows = makeAggContext(request, accountID), getRows(request, accountID)
 
-    # get date range selected by user, parse it and then update transactions+details displayed
-    if request.method == "POST" and request.POST['submit'] == "Enter":
-        request.user.profile.setDateRange(request.POST.get('datetimes'))
-    if request.method == "POST" and request.POST['submit'] == "Clear":
-        request.user.profile.setUseDateFilter("0")
+    if validateID(request, accountID) == True:
+        context, rows = makeAggContext(request, accountID), getRows(request, accountID)
 
-    if request.user.profile.useDateFilter == "1":
-        rawDates = request.user.profile.getDateRange().split("-")
-        startDate, endDate = rawDates[0], rawDates[1]
-        rows = getFilteredRows(rows, startDate, endDate)
-        context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
+        # get date range selected by user, parse it and then update transactions+details displayed
+        if request.method == "POST" and request.POST['submit'] == "Enter":
+            request.user.profile.setDateRange(request.POST.get('datetimes'))
+        if request.method == "POST" and request.POST['submit'] == "Clear":
+            request.user.profile.setUseDateFilter("0")
+
+        if request.user.profile.useDateFilter == "1":
+            rawDates = request.user.profile.getDateRange().split("-")
+            startDate, endDate = rawDates[0], rawDates[1]
+            rows = getFilteredRows(rows, startDate, endDate)
+            context['dateIndicator'] = "Transactions between " + str(startDate) + " - " + str(endDate)
+        else:
+            context['dateIndicator'] = "All transactions"
+        context['rows'] = rows
+        return render(request, 'transactions/transactions.html',
+                      updateContext(context, rows, request, accountID, False))
     else:
-        context['dateIndicator'] = "All transactions"
-
-    context['rows'] = rows
-
-    return render(request, 'transactions/transactions.html', updateContext(context, rows, request, accountID, False))
+        return render(validateID(request, accountID)[0], validateID(request, accountID)[1], validateID(request, accountID)[2])
 
 
 @login_required
@@ -141,9 +138,16 @@ def delete(request):
         idToRemove = request.POST.get('accountDropdown')
         if idToRemove == "All":
             request.user.profile.clearAccountList()
+        if idToRemove == "AllCurr":
+            request.user.profile.clearCurrAccounts()
+        if idToRemove == "AllCC":
+            request.user.profile.clearCCAccounts()
         elif idToRemove in getAccountIDsFromModel(request.user.profile):
             request.user.profile.deleteAccount(idToRemove)
-        request.user.profile.setAccountID("All")
+
+        accountList = getAccountIDsFromModel(request.user.profile)
+        if len(accountList) > 0:
+            request.user.profile.setAccountID(accountList[0])
+        else:
+            request.user.profile.setAccountID("None")
         return redirect('profile')
-
-

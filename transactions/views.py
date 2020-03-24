@@ -141,4 +141,7 @@ def delete(request):
             request.user.profile.clearAccountList()
         elif idToRemove in getStrAccountIDs(request.user.profile):
             request.user.profile.deleteAccount(idToRemove)
+        request.user.profile.setAccountID("All")
         return redirect('profile')
+
+

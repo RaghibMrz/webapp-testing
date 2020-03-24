@@ -90,9 +90,18 @@ def sortedRows(rows):
     return sortedRows
 
 
-# close to identical context required in two methods, this function calculates and returns it
-def getAccountBalance():
-    pass
+# Takes an account id, returns the balance on it, if "All accounts are selected, then it shows all
+def getCurrAccountBalance(request, accountID):
+    if accountID != "All":
+        return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
+
+    total = 0
+    for account in getStrAccountIDs(request.user.profile):
+        print(account)
+        print(isCreditAccount(account))
+        if not isCreditAccount(account):
+            total += float(getData(account)['Balance'][0]['Amount']['Amount'])
+    return total
 
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
@@ -119,6 +128,20 @@ def makeAggContext(request, accountID):
     return context
 
 
+# Takes an accountID, returns true if it is associated to a credit card, false for current account
+def isCreditAccount(accountID):
+    return getData(accountID)['Account'][0]['AccountSubType'] == 'CreditCard'
+
+
+def getAccountType(accountID):
+    if accountID == "All":
+        return "MyAcccounts"
+    elif isCreditAccount(accountID):
+        return "Credit-Card"
+    else:
+        return "Current Account"
+
+
 # the context dictionary needs to be updated with all sorts of different information retrieved from different
 # methods, this function collates those variables and adds them to the context.
 def updateContext(context, rows, request, accountID, home):
@@ -131,13 +154,22 @@ def updateContext(context, rows, request, accountID, home):
     else:
         context['total'] = getTotal(rows)[0]
         context['spendIndicator'] = getTotal(rows)[1]
-    # context['balance'] = getAccountBalance()
+    context['balance'] = getCurrAccountBalance(request, accountID)
+    context['accountType'] = getAccountType(accountID)
     if accountID != "All":
+        context['credit'] = isCreditAccount(accountID)
         context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
     if rows != False:
         context['monthlyIncome'] = getIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
+
+    accountsss = {
+        "10567": "Credit",
+        "22289": "Current"
+    }
+    context['myacc'] = accountsss
+
     return context
 
 
@@ -203,19 +235,6 @@ def makeFirstElement(element, elemList):
         elemList.append(element)
         elemList.reverse()
         return elemList
-
-
-# takes a list of transactions, the page number and the number of transactions to display
-def getPaginatedRows(rows, transPerPage, page):
-    if transPerPage == "AllTransactions":
-        return rows
-    transPerPage = int(transPerPage)
-    p = int(page.split(" ")[1])
-    start = transPerPage * (p - 1)
-    end = (transPerPage * p) - 1
-    if end > len(rows):
-        end = len(rows)
-    return rows[start:end]
 
 
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
@@ -411,11 +430,13 @@ def getPredictionForCreditCard(a, testDate, accountID):
 
     # chargedDate is the date before which all the purchases will be charged the interest
     chargedDate = targetdate - relativedelta(
-        days=int(a['Product'][0]['CCC']['CoreProduct']['MaxPurchaseInterestFreeLengthDays']))
+        days=int(a['Product'][0]['CCC'][0]['CCCMarketingState'][1]['CoreProduct']['MaxPurchaseInterestFreeLengthDays'])
+    )
 
     # check if the credit card is still in promotion
-    for marketingState in a['Product'][0]['CCC']['CCCMarketingState']:
+    for marketingState in a['Product'][0]['CCC'][0]['CCCMarketingState']:
         if marketingState['Identification'] == "P1":
+            return
             startDate = datetime.datetime.strptime(a[Account][0]['OpeningDate'],
                                                    "%d-%m-%Y")
             if startDate + relativedelta(months=int(marketingState['StateTenureLength'])) > testDate:
@@ -444,14 +465,10 @@ def getPredictionForCreditCard(a, testDate, accountID):
 def prediction(testDate, accountID):
     if not getData(accountID):
         # no data found
-        return
-    a = getData(accountID)
-    if a['Account'][0]['AccountSubType'] == 'CurrentAccount':
-        prediction = getPredictionForCurrent(a, testDate, accountID)
-    elif a['Account']['AccountSubType'] == 'CreditCard':
-        prediction = getPredictionForCreditCard(a, testDate, accountID)
-    # print(prediction)
-    return prediction
+        return False
+    if isCreditAccount(accountID):
+        return getPredictionForCreditCard(getData(accountID), testDate, accountID)
+    return getPredictionForCurrent(getData(accountID), testDate, accountID)
 
 
 def getIncome(rows):
@@ -554,6 +571,7 @@ def getCategory(mcc):
 # handles POST request which gets correct data for pagination including actual data to display,
 # the key and the setting for number of items per page
 ## no longer in use, replaced by more elegant solution
+@DeprecationWarning
 def getPaginationElements(request, transPerPage, page, rows, pageElem):
     if request.user.profile.getTransPerPage() != "AllTransactions":
         transPerPage = int(transPerPage)
@@ -571,18 +589,31 @@ def getPaginationElements(request, transPerPage, page, rows, pageElem):
         elems = ['Page 1']
 
     # This is the code to put in a views.py method to use the above method
-        # allows you to edit number of transactions per page
-        # fetches all attributes required to allow for pagination
-        # transPerPageList = ["10", "15", "20", "50", "AllTransactions"]
-        # if request.method == "POST" and (request.POST['submit'] in transPerPageList):
-        #     request.user.profile.setTransPerPage(request.POST.get('submit'))
-        #
-        # transPerPage = request.user.profile.getTransPerPage()
-        # transPerPageList = makeFirstElement(transPerPage, transPerPageList)
-        # pageElem, elems = getPaginationElements(request, transPerPage, page, rows, pageElem)
-        # transPerPageList.pop(transPerPageList.index("AllTransactions"))
-
+    # allows you to edit number of transactions per page
+    # fetches all attributes required to allow for pagination
+    # transPerPageList = ["10", "15", "20", "50", "AllTransactions"]
+    # if request.method == "POST" and (request.POST['submit'] in transPerPageList):
+    #     request.user.profile.setTransPerPage(request.POST.get('submit'))
+    #
+    # transPerPage = request.user.profile.getTransPerPage()
+    # transPerPageList = makeFirstElement(transPerPage, transPerPageList)
+    # pageElem, elems = getPaginationElements(request, transPerPage, page, rows, pageElem)
+    # transPerPageList.pop(transPerPageList.index("AllTransactions"))
     return pageElem, elems
+
+
+# takes a list of transactions, the page number and the number of transactions to display
+@DeprecationWarning
+def getPaginatedRows(rows, transPerPage, page):
+    if transPerPage == "AllTransactions":
+        return rows
+    transPerPage = int(transPerPage)
+    p = int(page.split(" ")[1])
+    start = transPerPage * (p - 1)
+    end = (transPerPage * p) - 1
+    if end > len(rows):
+        end = len(rows)
+    return rows[start:end]
 
 # class UserID():
 #     def __init__(self, userID):

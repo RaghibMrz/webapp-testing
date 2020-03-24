@@ -22,7 +22,8 @@ def home(request):
     # update categorical caps if necessary
     updateCaps(request)
 
-    print(getSalaryData(getRows(request, "10567")))
+
+    # print(getSalaryData(getRows(request, "10567")))
 
     context, rows = makeContext(request, accountID), getRows(request, accountID)
 

@@ -22,7 +22,7 @@ def getAccount(request):
     if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
         request.user.profile.setAccountID("All")
     if request.method == 'POST' and 'submit' in request.POST:
-        if request.POST['submit'] in getAccountsFromQuerySet(request.user.profile):
+        if request.POST['submit'] in getAccountsForDropDown(request.user.profile):
             request.user.profile.setAccountID(request.POST.get('submit'))
     return request.user.profile.getAccountID()
 
@@ -37,7 +37,7 @@ def validateID(request, accountID, page):
                 'Amount': 'Update accountID',
                 'Currency': 'and try again',
                 'BookingDateTime': 'No Data Found',
-                'accountIDs': getStrAccountIDs(request.user.profile),
+                'accountIDs': getAccountIDsFromModel(request.user.profile),
                 'selectedAccount': accountID
             }]}
         return render(request, 'transactions/' + page + '.html', context)
@@ -46,10 +46,13 @@ def validateID(request, accountID, page):
 # returns rows of userID selected, or aggregate rows if all selected
 def getRows(request, accountID):
     if accountID == "All":
-        rows = getAllRows(getStrAccountIDs(request.user.profile))
-    else:
-        rows = getSingleAccountRows(accountID)
-    return rows
+        return False
+        # rows = getAllRows(getAccountIDsFromModel(request.user.profile))
+    elif accountID == "AllCurr":
+        return getAllRowsCurr(getAccountIDsFromModel(request.user.profile))
+    elif accountID == "AllCC":
+        return getAllRowsCC(getAccountIDsFromModel(request.user.profile))
+    return getSingleAccountRows(accountID)
 
 
 # helper function to get data from database/local file into python dictionaries
@@ -92,16 +95,21 @@ def sortedRows(rows):
 
 # Takes an account id, returns the balance on it, if "All accounts are selected, then it shows all
 def getCurrAccountBalance(request, accountID):
-    if accountID != "All":
-        return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
-
-    total = 0
-    for account in getStrAccountIDs(request.user.profile):
-        print(account)
-        print(isCreditAccount(account))
-        if not isCreditAccount(account):
-            total += float(getData(account)['Balance'][0]['Amount']['Amount'])
-    return total
+    if accountID == "All":
+        return
+    elif accountID == "AllCurr":
+        total = 0
+        for account in getAccountIDsFromModel(request.user.profile):
+            if not isCreditAccount(account):
+                total += float(getData(account)['Balance'][0]['Amount']['Amount'])
+        return total
+    elif accountID == "AllCC":
+        total = 0
+        for account in getAccountIDsFromModel(request.user.profile):
+            if isCreditAccount(account):
+                total += float(getData(account)['Balance'][0]['Amount']['Amount'])
+        return total
+    return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
 
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
@@ -113,7 +121,7 @@ def makeCatContext(request, accountID):
     context = {
         'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
         'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
-        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+        'accountIDs': getAccountIDsFromModel(request.user.profile), 'selectedAccount': accountID
     }
     return context
 
@@ -123,7 +131,7 @@ def makeCatContext(request, accountID):
 # the required context dictionary for later use
 def makeAggContext(request, accountID):
     context = {
-        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+        'accountIDs': getAccountIDsFromModel(request.user.profile), 'selectedAccount': accountID
     }
     return context
 
@@ -136,10 +144,16 @@ def isCreditAccount(accountID):
 def getAccountType(accountID):
     if accountID == "All":
         return "MyAcccounts"
-    elif isCreditAccount(accountID):
-        return "Credit-Card"
-    else:
+    elif accountID == "AllCurr":
         return "Current Account"
+    elif accountID == "AllCC":
+        return "Credit-Card"
+
+    if "All" not in accountID:
+        if isCreditAccount(accountID):
+            return "Credit-Card"
+        else:
+            return "Current Account"
 
 
 # the context dictionary needs to be updated with all sorts of different information retrieved from different
@@ -157,7 +171,7 @@ def updateContext(context, rows, request, accountID, home):
     context['balance'] = getCurrAccountBalance(request, accountID)
     context['accountType'] = getAccountType(accountID)
     if accountID != "All":
-        context['credit'] = isCreditAccount(accountID)
+        context['credit'] = getAccountType(accountID) == "Credit-Card"
         context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
     if rows != False:
         context['monthlyIncome'] = getIncome(rows)
@@ -215,13 +229,55 @@ def getSingleAccountRows(accountID):
 
 
 # combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
-def getAllRows(IDs):
-    row = getSingleAccountRows(IDs[0])
-    for accountID in IDs:
-        if accountID == IDs[0]:
+# def getAllRows(IDs):
+#     row = getSingleAccountRows(IDs[0])
+#     for accountID in IDs:
+#         if accountID == IDs[0]:
+#             continue
+#         for collectingDict in getSingleAccountRows(accountID):
+#             row.append(collectingDict)
+#     return sortedRows(row)
+
+
+# combines list of transactions from all current accounts into one, by unpacking each list of dictionaries into one
+def getAllRowsCurr(accountIDs):
+    firstID = 0
+    for accountID in accountIDs:
+        if not isCreditAccount(accountID):
+            firstID = accountID
+            row = getSingleAccountRows(accountID)
+            break
+
+    if firstID == 0:
+        return
+
+    for accountID in accountIDs:
+        if accountID == firstID:
             continue
-        for collectingDict in getSingleAccountRows(accountID):
-            row.append(collectingDict)
+        if not isCreditAccount(accountID):
+            for collectingDict in getSingleAccountRows(accountID):
+                row.append(collectingDict)
+    return sortedRows(row)
+
+
+# combines list of transactions from all credit accounts into one, by unpacking each list of dictionaries into one
+def getAllRowsCC(accountIDs):
+    firstID = 0
+    for accountID in accountIDs:
+        if isCreditAccount(accountID):
+            firstID = accountID
+            row = getSingleAccountRows(accountID)
+            break
+
+    if firstID == 0:
+        return False
+
+    for accountID in accountIDs:
+        if accountID == firstID:
+            continue
+        if isCreditAccount(accountID):
+            for collectingDict in getSingleAccountRows(accountID):
+                row.append(collectingDict)
     return sortedRows(row)
 
 
@@ -238,7 +294,7 @@ def makeFirstElement(element, elemList):
 
 
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
-def getStrAccountIDs(profile):
+def getAccountIDsFromModel(profile):
     accountList = []
     for accounts in profile.getAccount():
         accountList.append(str(accounts))
@@ -246,11 +302,13 @@ def getStrAccountIDs(profile):
 
 
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
-def getAccountsFromQuerySet(profile):
+def getAccountsForDropDown(profile):
     accountList = []
     for accounts in profile.getAccount():
         accountList.append(str(accounts))
     accountList.append("All")
+    accountList.append("AllCurr")
+    accountList.append("AllCC")
     return accountList
 
 

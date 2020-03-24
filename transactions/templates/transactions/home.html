@@ -19,7 +19,8 @@
           {% for account in accountIDs %}
             <option value="{{account}}">{{ account }}</option>
           {% endfor %}
-          <option value="All">Show all</option>
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>

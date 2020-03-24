@@ -18,6 +18,7 @@ def home(request):
     request.session.set_expiry(600)
 
     accountID = getAccount(request)
+    print(accountID)
     validateID(request, accountID, 'home')
     context, rows = makeCatContext(request, accountID), getRows(request, accountID)
 
@@ -42,6 +43,7 @@ def home(request):
         context['dateIndicator'] = "All transactions"
 
     # get data from database, store into "context" dictionary
+    print(rows)
     if rows != False:
         for transaction in rows:
             context[getCategory(transaction['MCC'])].append(transaction)
@@ -101,7 +103,7 @@ def profile(request):
     context = {
         'uForm': uForm,
         'pForm': pForm,
-        'accountIDs': getStrAccountIDs(request.user.profile)
+        'accountIDs': getAccountIDsFromModel(request.user.profile)
     }
     return render(request, "transactions/profile.html", context)
 
@@ -139,7 +141,7 @@ def delete(request):
         idToRemove = request.POST.get('accountDropdown')
         if idToRemove == "All":
             request.user.profile.clearAccountList()
-        elif idToRemove in getStrAccountIDs(request.user.profile):
+        elif idToRemove in getAccountIDsFromModel(request.user.profile):
             request.user.profile.deleteAccount(idToRemove)
         request.user.profile.setAccountID("All")
         return redirect('profile')

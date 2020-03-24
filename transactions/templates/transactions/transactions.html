@@ -6,22 +6,24 @@
 <div class="container-fluid">
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
-    <h1 class="h3 mb-0 text-gray-800  mr-3">All Transactions</h1>
-    <h4 class="h6 mb-0 text-gray-800  mr-3">(Account: {{ selectedAccount }})</h4>
-    <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-tachometer-alt text-white-50"></i> See Dashboard</a>
-    <a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
-    <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
-      <select class="custom-select w-auto" name="submit">
-        <!--working with actual accounts-->
-        <option value="All">All Accounts</option>
-        {% for account in accountIDs %}
-          <option value="{{account}}">Account: {{ account }}</option>
-        {% endfor %}
-      </select>
-      <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
-    </form>
-  </div>
+      <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
+      <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
+      <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 5px"></i>Sort by Category</a>
+      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
+      
+      <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="submit">
+          <!--working with actual accounts-->
+          <option value="none" selected disabled hidden>Switch accounts</option>
+          {% for account in accountIDs %}
+            <option value="{{account}}">{{ account }}</option>
+          {% endfor %}
+          <option value="All">Show all</option>
+        </select>
+        <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+      </form>
+    </div>
 
   <!-- Content Row -->
   <div class="row">

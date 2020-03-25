@@ -216,7 +216,7 @@ def updateContext(context, rows, request, accountID, home):
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
 
-        #for lib kai, 4 lines below:
+        # for lib kai, 4 lines below:
         context['averageSpend'] = getAverageMonthlySpend(rows)
         context['averageIncome'] = getAverageMonthlyIncome(rows)
         context['monthlySpendVIncome'] = getSpendVIncome(rows)

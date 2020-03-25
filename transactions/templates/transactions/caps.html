@@ -23,6 +23,7 @@
           {% endfor %}
           <option value="AllCurr">Show all current accounts</option>
           <option value="AllCC">Show all credit accounts</option>
+          <option value="All">All accounts (summary)</option>
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
@@ -52,6 +53,7 @@
           {% endfor %}
           <option value="AllCurr">Show all current accounts</option>
           <option value="AllCC">Show all credit accounts</option>
+          <option value="All">All accounts (summary)</option>
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
@@ -180,6 +182,7 @@
             <div class="progress-bar bg-success" role="progressbar" style="width: {{cap.Percentage}}%" aria-valuenow="{{cap.Spend}} " aria-valuemin="0" aria-valuemax="{{cap.Cap}}"></div>
             {% endif %}
           </div>
+          {% endif %}
         </div>
       </div>
     </div>

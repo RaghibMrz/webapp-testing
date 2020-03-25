@@ -28,6 +28,8 @@ def getAccount(request):
     if request.method == 'POST' and 'submit' in request.POST:
         if request.POST['submit'] in getAccountsForDropDown(request.user.profile):
             request.user.profile.setAccountID(request.POST.get('submit'))
+        if request.POST['submit'] == "All":
+            return 'All'
     return request.user.profile.getAccountID()
 
 
@@ -109,7 +111,7 @@ def getSummaryContext(request):
         newEntry['nextBillingDay'] = predict['nextBillingDay'].date()
         if newEntry['isCreditAccount']:
             newEntry['balance'] = predict['balance']
-            totalCreditBalance+= predict['balance']
+            totalCreditBalance += predict['balance']
             newEntry['minimumPayment'] = predict['minRepaymentAmount']
             newEntry['balanceWtihInterest'] = predict['BalanceWithInterest']
         else:
@@ -118,17 +120,17 @@ def getSummaryContext(request):
             directDebit = getDirectDebit(data, datetime.datetime(2020, 2, 10), accountID)
             sumofDD = 0
             for value in directDebit.values():
-                sumofDD +=value
+                sumofDD += value
             newEntry['directDebit'] = sumofDD
-            totalBills+=sumofDD
+            totalBills += sumofDD
         accountData.append(newEntry)
     context = {
-        'accountIDs' : accountIDs,
-        'accountData' : accountData,
-        'totalCurrentBalance' : totalCurrentBalance,
-        'totalCreditBalance' : totalCreditBalance,
-        'totalBills' : totalBills,
-        'remainingAmount' : totalCurrentBalance - totalCreditBalance - totalBills
+        'accountIDs': accountIDs,
+        'accountData': accountData,
+        'totalCurrentBalance': totalCurrentBalance,
+        'totalCreditBalance': totalCreditBalance,
+        'totalBills': totalBills,
+        'remainingAmount': totalCurrentBalance - totalCreditBalance - totalBills
     }
     return context
 
@@ -247,7 +249,7 @@ def updateContext(context, rows, request, accountID, home):
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
 
-        #for lib kai, 4 lines below:
+        # for lib kai, 4 lines below:
         context['averageSpend'] = getAverageMonthlySpend(rows)
         context['averageIncome'] = getAverageMonthlyIncome(rows)
         context['monthlySpendVIncome'] = getSpendVIncome(rows)
@@ -616,7 +618,7 @@ def getPredictionForCurrent(a, testDate, accountID):
     prediction = {
         "date": [],
         "value": [],
-        "nextBillingDay" : targetdate
+        "nextBillingDay": targetdate
     }
     currentdate = testDate.date()
     timeInterval = targetdate - testDate

@@ -205,17 +205,72 @@ def updateContext(context, rows, request, accountID, home):
 
     if getAccountType(accountID) == "Credit-Card":
         context['minPayment'] = getMinPayment(request.user.profile, accountID)
-        context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+        # context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
 
     if getAccountType(accountID) == "Current Account":
         # whatever u need for current accounts only
         context['dd'] = getMonthlyDirectDebit(request, accountID)
-        context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+        # context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
     if rows != False:
-        context['monthlyIncome'] = getIncome(rows)
+        context['monthlyIncome'] = getMinIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
+
+        #for lib kai, 4 lines below:
+        context['averageSpend'] = getAverageMonthlySpend(rows)
+        context['averageIncome'] = getAverageMonthlyIncome(rows)
+        context['monthlySpendVIncome'] = getSpendVIncome(rows)
+    context['prediction'] = buildPredictionDict(request)
+
     return context
+
+
+# creates dictionary of monthly spend against monthly income
+def getSpendVIncome(rows):
+    monthDict = getMonthlySpendDict(rows, "spend")
+    months = []
+    spend = []
+    income = []
+    for key in sorted(monthDict, reverse=True):
+        months.append(key)
+        spend.append(monthDict[key])
+    monthDict = getMonthlySpendDict(rows, "income")
+    for key in sorted(monthDict, reverse=True):
+        income.append(monthDict[key])
+    months = getCleanMonths(months)
+    return {'months': months, 'spend': spend, 'income': income}
+
+
+# takes list of months, returns in neater format
+def getCleanMonths(months):
+    newList = []
+    for month in months:
+        date = datetime.datetime.strptime(str(month), "%m-%Y")
+        date = (time.mktime(date.timetuple()) * 1000)
+        newList.append(date)
+    return newList
+
+
+# builds a dictionary with predicted spend values for all accounts associated with user
+def buildPredictionDict(request):
+    current = []
+    credit = []
+    for account in getAccountIDsFromModel(request.user.profile):
+        newDict = {}
+        if isCreditAccount(account):
+            credit.append(prediction(datetime.datetime(2020, 2, 10), account))
+        else:
+            newDict[str(account)] = {
+                "dates": prediction(datetime.datetime(2020, 2, 10), account).get('date'),
+                "values": prediction(datetime.datetime(2020, 2, 10), account).get('value')
+            }
+            current.append(newDict)
+
+    pred = {
+        'current': current,
+        'credit': credit
+    }
+    return pred
 
 
 # takes user bank accountID and returns a list of transactions.
@@ -439,20 +494,21 @@ def getSalaryData(rows):
                 continue
             date = row['BookingDateTime']
             amount = float(row['Amount'])
-            if str(date.month) not in monthDict:
-                monthDict[str(date.month)] = amount
+            if str(date.month) + str(date.year) not in monthDict:
+                monthDict[str(date.month) + str(date.year)] = amount
                 fullDateDict[str(date)] = amount
-            elif amount > monthDict[str(date.month)]:
-                monthDict[str(date.month)] = amount
+            elif amount > monthDict[str(date.month) + str(date.year)]:
+                monthDict[str(date.month) + str(date.year)] = amount
                 fullDateDict[str(date)] = amount
 
     salList = list(monthDict.values())
     modalValue = max(set(salList), key=salList.count)
+    newDict = {}
     for item in fullDateDict:
-        if fullDateDict[item] != modalValue:
-            del fullDateDict[item]
+        if fullDateDict[item] == modalValue:
+            newDict[item] = modalValue
 
-    salaryDates = list(fullDateDict.keys())
+    salaryDates = list(newDict.keys())
     totalOfDays = 0
     for date in salaryDates:
         totalOfDays += int(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S").day)
@@ -612,47 +668,47 @@ def prediction(testDate, accountID):
     return getPredictionForCurrent(getData(accountID), testDate, accountID)
 
 
-def getIncome(rows):
-    if rows != False:
-        monthDict = {}
-        for row in rows:
-            amount = float(row['Amount'])
-            date = row['BookingDateTime']
-            if str(date.month) not in monthDict:
-                monthDict[str(date.month)] = 0
-            if amount > 0:
-                monthDict[str(date.month)] += amount
-        # round(sum(monthDict.values()) / len(monthDict.values()), 2)
-        if len(monthDict.values()) > 0:
-            return min(monthDict.values())
-        else:
-            return 0
-
-
-# returns average monthly spend on account
-def getAverageMonthlySpend(rows):
+def getMonthlySpendDict(rows, indicator):
     monthDict = {}
     for row in rows:
         amount = float(row['Amount'])
         date = row['BookingDateTime']
-        if str(date.month) not in monthDict:
-            monthDict[str(date.month)] = 0
-        if amount < 0:
-            monthDict[str(date.month)] += amount
-    return -round(sum(monthDict.values())/len(monthDict.values()), 2)
+        if str(date.month) + "-" + str(date.year) not in monthDict:
+            monthDict[str(date.month) + "-" + str(date.year)] = 0
+        if indicator == "spend":
+            if amount < 0:
+                monthDict[str(date.month) + "-" + str(date.year)] += amount
+        if indicator == "income":
+            if amount > 0:
+                monthDict[str(date.month) + "-" + str(date.year)] += amount
+    return monthDict
+
+
+# calculates the minimum income per month
+def getAverageMonthlyIncome(rows):
+    monthDict = getMonthlySpendDict(rows, "income")
+    return round(sum(monthDict.values()) / len(monthDict.values()), 2)
+
+
+# calculates the average income per month
+def getMinIncome(rows):
+    monthDict = getMonthlySpendDict(rows, "income")
+    if len(monthDict.values()) > 0:
+        return min(monthDict.values())
+    else:
+        return 0
+
+
+# returns average monthly spend on account
+def getAverageMonthlySpend(rows):
+    monthDict = getMonthlySpendDict(rows, "spend")
+    return -round(sum(monthDict.values()) / len(monthDict.values()), 2)
 
 
 # calculates minimum monthly spend- this is not average spend but rather the lowest amount of money you usually
 # spend on your account
 def getSpend(rows):
-    monthDict = {}
-    for row in rows:
-        amount = float(row['Amount'])
-        date = row['BookingDateTime']
-        if str(date.month) not in monthDict:
-            monthDict[str(date.month)] = 0
-        if amount < 0:
-            monthDict[str(date.month)] += amount
+    monthDict = getMonthlySpendDict(rows, "spend")
     if len(monthDict.values()) > 0:
         return -round(max(monthDict.values()), 2)
     else:
@@ -661,7 +717,7 @@ def getSpend(rows):
 
 def calcExcess(rows):
     leftOver = []
-    left = getIncome(rows) - getSpend(rows)
+    left = getMinIncome(rows) - getSpend(rows)
     if left >= 0:
         leftOver.append("On track to save: ")
     else:

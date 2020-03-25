@@ -121,16 +121,17 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ leftOver.0 }}</div>
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1"></div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ leftOver.1 |floatformat:2| intcomma}}</div>
+                  {% if totalCap == allCap %}
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Good!<br>Both caps are identical. This figure will be used to notify you if you go over budget</div>
+                  {% else %}
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                    Your categori
+                  </div>
+                  {% endif %}
                 </div>
-                <!--<div class="col">-->
-                  <!--<div class="progress progress-sm mr-2">-->
-                    <!--<div class="progress-bar bg-info" role="progressbar" style="width: 46%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>-->
-                  <!--</div>-->
-                <!--</div>-->
               </div>
             </div>
             <div class="col-auto">
@@ -147,9 +148,9 @@
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
         <div class="card-body">
-          <h4 class="small font-weight-bold">Budget used <span class="float-right">Total Salary</span></h4>
-          <div class="progress mb-2">
-            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100"></div>
+          <h4 class="small font-weight-bold">Cap information</h4>
+          <div class="p mb-0 mr-3 text-gray-800">
+            Your categorical caps seem to supersede the cap you set on all your transactions, consider changing this. If you are not budgeting arbitrarily, these values should be identical.
           </div>
         </div>
       </div>

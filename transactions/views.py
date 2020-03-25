@@ -52,7 +52,6 @@ def summary(request):
     accountID = getAccount(request)
     return render(request, 'transactions/summary.html')
 
-
 # special page for user's budgeting insights insights
 @login_required
 def caps(request):

@@ -23,6 +23,7 @@
           {% endfor %}
           <option value="AllCurr">Show all current accounts</option>
           <option value="AllCC">Show all credit accounts</option>
+          <option value="All">All accounts (summary)</option>
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
@@ -52,6 +53,7 @@
           {% endfor %}
           <option value="AllCurr">Show all current accounts</option>
           <option value="AllCC">Show all credit accounts</option>
+          <option value="All">All accounts (summary)</option>
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
@@ -124,13 +126,7 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1"></div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  {% if totalCap == allCap %}
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Good!<br>Both caps are identical. This figure will be used to notify you if you go over budget</div>
-                  {% else %}
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                    Your categori
-                  </div>
-                  {% endif %}
+                
                 </div>
               </div>
             </div>
@@ -149,9 +145,16 @@
       <div class="card shadow mb-4">
         <div class="card-body">
           <h4 class="small font-weight-bold">Cap information</h4>
+          {% if totalCap == allCap %}
+            <div class="p mb-0 mr-3 text-gray-800">
+              Both caps are identical. This figure will be used to notify you if you go over budget
+            </div>
+          {% else %}
           <div class="p mb-0 mr-3 text-gray-800">
-            Your categorical caps seem to supersede the cap you set on all your transactions, consider changing this. If you are not budgeting arbitrarily, these values should be identical.
+              Your categorical caps seem to supersede the cap you set on all your transactions, consider changing this.
+              If you are not budgeting arbitrarily, these values should be identical.
           </div>
+          {% endif %}
         </div>
       </div>
     </div>

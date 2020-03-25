@@ -28,6 +28,8 @@ def getAccount(request):
     if request.method == 'POST' and 'submit' in request.POST:
         if request.POST['submit'] in getAccountsForDropDown(request.user.profile):
             request.user.profile.setAccountID(request.POST.get('submit'))
+        if request.POST['submit'] == "All":
+            return 'All'
     return request.user.profile.getAccountID()
 
 
@@ -93,9 +95,10 @@ def sortedRows(rows):
     sortedRows.reverse()
     return sortedRows
 
-#function that returns all necessary info on summary page 
+
+# function that returns all necessary info on summary page
 def getSummaryContext(request):
-    accountIDs = getStrAccountIDs(request.user.profile)
+    accountIDs = getAccountIDsFromModel(request.user.profile)
     accountData = []
     totalCurrentBalance = 0
     totalCreditBalance = 0
@@ -105,11 +108,11 @@ def getSummaryContext(request):
         newEntry = {}
         newEntry['accountID'] = accountID
         newEntry['isCreditAccount'] = isCreditAccount(accountID)
-        predict = prediction( datetime.datetime(2020, 2, 10), accountID)
+        predict = prediction(datetime.datetime(2020, 2, 10), accountID)
         newEntry['nextBillingDay'] = predict['nextBillingDay']
         if newEntry['isCreditAccount']:
             newEntry['balance'] = predict['balance']
-            totalCreditBalance+= predict['balance']
+            totalCreditBalance += predict['balance']
             newEntry['minimumPayment'] = predict['minRepaymentAmount']
             newEntry['balanceWtihInterest'] = predict['BalanceWithInterest']
         else:
@@ -118,17 +121,17 @@ def getSummaryContext(request):
             directDebit = getDirectDebit(data, datetime.datetime(2020, 2, 10), accountID)
             sumofDD = 0
             for value in directDebit.values():
-                sumofDD +=value
+                sumofDD += value
             newEntry['directDebit'] = sumofDD
-            totalBills+=sumofDD
+            totalBills += sumofDD
         accountData.append(newEntry)
     context = {
-        'accountIDs' : accountIDs,
-        'accountData' : accountData,
-        'totalCurrentBalance' : totalCurrentBalance,
-        'totalCreditBalance' : totalCreditBalance,
-        'totalBills' : totalBills,
-        'remainingAmount' : totalCurrentBalance - totalCreditBalance - totalBills
+        'accountIDs': accountIDs,
+        'accountData': accountData,
+        'totalCurrentBalance': totalCurrentBalance,
+        'totalCreditBalance': totalCreditBalance,
+        'totalBills': totalBills,
+        'remainingAmount': totalCurrentBalance - totalCreditBalance - totalBills
     }
     return context
 
@@ -624,7 +627,7 @@ def getPredictionForCurrent(a, testDate, accountID):
     prediction = {
         "date": [],
         "value": [],
-        "nextBillingDay" : targetdate
+        "nextBillingDay": targetdate
     }
     currentdate = testDate.date()
     timeInterval = targetdate - testDate

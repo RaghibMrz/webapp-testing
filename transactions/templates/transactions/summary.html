@@ -3,14 +3,16 @@
 {% load static %}
 {% load humanize %}
 <!-- Begin Page Content -->
+{% if noRows %}
 <div class="container-fluid">
-  <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
-      <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
-      <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
-      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
-      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
-      
+  <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+    {% if accountID == "None" or accountID == "AllCur" or accountID == "AllCC" %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">No Account found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Please go to your profile and add one</h4>
+    {% else %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">AccountID "{{accountID}}" not found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Delete this ID and try again</h4>
+    {% endif %}
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
         <select class="custom-select w-auto" name="submit">
@@ -19,10 +21,39 @@
           {% for account in accountIDs %}
             <option value="{{account}}">{{ account }}</option>
           {% endfor %}
-          <option value="All">Show all</option>
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
+          <option value="All">All accounts (summary)</option>
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <a href="{% url 'caps' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> Caps </a>
+    </div>
+</div>
+{% else %}
+<div class="container-fluid">
+  <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+      <h4 class="h3 mb-0 text-gray-800  mr-3">All Accounts</h4>
+      <h4 class="h3 mb-0 text-black-800  mr-3">Summary</h4>
+      <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="submit">
+          <!--working with actual accounts-->
+          <option value="none" selected disabled hidden>Switch accounts</option>
+          {% for account in accountIDs %}
+            <option value="{{account}}">{{ account }}</option>
+          {% endfor %}
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
+          <option value="All">All accounts (summary)</option>
+        </select>
+        <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+      </form>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> Categorical Transactions</a>
+      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
     </div>
 
 
@@ -153,7 +184,7 @@
               <div class="card-body">
                 <div class="table-responsive">
                   {% if account.isCreditAccount %}
-                  <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="ccTable1" width="100%" cellspacing="0">
                     <thead>
                       <tr>
                       <th>Next Billing Day</th>
@@ -171,7 +202,7 @@
                       </tr>
                   </table>
                   {% else %}
-                  <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
+                  <table class="table table-bordered" id="ccTable2" width="100%" cellspacing="0">
                     <thead>
                       <tr>
                       <th>Next Interest Payday</th>
@@ -239,18 +270,14 @@
             </div>
           </div>
           </div>
-        
-          {% endfor %}  
-        <!-- <div class="card-body">
-          <div class="chart-area">
-            <canvas id="myAreaChart"></canvas>
-          </div>
-        </div> -->
+          {% endfor %}
         </div>
       </div>
     </div>
   </div>
   
+
+
 
   <!-- Pie Chart -->
   <div class="row">
@@ -882,4 +909,5 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock ctt %} 

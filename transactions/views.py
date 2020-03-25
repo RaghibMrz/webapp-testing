@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from users.forms import UserUpdateForm, ProfileUpdateForm
 from .forms import *
@@ -13,6 +13,9 @@ from .utils import *
 @login_required
 def home(request):
     request.session.set_expiry(600)
+    if getAccount(request) == "All":
+        return redirect('summary')
+
     accountID = getAccount(request)
 
     if validateID(request, accountID) == True:
@@ -44,19 +47,24 @@ def home(request):
 
         return render(request, 'transactions/home.html', updateContext(context, rows, request, accountID, True))
     else:
-        return render(validateID(request, accountID)[0], validateID(request, accountID)[1], validateID(request, accountID)[2])
+        return render(validateID(request, accountID)[0], validateID(request, accountID)[1],
+                      validateID(request, accountID)[2])
+
 
 @login_required
 def summary(request):
     request.session.set_expiry(600)
     context = getSummaryContext(request)
-    print(context)
     return render(request, 'transactions/summary.html', context)
+
 
 # special page for user's budgeting insights insights
 @login_required
 def caps(request):
     request.session.set_expiry(600)
+    if getAccount(request) == "All":
+        return redirect('summary')
+
     accountID = getAccount(request)
     context = makeAggContext(request, accountID)
     context['spend'] = getAverageMonthlySpend(getRows(request, accountID))
@@ -66,10 +74,14 @@ def caps(request):
     context['totalCap'] = sum(caps)
     return render(request, 'transactions/caps.html', context)
 
+
 # noinspection PySimplifyBooleanCheck
 @login_required
 def transactions(request):
     request.session.set_expiry(600)
+    if getAccount(request) == "All":
+        return redirect('summary')
+
     accountID = getAccount(request)
 
     # update categorical caps if necessary
@@ -96,7 +108,8 @@ def transactions(request):
         return render(request, 'transactions/transactions.html',
                       updateContext(context, rows, request, accountID, False))
     else:
-        return render(validateID(request, accountID)[0], validateID(request, accountID)[1], validateID(request, accountID)[2])
+        return render(validateID(request, accountID)[0], validateID(request, accountID)[1],
+                      validateID(request, accountID)[2])
 
 
 @login_required

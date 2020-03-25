@@ -1,0 +1,1722 @@
+{% extends "transactions/base.html" %}
+{% block ctt %}
+{% load static %}
+{% load humanize %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+      <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
+      <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
+      
+      <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="submit">
+          <!--working with actual accounts-->
+          <option value="none" selected disabled hidden>Switch accounts</option>
+          {% for account in accountIDs %}
+            <option value="{{account}}">{{ account }}</option>
+          {% endfor %}
+          <option value="All">Show all</option>
+        </select>
+        <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+      </form>
+    </div>
+
+
+  <!-- Content Row -->
+  <div class="row">
+   <!-- Balance Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Balance on current account</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ balance }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-comments fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Credit Card Bill to Pay</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{CCBill|floatformat:2| intcomma}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spend (Monthly) Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Predicted Monthly Bill Payment</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyBill|floatformat:2| intcomma}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-pound-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Average income/spend -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Overall Remaining Balance</div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ leftOver.1 |floatformat:2| intcomma}}</div>
+                </div>
+                <!--<div class="col">-->
+                  <!--<div class="progress progress-sm mr-2">-->
+                    <!--<div class="progress-bar bg-info" role="progressbar" style="width: 46%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+    <div class="col-xl-12 col-lg-11">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <h4 class="small font-weight-bold">Budget used <span class="float-right">Total Salary</span></h4>
+          <div class="progress mb-2">
+            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-11">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Accounts Overview</h6>
+          
+
+          
+        </div>
+        
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedCreditCardTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedCreditCardTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Credit Cards</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedCreditCardTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      <th>Date</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in two %}
+                      <tr>
+                      <td>{{ row.BookingDateTime }}</td>
+                      <td>{{ row.TransactionInformation }}</td>
+                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                      <td>{{ row.Currency }}</td>
+                      </tr>
+                    {% endfor %}
+                  </table>
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#creditCardCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="creditCardCap" tabindex="-1" role="dialog" aria-labelledby="creditCardCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="creditCardCapTitle">Credit Card Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueCC" value="{{ caps.0 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedBPTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedBPTransactions">
+              <div class="row">
+                <div class="col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
+                </div>
+                <div class="col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.0}}: £{{totals.0|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+              <!-- <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
+              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6> -->
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedBPTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="bpTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in one %}
+                        <tr>
+                        <td>{{ row.TransactionInformation }}</td>
+                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                        <td>{{ row.Currency }}</td>
+                        <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  <br>
+                </div>
+                <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: £{{ totals.0 |floatformat:2| intcomma}}</h6>
+                  <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#bpCap">
+                    <i class="fas fa-tachometer-alt"></i> Set Cap
+                  </button>
+  
+                  <!-- Modal -->
+                  <div class="modal fade" id="bpCap" tabindex="-1" role="dialog" aria-labelledby="bpCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="bpCapTitle">Bills & Payments Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueBP" value="{{ caps.1 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedTransportTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedTransportTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Transport</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.1}}: £{{totals.1|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedTransportTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="transportTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in two %}
+                        <tr>
+                        <td>{{ row.TransactionInformation }}</td>
+                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                        <td>{{ row.Currency }}</td>
+                        <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#transportCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="transportCap" tabindex="-1" role="dialog" aria-labelledby="transportCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="transportCapTitle">Transport Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueTP" value="{{ caps.2 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedGroceriesTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedGroceriesTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Groceries</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.2}}: £{{totals.2|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedGroceriesTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="groceriesTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Transaction</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in three %}
+                        <tr>
+                        <td>{{ row.TransactionInformation }}</td>
+                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                        <td>{{ row.Currency }}</td>
+                        <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: £{{ totals.2 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#groceriesCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="groceriesCap" tabindex="-1" role="dialog" aria-labelledby="groceriesCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="groceriesCapTitle">Groceries Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.3 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedFCTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedFCTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Fashion & Cosmetics</h6>
+                </div>
+                <div class="col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.3}}: £{{totals.3|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedFCTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="fcTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in four %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: £{{ totals.3 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#fcCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="fcCap" tabindex="-1" role="dialog" aria-labelledby="fcCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="fcCapTitle">Fashion & Cosmetics Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueFC" value="{{ caps.4 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedFinancesTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedFinancesTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Finances</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.4}}: £{{totals.4|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedFinancesTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="financesTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                          <th>Transaction</th>
+                          <th>Amount</th>
+                          <th>Currency</th>
+                          <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in five %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: £{{ totals.4 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#financesCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="financesCap" tabindex="-1" role="dialog" aria-labelledby="financesCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="financesCapTitle">Finances Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueFSC" value="{{ caps.5 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedFoodTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedFoodTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Food</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.5}}: £{{totals.5|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedFoodTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="foodTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in six %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: £{{ totals.5 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#foodCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="foodCap" tabindex="-1" role="dialog" aria-labelledby="foodCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="foodCapTitle">Food Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueFoodC" value="{{ caps.6 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedGeneralTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedGeneralTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">General</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.6}}: £{{totals.6|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedGeneralTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="generalTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in seven %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: £{{ totals.6 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#generalCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="generalCap" tabindex="-1" role="dialog" aria-labelledby="generalCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="generalCapTitle">General Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.7 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedEntertainmentTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedEntertainmentTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Entertainment</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.7}}: £{{totals.7|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedEntertainmentTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="entertainmentTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in eight %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: £{{ totals.7 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#entertainmentCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="entertainmentCap" tabindex="-1" role="dialog" aria-labelledby="entertainmentCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="entertainmentCapTitle">Entertainment Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueEC" value="{{ caps.8 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedLSTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedLSTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Leisure & Self-Care</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.8}}: £{{totals.8|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedLSTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="lsTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in nine %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: £{{ totals.8 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#lsCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="lsCap" tabindex="-1" role="dialog" aria-labelledby="lsCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="lsCapTitle">Leisure & Self-Care Cap</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueLSC" value="{{ caps.9 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
+            <a href="#collapsedOtherTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedOtherTransactions">
+              <div class="row">
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary">Other</h6>
+                </div>
+                <div class = "col-xl-6">
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.9}}: £{{totals.9|floatformat:2| intcomma}}</h6>
+                </div>
+              </div>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse hide" id="collapsedOtherTransactions">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="otherTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Transaction</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in zero %}
+                        <tr>
+                          <td>{{ row.TransactionInformation }}</td>
+                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
+                          <td>{{ row.Currency }}</td>
+                          <td>{{ row.BookingDateTime }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
+                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: £{{ totals.9 |floatformat:2| intcomma}}</h6>
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#otherCap">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="otherCap" tabindex="-1" role="dialog" aria-labelledby="otherCapTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="otherCapTitle">Other</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueOC" value="{{ caps.10 }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+                            </div>
+                            <div class="col-xl-6">
+                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <!-- <div class="card-body">
+          <div class="chart-area">
+            <canvas id="myAreaChart"></canvas>
+          </div>
+        </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie Chart -->
+  <div class="row">
+    <div class="col-xl-6 col-lg-6">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Expenditure</h6>
+<!--           <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header">Dropdown Header:</div>
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div> -->
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" style="position: relative; height: 50vh;">
+          <!-- <img src="{% static 'transactions/img/SquarePie.jpg' %}" style="max-width:100%;"> -->
+
+
+          <canvas id="pieChart"></canvas>
+          <script>
+            // var endpoint = '/home/api/chart/data/'
+            // var resData = []
+            // var labels = []
+            // $.ajax({
+            //   method: "GET",
+            //   url: endpoint,
+            //   success: function(data){
+            //     labels = data.labels
+            //     resData = data.default
+            //     console.log(data)
+            //     console.log(data.customers)
+            //     // resData = JSON.parse(data)
+
+            //     var bpTotal = "{{totals.0}}";
+            //     var tpTotal = "{{totals.1}}";
+            //     var groceryTotal = "{{totals.2}}";
+            //     var fcTotal = "{{totals.3}}";
+            //     var financesTotal = "{{totals.4}}";
+            //     var foodTotal = "{{totals.5}}";
+            //     var genTotal = "{{totals.6}}";
+            //     var entertainmentTotal = "{{totals.7}}";
+            //     var lsTotal = "{{totals.8}}";
+            //     var uncatTotal = "{{totals.9}}";
+
+
+            //     var ctxPie = document.getElementById("pieChart")
+            //     var myPieChart = new Chart(ctxPie,{
+            //       type: 'pie',
+            //       data: {
+            //         labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+            //         datasets: [{
+            //           label: '# of Votes',
+            //           // data: resData,
+            //           data: [bpTotal, tpTotal, groceryTotal, fcTotal, financesTotal, foodTotal, genTotal, entertainmentTotal, lsTotal, uncatTotal],
+
+            //           backgroundColor: [
+            //             'rgba(78, 115, 223, 0.5)', //blue
+            //             'rgba(231, 74, 59, 0.5)',  //red
+            //             'rgba(253, 126, 20, 0.5)',  //orange
+            //             'rgba(232, 62, 140, 0.5)',  //pink
+            //             'rgba(28, 200, 138, 0.5)',  //green
+            //             'rgba(246, 194, 62, 0.5)',  //yellow
+            //             'rgba(90, 92, 105, 0.5)',  //gray-dark
+            //             'rgba(102, 16, 242, 0.5)',  //indigo
+            //             'rgba(54, 185, 204, 0.5)',  //cyan
+            //             'rgba(133, 135, 150, 0.5)',  //gray
+                        
+            //           ],
+            //           borderColor: [
+            //           'rgba(78, 115, 223, 1)',
+            //             'rgba(231, 74, 59, 1)',
+            //             'rgba(253, 126, 20, 1)',
+            //             'rgba(232, 62, 140, 1)',
+            //             'rgba(28, 200, 138, 1)',
+            //             'rgba(246, 194, 62, 1)',
+            //             'rgba(90, 92, 105, 1)',
+            //             'rgba(102, 16, 242, 1)',
+            //             'rgba(54, 185, 204, 1)',
+            //             'rgba(133, 135, 150, 1)',
+            //           ],
+            //           borderWidth: 1
+
+            //         }]
+            //       },
+            //       options: {
+            //         maintainAspectRatio: false,
+            //         // width: 100,
+            //         // height: 300,
+            //         // scales: {
+            //         //   yAxes: [{
+            //         //     ticks: {
+            //         //       beginAtZero: true
+            //         //     }
+            //         //   }]
+            //         // }
+            //       }
+            //     })
+            //   },
+            //   error: function(error_data){
+            //     console.log("error")
+            //     console.log(error_data)
+            //   },
+            // })
+
+
+            var bpTotal = "{{totals.0}}";
+            var tpTotal = "{{totals.1}}";
+            var groceryTotal = "{{totals.2}}";
+            var fcTotal = "{{totals.3}}";
+            var financesTotal = "{{totals.4}}";
+            var foodTotal = "{{totals.5}}";
+            var genTotal = "{{totals.6}}";
+            var entertainmentTotal = "{{totals.7}}";
+            var lsTotal = "{{totals.8}}";
+            var uncatTotal = "{{totals.9}}";
+
+            var ctxPie = document.getElementById("pieChart")
+            var myPieChart = new Chart(ctxPie,{
+              type: 'pie',
+              data: {
+                labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+                datasets: [{
+                  // data: resData,
+                  // data: [5,5,5,5,5,5,5,5,5,5],  //test
+                  label: "Amount Spent",
+                  data: [bpTotal, tpTotal, groceryTotal, fcTotal, financesTotal, foodTotal, genTotal, entertainmentTotal, lsTotal, uncatTotal],
+
+                  backgroundColor: [
+                    'rgba(78, 115, 223, 0.5)', //blue
+                    'rgba(231, 74, 59, 0.5)',  //red
+                    'rgba(253, 126, 20, 0.5)',  //orange
+                    'rgba(232, 62, 140, 0.5)',  //pink
+                    'rgba(28, 200, 138, 0.5)',  //green
+                    'rgba(246, 194, 62, 0.5)',  //yellow
+                    'rgba(90, 92, 105, 0.5)',  //gray-dark
+                    'rgba(102, 16, 242, 0.5)',  //indigo
+                    'rgba(54, 185, 204, 0.5)',  //cyan
+                    'rgba(133, 135, 150, 0.5)',  //gray
+                    
+                  ],
+                  borderColor: [
+                  'rgba(78, 115, 223, 1)',
+                    'rgba(231, 74, 59, 1)',
+                    'rgba(253, 126, 20, 1)',
+                    'rgba(232, 62, 140, 1)',
+                    'rgba(28, 200, 138, 1)',
+                    'rgba(246, 194, 62, 1)',
+                    'rgba(90, 92, 105, 1)',
+                    'rgba(102, 16, 242, 1)',
+                    'rgba(54, 185, 204, 1)',
+                    'rgba(133, 135, 150, 1)',
+                  ],
+                  borderWidth: 1
+
+                }]
+              },
+              options: {
+                maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: "Amount Spent"
+                },
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']]
+                    },
+                    label: function(tooltipItem, data) {
+                      var label = data.datasets[tooltipItem.datasetIndex].label;
+                      return label + ": " + Number(data.datasets[0].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                    }
+                  }
+                }
+                // width: 100,
+                // height: 300,
+                // scales: {
+                //   yAxes: [{
+                //     ticks: {
+                //       beginAtZero: true
+                //     }
+                //   }]
+                // }
+              }
+            })
+          </script>
+
+
+<!--           <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> Food
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> Groceries
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-info"></i> Entertainment
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-japanese-indigo"></i> Bills
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-pastel-blue"></i> Transport
+            </span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-xl-6 col-lg-6">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Expenditure</h6>
+<!--           <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header">Dropdown Header:</div>
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div> -->
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" style="position: relative; height: 50vh;">
+          <!-- <img src="{% static 'transactions/img/SquareBar.jpg' %}" style="max-width:100%;"> -->
+
+          <canvas id="treeChart"></canvas>
+          <script>
+            // var endpoint = '/home/api/chart/data/'
+            // $.ajax({
+            //   method: "GET",
+            //   url: endpoint,
+            //   success: function(data){
+                
+            //   },
+            //   error: function(error_data){
+
+            //   },
+            // })
+
+            var ctxTree = document.getElementById("treeChart").getContext('2d');
+          
+            var bpTotal = "{{totals.0}}";
+            var tpTotal = "{{totals.1}}";
+            var groceryTotal = "{{totals.2}}";
+            var fcTotal = "{{totals.3}}";
+            var financesTotal = "{{totals.4}}";
+            var foodTotal = "{{totals.5}}";
+            var genTotal = "{{totals.6}}";
+            var entertainmentTotal = "{{totals.7}}";
+            var lsTotal = "{{totals.8}}";
+            var uncatTotal = "{{totals.9}}";
+
+            var bpCount = "{{count.0}}";
+            var tpCount = "{{count.1}}";
+            var groceryCount = "{{count.2}}";
+            var fcCount = "{{count.3}}";
+            var financesCount = "{{count.4}}";
+            var foodCount = "{{count.5}}";
+            var genCount = "{{count.6}}";
+            var entertainmentCount = "{{count.7}}";
+            var lsCount = "{{count.8}}";
+            var uncatCount = "{{count.9}}";
+
+            var myTreeChart = new Chart(ctxTree,{
+              type: 'bar',
+              data: {
+                labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+                datasets: [{
+                  // label: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+                  label: "Number of Transactions",
+                  data: [bpCount, tpCount, groceryCount, fcCount, financesCount, foodCount, genCount, entertainmentCount, lsCount, uncatCount],
+
+                  backgroundColor: [
+                    'rgba(78, 115, 223, 0.5)', //blue
+                    'rgba(231, 74, 59, 0.5)',  //red
+                    'rgba(253, 126, 20, 0.5)',  //orange
+                    'rgba(232, 62, 140, 0.5)',  //pink
+                    'rgba(28, 200, 138, 0.5)',  //green
+                    'rgba(246, 194, 62, 0.5)',  //yellow
+                    'rgba(90, 92, 105, 0.5)',  //gray-dark
+                    'rgba(102, 16, 242, 0.5)',  //indigo
+                    'rgba(54, 185, 204, 0.5)',  //cyan
+                    'rgba(133, 135, 150, 0.5)',  //gray
+                  ],
+                  borderColor: [
+                    'rgba(78, 115, 223, 1)',
+                    'rgba(231, 74, 59, 1)',
+                    'rgba(253, 126, 20, 1)',
+                    'rgba(232, 62, 140, 1)',
+                    'rgba(28, 200, 138, 1)',
+                    'rgba(246, 194, 62, 1)',
+                    'rgba(90, 92, 105, 1)',
+                    'rgba(102, 16, 242, 1)',
+                    'rgba(54, 185, 204, 1)',
+                    'rgba(133, 135, 150, 1)',
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: "Number of transactions",
+                },
+                legend: {
+                  display: false,
+                },
+                responsive: true,
+              }
+            });
+
+
+            var treemapData = [
+              {
+                category: "Bills & Payments",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: bpCount,
+                transactionTotal: bpTotal
+              },
+              {
+                category: "Transport",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: tpCount,
+                transactionTotal: tpTotal
+              },
+              {
+                category: "Groceries",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: groceryCount,
+                transactionTotal: groceryTotal
+              },
+              {
+                category: "Fashion & Cosmetics",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: fcCount,
+                transactionTotal: fcTotal
+              },
+              {
+                category: "Finances",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: financesCount,
+                transactionTotal: financesTotal
+              },
+              {
+                category: "Food",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: foodCount,
+                transactionTotal: foodTotal
+              },
+              {
+                category: "General",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: genCount,
+                transactionTotal: genTotal
+              },
+              {
+                category: "Entertainment",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: entertainmentCount,
+                transactionTotal: entertainmentTotal
+              },
+              {
+                category: "Leisure & Self-Care",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: lsCount,
+                transactionTotal: lsTotal
+              },
+              {
+                category: "Other",
+                count: "Number of Transactions",
+                sum: "Total Amount Spent",
+                transactionCount: uncatCount,
+                transactionTotal: uncatTotal
+              }
+            ]
+
+            // var myTreeChart = new Chart(ctxTree,{
+            //   type: 'treemap',
+            //   data: {
+            //     labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
+            //     datasets: [{
+            //       label: 'Color Density: Amount Spent    Size: Number of Transactions',
+            //       tree: [bpCount, tpCount, groceryCount, fcCount, financesCount, foodCount, genCount, entertainmentCount, lsCount, uncatCount],
+            //       // fontColor: '#000000',
+            //       // fontFamily: 'serif',
+            //       // fontSize: 12,
+            //       // fontStyle: 'normal',
+            //       backgroundColor: function(myTreeMapChart) {
+            //             var value = myTreeMapChart.dataset.tree[myTreeMapChart.dataIndex];
+            //             var alpha = (value + 3) / 10;
+            //             return Color('rgba(231, 74, 59)').alpha(alpha).rgbString();
+            //       },
+            //       borderColor: function(myTreeMapChart) {
+            //             var value = myTreeMapChart.dataset.tree[myTreeMapChart.dataIndex];
+            //             var alpha = (value + 3) / 5;
+            //             return Color('rgba(231, 74, 59)').alpha(alpha).rgbString();
+            //       },
+            //       borderWidth: 1
+            //     }]
+            //   },
+            //   options: {
+            //     maintainAspectRatio: false,
+            //     // title: {
+            //     //   display: true,
+            //     //   // text: "Treemap Sample"
+            //     // },
+            //     tooltips: {
+            //       callbacks: {
+            //         title: function(item, data) {
+            //           return '';
+            //         },
+            //         label: function(item, data) {
+            //           var dataset = data.datasets[item.datasetIndex];
+            //           var dataItem = dataset.data[item.index];
+            //           return dataItem.v;
+            //         },
+            //       },
+            //     },
+            //   },
+            //   // options: {
+            //   //   maintainAspectRatio: false,
+            //   //   // scales: {
+            //   //   //   yAxes: [{
+            //   //   //     ticks: {
+            //   //   //       beginAtZero: true
+            //   //   //     }
+            //   //   //   }]
+            //   //   // }
+            //   // }
+
+
+            // });
+          </script>
+
+
+<!--           <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> Food
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> Groceries
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-info"></i> Entertainment
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-japanese-indigo"></i> Bills
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-pastel-blue"></i> Transport
+            </span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+    
+
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Content Column -->
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-11">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          {% if prediction %}
+          <h6 class="m-0 font-weight-bold text-primary">Spending Pattern and Predictions</h6>
+          <h6 class="m-0 text-secondary" style="float:left"> - For Account {{ selectedAccount }}</h6>
+          </div>
+            <!-- Card Body -->
+            <div class="card-body" style="position: relative; height: 50vh;">
+              <!-- <img src="{% static 'transactions/img/line.jpg' %}" style="max-width:100%;"> -->
+              
+              <canvas id='lineChart'></canvas>
+              <script>
+                var timeFormat = "MMM Do YY";
+    
+                var predictionDates = "{{ prediction.date }}".slice(1,-1).replace(/\s/g, '').split(',');
+                for (i in predictionDates) {
+                  predictionDates[i] = new Date(parseInt(predictionDates[i]));
+                };
+    
+                var predictionValues = "{{ prediction.value }}".slice(1,-1).replace(/\s/g, '').split(',');
+                for (i in predictionValues) {
+                  predictionValues[i] = parseInt(predictionValues[i])
+                };
+    
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: predictionDates,
+                    datasets: [{
+                      label: "Predicted Amount Spent",
+                      data: predictionValues,
+                      backgroundColor: 'rgba(231, 74, 59, 0.5)',
+                      borderColor: 'rgba(231, 74, 59, 1)',
+                      fill: false
+                    }],
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    }
+                  }
+                });
+              </script>
+    
+              <!-- DataTables Script -->
+              <script>
+                $(document).ready(function() {
+                  $('#ccTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#bpTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#transportTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#groceriesTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#fcTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#financesTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#foodTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#generalTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#entertainmentTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#lsTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+                $(document).ready(function() {
+                  $('#otherTable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+              </script>
+            </div>
+          {% else %}
+            <h6 class="m-0 font-weight-bold text-secondary">Spending Pattern and Predictions- Not available for <strong>all</strong> accounts,
+              please select one from the drop down menu in the top right</h6>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock ctt %} 

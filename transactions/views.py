@@ -46,6 +46,13 @@ def home(request):
     else:
         return render(validateID(request, accountID)[0], validateID(request, accountID)[1], validateID(request, accountID)[2])
 
+@login_required
+def summary(request):
+    request.session.set_expiry(600)
+
+    accountID = getAccount(request)
+    return render(request, 'transactions/summary.html')
+
 
 # noinspection PySimplifyBooleanCheck
 @login_required

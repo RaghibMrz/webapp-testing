@@ -112,6 +112,16 @@ def getCurrAccountBalance(request, accountID):
         return total
     return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
 
+def getSummaryContext(request, accountID):
+    accountIDs = getStrAccountIDs(request.user.profile)
+    accountData = []
+    for accountID in accountIDs:
+        data = getData(accountID)
+
+        newEntry = {}
+
+
+
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
 # a couple other lists for supplementary data such as sums, these are then filed into
@@ -452,27 +462,23 @@ def getSalaryData(rows):
     return [modalValue, averageDay]
 
 
-# function which works out average monthly direct debit costs
-def getDirectDebits(accountID):
-    return "1234.56"
 
 
-# prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
-def getPredictionForCurrent(a, testDate, accountID):
+def getMonthlyDirectDebit(accountID):
+    data = getData(accountID)
+    totalDirectDebit = 0 
+    for directdebit in data['DirectDebit']:
+        if directdebit['DirectDebitStatusCode'] == "Active":
+            totalDirectDebit+= float(directdebit['PreviousPaymentAmount']['Amount'])
+    return totalDirectDebit
+        
+# it takes the dataset a, the testdate and the account to return all the direct debits u need to pay from the testdate to the next billing day
+def getDirectDebit(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
-    # print(billingdate)
-    averagespending = getAverageSpending(testDate, accountID)
     if testDate.day > billingdate.day:
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
-    currentbalance = float(a['Balance'][0]['Amount']['Amount'])
-    prediction = {
-        "date": [],
-        "value": []
-    }
-    currentdate = testDate.date()
-    timeInterval = targetdate - testDate
     directDebitToPay = {}
     for directdebit in a['DirectDebit']:
         if directdebit['DirectDebitStatusCode'] == "Active":
@@ -485,18 +491,52 @@ def getPredictionForCurrent(a, testDate, accountID):
                     directDebitToPay[nextpayment.date()] += float(directdebit['PreviousPaymentAmount']['Amount'])
                 else:
                     directDebitToPay[nextpayment.date()] = float(directdebit['PreviousPaymentAmount']['Amount'])
+    return directDebitToPay
+
+# prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
+def getPredictionForCurrent(a, testDate, accountID):
+    salaryData = getSalaryData(getSingleAccountRows(accountID))
+    print(salaryData)
+    billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
+    salaryDay = datetime.datetime(testDate.year, testDate.month, salaryData[1])
+    # print(billingdate)
+    averagespending = getAverageSpending(testDate, accountID)
+    if testDate.day > billingdate.day:
+        targetdate = billingdate + relativedelta(months=1)
+    else:
+        targetdate = billingdate
+    salary = {}
+    if salaryDay > testDate and salaryDay < targetdate:
+        salary[salaryDay.date()] = salaryData[0]
+    else:
+        salaryDay = salaryDay + relativedelta(months = 1)
+        if salaryDay > testDate and salaryDay < targetdate:
+            salary[salaryDay.date()] = salaryData[0]
+    print(salary)
+    currentbalance = float(a['Balance'][0]['Amount']['Amount'])
+    prediction = {
+        "date": [],
+        "value": []
+    }
+    currentdate = testDate.date()
+    timeInterval = targetdate - testDate
+    directDebitToPay = getDirectDebit(a, testDate, accountID)
     # print(directDebitToPay)
     # print(timeInterval.days)
     daysPredicted = 0
     while daysPredicted < timeInterval.days:
         currentdate += relativedelta(days=1)
+        print(currentdate)
         currentbalance -= averagespending
+        if currentdate in salary:
+            currentbalance += salary[currentdate]
         if currentdate in directDebitToPay:
             currentbalance -= directDebitToPay[currentdate]
         # prediction[time.mktime(currentdate.timetuple()) * 1000] = currentbalance
         prediction["date"].append(time.mktime(currentdate.timetuple()) * 1000)
         prediction["value"].append(currentbalance)
         daysPredicted += 1
+        
     return prediction
 
 

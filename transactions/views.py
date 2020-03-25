@@ -53,6 +53,19 @@ def summary(request):
     return render(request, 'transactions/summary.html')
 
 
+# special page for user's budgeting insights insights
+@login_required
+def caps(request):
+    request.session.set_expiry(600)
+    accountID = getAccount(request)
+    context = makeAggContext(request, accountID)
+    context['spend'] = getAverageMonthlySpend(getRows(request, accountID))
+    context['accountType'] = getAccountType(accountID)
+    caps = getAllCaps(request)
+    context['allCap'] = caps.pop(0)
+    context['totalCap'] = sum(caps)
+    return render(request, 'transactions/caps.html', context)
+
 # noinspection PySimplifyBooleanCheck
 @login_required
 def transactions(request):

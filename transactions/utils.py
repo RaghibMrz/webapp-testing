@@ -473,7 +473,7 @@ def getMonthlyDirectDebit(request, accountID):
                         totalDirectDebit += float(directdebit['PreviousPaymentAmount']['Amount'])
                 total += totalDirectDebit
         return total
-    
+
     data = getData(accountID)
     totalDirectDebit = 0.0
     for directdebit in data['DirectDebit']:
@@ -629,6 +629,21 @@ def getIncome(rows):
             return 0
 
 
+# returns average monthly spend on account
+def getAverageMonthlySpend(rows):
+    monthDict = {}
+    for row in rows:
+        amount = float(row['Amount'])
+        date = row['BookingDateTime']
+        if str(date.month) not in monthDict:
+            monthDict[str(date.month)] = 0
+        if amount < 0:
+            monthDict[str(date.month)] += amount
+    return -round(sum(monthDict.values())/len(monthDict.values()), 2)
+
+
+# calculates minimum monthly spend- this is not average spend but rather the lowest amount of money you usually
+# spend on your account
 def getSpend(rows):
     monthDict = {}
     for row in rows:
@@ -673,7 +688,7 @@ def getAllCaps(request):
                         "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
     capValues = []
     for caps in possibleCapSetOn:
-        capValues.append((request.user.profile.getCap(caps)[0]))
+        capValues.append(float(request.user.profile.getCap(caps)[0]))
     return capValues
 
 

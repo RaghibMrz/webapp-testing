@@ -50,7 +50,6 @@ def home(request):
 def summary(request):
     request.session.set_expiry(600)
     context = getSummaryContext(request)
-    print(context)
     return render(request, 'transactions/summary.html', context)
 
 # special page for user's budgeting insights insights
@@ -58,12 +57,50 @@ def summary(request):
 def caps(request):
     request.session.set_expiry(600)
     accountID = getAccount(request)
-    context = makeAggContext(request, accountID)
+    tempcontext, rows = makeCatContext(request, accountID), getRows(request, accountID)
+    if rows != False:
+        rawDates = request.user.profile.getDateRange().split("-")
+        startDate, endDate = rawDates[0], rawDates[1]
+        rows = getFilteredRows(rows, startDate, endDate)
+        for transaction in rows:
+            tempcontext[getCategory(transaction['MCC'])].append(transaction)
+    totalList, spendIndicatorList, tempcontext =  getCategoricalTotal(tempcontext)
+    possibleCapSetOn = ["getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+                        "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
+    categoricalSpend = {}
+    for i in range (len(possibleCapSetOn)):
+        if spendIndicatorList[i] == 'Spent':
+            categoricalSpend[possibleCapSetOn[i]] = totalList[i]
+        else:
+            categoricalSpend[possibleCapSetOn[i]] = 0
+    context = makeAggContext(request,accountID)
     context['spend'] = getAverageMonthlySpend(getRows(request, accountID))
     context['accountType'] = getAccountType(accountID)
-    caps = getAllCaps(request)
-    context['allCap'] = caps.pop(0)
-    context['totalCap'] = sum(caps)
+    capvalues = getAllCaps(request)
+    capsContext = []
+    capsContext.append({'Category': 'Bills & Payments', 'Spend': categoricalSpend['getValueBP'], 'Cap' : capvalues[1]})
+    capsContext.append({'Category': 'Transport', 'Spend': categoricalSpend['getValueTP'], 'Cap' : capvalues[2]})
+    capsContext.append({'Category': 'Groceries', 'Spend': categoricalSpend['getValueGC'], 'Cap' : capvalues[3]})
+    capsContext.append({'Category': 'Fashion & Cosmetics', 'Spend': categoricalSpend['getValueFC'], 'Cap' : capvalues[4]})
+    capsContext.append({'Category': 'Finances', 'Spend': categoricalSpend['getValueFSC'], 'Cap' : capvalues[5]})
+    capsContext.append({'Category': 'Food', 'Spend': categoricalSpend['getValueFoodC'], 'Cap' : capvalues[6]})
+    capsContext.append({'Category': 'General', 'Spend': categoricalSpend['getValueGeneralC'], 'Cap' : capvalues[7]})
+    capsContext.append({'Category': 'Entertainment', 'Spend': categoricalSpend['getValueEC'], 'Cap' : capvalues[8]})
+    capsContext.append({'Category': 'Lersure & Self-Care', 'Spend': categoricalSpend['getValueLSC'], 'Cap' : capvalues[9]})
+    capsContext.append({'Category': 'Other', 'Spend': categoricalSpend['getValueOC'], 'Cap' : capvalues[10]})
+    for cap in capsContext:
+        if cap['Cap'] != 0:
+            cap['Percentage'] = cap['Spend'] / cap['Cap'] *100
+        else:
+            cap['Percentage'] = 0
+    context['allCap'] = capvalues.pop(0)
+    context['allSpend'] = sum(totalList)
+    context['totalCap'] = sum(capvalues)
+    if context['allCap'] > 0:
+        context['totalPercentage'] = sum(totalList) / context['allCap'] * 100
+    else:
+        context['totalPercentage'] = 0
+    context['capData'] = capsContext
     return render(request, 'transactions/caps.html', context)
 
 # noinspection PySimplifyBooleanCheck

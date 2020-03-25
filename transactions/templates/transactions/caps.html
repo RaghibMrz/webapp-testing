@@ -128,7 +128,7 @@
                   <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Good!<br>Both caps are identical. This figure will be used to notify you if you go over budget</div>
                   {% else %}
                   <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                    Your categori
+                    Your categorical caps seem to supersede the cap you set on all your transactions, consider changing this. If you are not budgeting arbitrarily, these values should be identical.
                   </div>
                   {% endif %}
                 </div>
@@ -143,19 +143,49 @@
     </div>
   </div>
 
-  <!-- Content Row -->
+
   <div class="row">
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
         <div class="card-body">
-          <h4 class="small font-weight-bold">Cap information</h4>
-          <div class="p mb-0 mr-3 text-gray-800">
-            Your categorical caps seem to supersede the cap you set on all your transactions, consider changing this. If you are not budgeting arbitrarily, these values should be identical.
+          <h4 class="small font-weight-bold">Overall : {{allSpend|floatformat:2| intcomma}} spent out of {{allCap|floatformat:2| intcomma}}</h4>
+          <div class="progress mb-2">
+            {% if totalPercentage > 100%}
+            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="{{allSpend}} " aria-valuemin="0" aria-valuemax="{{allCap}}"></div>
+            {% elif totalPercentage > 66%}
+            <div class="progress-bar bg-warning" role="progressbar" style="width:{{totalPercentage}}%" aria-valuenow="{{allSpend}} " aria-valuemin="0" aria-valuemax="{{allCap}}"></div>
+            {% else %}
+            <div class="progress-bar bg-success" role="progressbar" style="width: {{totalPercentage}}%" aria-valuenow="{{allSpend}} " aria-valuemin="0" aria-valuemax="{{allCap}}"></div>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Content Row -->
+  {% for cap in capData %}
+  {% if cap.Cap > 0 %}
+  <div class="row">
+    <div class="col-xl-12 col-lg-11">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <h4 class="small font-weight-bold">{{cap.Category}} : {{cap.Spend|floatformat:2| intcomma}} spent out of {{cap.Cap|floatformat:2| intcomma}}</h4>
+          <div class="progress mb-2">
+            {% if cap.Percentage > 100%}
+            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="{{cap.Spend}} " aria-valuemin="0" aria-valuemax="{{cap.Cap}}"></div>
+            {% elif cap.Percentage > 66%}
+            <div class="progress-bar bg-warning" role="progressbar" style="width:{{cap.Percentage}}%" aria-valuenow="{{cap.Spend}} " aria-valuemin="0" aria-valuemax="{{cap.Cap}}"></div>
+            {% else %}
+            <div class="progress-bar bg-success" role="progressbar" style="width: {{cap.Percentage}}%" aria-valuenow="{{cap.Spend}} " aria-valuemin="0" aria-valuemax="{{cap.Cap}}"></div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endfor %}
 
     <!-- Pie Chart -->
   <div class="row">

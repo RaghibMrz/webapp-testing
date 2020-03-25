@@ -152,14 +152,6 @@ def getCurrAccountBalance(request, accountID):
     return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
 
 
-# def getSummaryContext(request, accountID):
-#     accountIDs = getStrAccountIDs(request.user.profile)
-#     accountData = []
-#     for accountID in accountIDs:
-#         data = getData(accountID)
-#
-#         newEntry = {}
-
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
 # a couple other lists for supplementary data such as sums, these are then filed into
@@ -729,6 +721,8 @@ def getMonthlySpendDict(rows, indicator):
 # calculates the minimum income per month
 def getAverageMonthlyIncome(rows):
     monthDict = getMonthlySpendDict(rows, "income")
+    if len(monthDict.values()) == 0:
+        return 0
     return round(sum(monthDict.values()) / len(monthDict.values()), 2)
 
 
@@ -744,6 +738,8 @@ def getMinIncome(rows):
 # returns average monthly spend on account
 def getAverageMonthlySpend(rows):
     monthDict = getMonthlySpendDict(rows, "spend")
+    if len(monthDict.values()) == 0:
+        return 0
     return -round(sum(monthDict.values()) / len(monthDict.values()), 2)
 
 
@@ -772,7 +768,7 @@ def calcExcess(rows):
 # check if post request has been sent to update a certain cap
 def updateCaps(request):
     possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
-                        "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
+                        "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
 
     if request.method == "POST" and any(cap in request.POST for cap in possibleCapSetOn):
         chosenCapName = str(list(dict(request.POST).keys())[1])
@@ -783,10 +779,11 @@ def updateCaps(request):
 # gets all the numerical values of the caps set on each category
 def getAllCaps(request):
     possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
-                        "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
+                        "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
     capValues = []
     for caps in possibleCapSetOn:
         capValues.append(float(request.user.profile.getCap(caps)[0]))
+    print(capValues)
     return capValues
 
 

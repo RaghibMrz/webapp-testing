@@ -116,6 +116,101 @@
                 ]
             }
         ],
+        "Balance": [
+            {
+                "AccountId": "22289",
+                "Amount": {
+                    "Amount": "1453.04",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Type": "InterimAvailable",
+                "DateTime": "2020-01-27T23:59:59+00:00",
+                "CreditLine": [
+                    {
+                        "Included": true,
+                        "Amount": {
+                            "Amount": "1000.00",
+                            "Currency": "GBP"
+                        },
+                        "Type": "Pre-Agreed"
+                    }
+                ]
+            },
+            {
+                "AccountId": "76523",
+                "Amount": {
+                    "Amount": "900.70",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Type": "InterimAvailable",
+                "DateTime": "2020-01-24T23:59:59+00:00",
+                "CreditLine": [
+                    {
+                        "Included": true,
+                        "Amount": {
+                            "Amount": "1000.00",
+                            "Currency": "GBP"
+                        },
+                        "Type": "Pre-Agreed"
+                    }
+                ]
+            },
+            {
+                "AccountId": "10567",
+                "Amount": {
+                    "Amount": "506.81",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Type": "InterimAvailable",
+                "DateTime": "2020-01-27T23:59:59+00:00",
+                "CreditLine": [
+                    {
+                        "Included": true,
+                        "Amount": {
+                            "Amount": "1000.00",
+                            "Currency": "GBP"
+                        },
+                        "Type": "Pre-Agreed"
+                    }
+                ]
+            },
+            {
+                "AccountId": "97513",
+                "Amount": {
+                  "Amount": "326.13",
+                  "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Type": "InterimAvailable",
+                "DateTime": "2020-01-31T23:59:59+00:00",
+                "LastPaidTransaction": "698" 
+            },
+            {
+                "AccountId": "92548",
+                "Amount": {
+                  "Amount": "157.63",
+                  "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Type": "InterimAvailable",
+                "DateTime": "2020-01-31T23:59:59+00:00",
+                "LastPaidTransaction": "471" 
+            },
+            {
+                "AccountId": "90613",
+                "Amount": {
+                  "Amount": "0",
+                  "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Debit",
+                "Type": "InterimAvailable",
+                "DateTime": "2020-01-31T23:59:59+00:00",
+                "LastPaidTransaction": "906" 
+            }
+        ],
         "Transaction": [
             {
                 "AccountId": "22289",
@@ -5803,7 +5898,7 @@
                 "Status": "Booked",
                 "BookingDateTime": "2020-01-09T6:00:00+00:00",
                 "ValueDateTime": "2020-01-09T6:00:00+00:00",
-                "TransactionInformation": "Credit Card VISA",
+                "TransactionInformation": "Credit Card MasterCard",
                 "BankTransactionCode": {
                     "Code": "IssuedCreditTransfer",
                     "SubCode": "DomesticCreditTransfer"
@@ -5821,7 +5916,7 @@
                     "Type": "InterimBooked"
                 },
                 "MerchantDetails": {
-                    "MerchantName": "Credit Card VISA",
+                    "MerchantName": "Credit Card MasterCard",
                     "MerchantCategoryCode": "7276"
                 }
             },
@@ -9813,7 +9908,7 @@
             {
                 "AccountId": "76523",
                 "ProductType": "PersonalCurrentAccount",
-                "ProductName": "Nationwide FlexDirect",
+                "ProductName": "Barclays Current Account",
                 "PCA": {
                     "CreditInterest": {
                         "TierBandSet": {
@@ -9918,7 +10013,7 @@
             {
                 "AccountId": "10567",
                 "ProductType": "PersonalCurrentAccount",
-                "ProductName": "Nationwide FlexDirect",
+                "ProductName": "HSBC Current Account",
                 "PCA": {
                     "CreditInterest": {
                         "TierBandSet": {
@@ -10024,316 +10119,300 @@
                 "AccountId": "97513",
                 "ProductType": "CommercialCreditCard",
                 "ProductName": "VISA Credit Card",
-                "PCA": {
-                    "CreditInterest": {
-                        "TierBandSet": {
-                            "TierBandMethod": "Tiered",
-                            "CalculationMethod": "Compound",
-                            "Notes": [
-                                "From the 11th June 2017, we will be changing how we pat credit interest on our Bank of Scotland current accounts with Vantage.",
-                                "We are replacing the current tiered rates with a single interest rate of 2% AER(1.98% gross) (variable) on credit balances between \u00c2\u00a31 and \u00c2\u00a35,000. Depending on the balance of your account this may be an increase or decrease to the rate your currently receive."
-                            ],
-                            "TierBand": [
-                                {
-                                    "Identification": "1",
-                                    "TierValueMinimum": "1.00",
-                                    "TierValueMaximum": "999.99",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "1.50",
-                                    "BankInterestRateType": "Gross"
-                                },
-                                {
-                                    "Identification": "2",
-                                    "TierValueMinimum": "1000.00",
-                                    "TierValueMaximum": "2999.99",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "2.00",
-                                    "BankInterestRateType": "Gross"
-                                },
-                                {
-                                    "TierValueMinimum": "3000.00",
-                                    "TierValueMaximum": "5000.00",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "3.00",
-                                    "BankInterestRateType": "Gross"
-                                }
-                            ]
-                        }
-                    },
-                    "Overdraft": {
-                        "OverdraftTierBandSet": [
-                            {
-                                "TierBandMethod": "Whole",
-                                "Identification": "Arranged Overdraft",
-                                "OverdraftFeesCharges": [
+                "CCC": [{
+                    "Name": "Barclaycard Platinum",
+                    "Identification": "Personal Credit Card - Commercial Card",
+                    "Segment": ["General"],
+                    "CCCMarketingState": [{
+                        "Identification": "P1",
+                        "PredecessorID": "",
+                        "MarketingState": "Promotional",
+                        "FirstMarketedDate": "1990-01-01",
+                        "LastMarketedDate": "9999-12-31",
+                        "StateTenureLength": 27,
+                        "StateTenurePeriod": "Month",
+                        "Notes": ["0% interest on Balance Transfers and Purchases"]
+                    }, 
+                    {
+                        "Identification": "R1",
+                        "PredecessorID": "P2",
+                        "MarketingState": "Regular",
+                        "FirstMarketedDate": "1990-01-01",
+                        "LastMarketedDate": "9999-12-31",
+                        "Notes": ["Regular Rates Apply"],
+                        "Repayment": {
+                            "MinBalanceRepaymentRate": "1.0",
+                            "MinBalanceRepaymentAmount": "5.00",
+                            "Notes": ["Minimum Payment:\nThe highest of:\n£5 (or the full outstanding balance if it's less than £5);\n2.25% of your main balance plus any Instalment Plan instalments due for that month;\nAn amount equal to any interest, default fees or account maintenance fees that have been added to your account since your last statement, plus 1% of the rest of your main balance plus any Instalment Plan instalments due for that month."],
+                            "NonRepaymentFeeCharges": [{
+                                "NonRepaymentFeeChargeDetail": [{
+                                        "FeeType": "LatePayment",
+                                        "FeeAmount": "12.00",
+                                        "ApplicationFrequency": "Monthly",
+                                        "CalculationFrequency": "CalculationFrequency"
+                                    },
                                     {
-                                        "OverdraftFeeChargeCap": [
-                                            {
-                                                "CappingPeriod": "Month",
-                                                "FeeType": [
-                                                    "UnauthorisedBorrowing"
-                                                ],
-                                                "FeeMinMaxType": "Maximum",
-                                                "FeeCapAmount": "60.00"
-                                            },
-                                            {
-                                                "CappingPeriod": "Month",
-                                                "FeeType": [
-                                                    "BorrowingItem"
-                                                ],
-                                                "FeeMinMaxType": "Maximum",
-                                                "FeeCapAmount": "35.00"
-                                            }
-                                        ],
-                                        "OverdraftFeeChargeDetail": [
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "ArrangedOverdraft",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "0.50"
-                                            },
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "UnauthorisedBorrowing",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "5.00"
-                                            },
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "BorrowingItem",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "5.00"
-                                            }
-                                        ]
+                                        "FeeType": "ReturnPayment",
+                                        "FeeAmount": "0.00",
+                                        "ApplicationFrequency": "Monthly",
+                                        "CalculationFrequency": "CalculationFrequency"
+                                    },
+                                    {
+                                        "FeeType": "OverCreditLimit",
+                                        "FeeAmount": "12.00",
+                                        "ApplicationFrequency": "Monthly",
+                                        "CalculationFrequency": "CalculationFrequency"
                                     }
-                                ],
-                                "BufferAmount": "10.00",
-                                "Notes": [
-                                    "The daily usage fee-free overdraft period is for 12 months starting on the date you open a Current Account with us."
                                 ]
+                            }],
+                            "RepaymentAllocation": {
+                                "Notes": ["N/A"]
                             }
-                        ]
-                    }
-                }
+                        },
+                        "OtherFeesCharges": {
+                            "FeeChargeDetail": [{
+                                "FeeCategory": "Purchase",
+                                "FeeType": "Purchase",
+                                "FeeRate": "1.67",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "CashAdvance",
+                                "FeeType": "CashAdvance",
+                                "FeeRate": "2.07",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "BalanceTransfers",
+                                "FeeType": "BalanceTransfers",
+                                "FeeRate": "1.67",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "FX",
+                                "FeeType": "ForeignCash",
+                                "FeeRate": "2.99",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }],
+                            "FeeChargeCap": [{
+                                "FeeType": "Handling",
+                                "MinMaxType": "Minimum",
+                                "FeeCapAmount": "3.00",
+                                "CappingPeriod": "Month"
+                            }]
+                        },
+                        "CoreProduct": {
+                            "ProductURL": "https://www.barclaycard.co.uk/personal/credit-cards/platinum-purchase-bt",
+                            "ProductDescription": "A flexible way to manage your day-to-day expenses and boost your cash flow.",
+                            "TcsAndCsURL": "https://www.barclaycard.co.uk/content/dam/barclaycard/documents/personal/existing-customers/terms-and-conditions-barclaycard-core-2019.pdf",
+                            "MaxDailyCardWithdrawalLimit": "500.00",
+                            "MinCreditLimit": "500.00",
+                            "MaxPurchaseInterestFreeLengthDays": 56,
+                            "SalesAccessChannels": ["Branch", "Online"],
+                            "ServicingAccessChannels": ["Branch", "Online", "Post", "CallCentre", "MobileBankingApp"],
+                            "CardScheme": ["Visa"],
+                            "ContactlessIndicator": true,
+                            "PeriodicFee": "32.00",
+                            "PeriodicFeePeriod": "Year",
+                            "APR": "21.9",
+                            "Notes": ["After the initial 12 month period, the annual charge for each Commercial Card is £32."]
+                        }
+                    }]
+                }]
             },
             {
                 "AccountId": "92548",
                 "ProductType": "CommercialCreditCard",
                 "ProductName": "MasterCard Credit Card",
-                "PCA": {
-                    "CreditInterest": {
-                        "TierBandSet": {
-                            "TierBandMethod": "Tiered",
-                            "CalculationMethod": "Compound",
-                            "Notes": [
-                                "From the 11th June 2017, we will be changing how we pat credit interest on our Bank of Scotland current accounts with Vantage.",
-                                "We are replacing the current tiered rates with a single interest rate of 2% AER(1.98% gross) (variable) on credit balances between \u00c2\u00a31 and \u00c2\u00a35,000. Depending on the balance of your account this may be an increase or decrease to the rate your currently receive."
-                            ],
-                            "TierBand": [
-                                {
-                                    "Identification": "1",
-                                    "TierValueMinimum": "1.00",
-                                    "TierValueMaximum": "999.99",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "1.50",
-                                    "BankInterestRateType": "Gross"
-                                },
-                                {
-                                    "Identification": "2",
-                                    "TierValueMinimum": "1000.00",
-                                    "TierValueMaximum": "2999.99",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "2.00",
-                                    "BankInterestRateType": "Gross"
-                                },
-                                {
-                                    "TierValueMinimum": "3000.00",
-                                    "TierValueMaximum": "5000.00",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "3.00",
-                                    "BankInterestRateType": "Gross"
-                                }
-                            ]
-                        }
-                    },
-                    "Overdraft": {
-                        "OverdraftTierBandSet": [
-                            {
-                                "TierBandMethod": "Whole",
-                                "Identification": "Arranged Overdraft",
-                                "OverdraftFeesCharges": [
+                "CCC": [{
+                    "Name": "HSBC Business Credit Card",
+                    "Identification": "Business Credit Card - Commercial Card",
+                    "Segment": ["General"],
+                    "CCCMarketingState": [{
+                        "Identification": "P1",
+                        "PredecessorID": "",
+                        "MarketingState": "Promotional",
+                        "FirstMarketedDate": "1990-01-01",
+                        "LastMarketedDate": "9999-12-31",
+                        "StateTenureLength": 6,
+                        "StateTenurePeriod": "Month",
+                        "Notes": ["0% on Balance Transfers and Purchases"]
+                    }, {
+                        "Identification": "R1",
+                        "PredecessorID": "P2",
+                        "MarketingState": "Regular",
+                        "FirstMarketedDate": "1990-01-01",
+                        "LastMarketedDate": "9999-12-31",
+                        "Notes": ["Regular Rates Apply"],
+                        "Repayment": {
+                            "MinBalanceRepaymentRate": "1.5",
+                            "MinBalanceRepaymentAmount": "5.00",
+                            "Notes": ["Minimum Payment:\nThe sum of:\nthe interest for the period from the last statement;\nany fees and charges;\n1.5% of the full amount you owe us as shown on your monthly statement rounded to the nearest pound above minimum £5 or your statement balance if it is lower."],
+                            "NonRepaymentFeeCharges": [{
+                                "NonRepaymentFeeChargeDetail": [{
+                                        "FeeType": "LatePayment",
+                                        "FeeAmount": "12.00",
+                                        "ApplicationFrequency": "Monthly",
+                                        "CalculationFrequency": "CalculationFrequency"
+                                    },
                                     {
-                                        "OverdraftFeeChargeCap": [
-                                            {
-                                                "CappingPeriod": "Month",
-                                                "FeeType": [
-                                                    "UnauthorisedBorrowing"
-                                                ],
-                                                "FeeMinMaxType": "Maximum",
-                                                "FeeCapAmount": "60.00"
-                                            },
-                                            {
-                                                "CappingPeriod": "Month",
-                                                "FeeType": [
-                                                    "BorrowingItem"
-                                                ],
-                                                "FeeMinMaxType": "Maximum",
-                                                "FeeCapAmount": "35.00"
-                                            }
-                                        ],
-                                        "OverdraftFeeChargeDetail": [
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "ArrangedOverdraft",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "0.50"
-                                            },
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "UnauthorisedBorrowing",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "5.00"
-                                            },
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "BorrowingItem",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "5.00"
-                                            }
-                                        ]
+                                        "FeeType": "ReturnPayment",
+                                        "FeeAmount": "5.00",
+                                        "ApplicationFrequency": "Monthly",
+                                        "CalculationFrequency": "CalculationFrequency"
                                     }
-                                ],
-                                "BufferAmount": "10.00",
-                                "Notes": [
-                                    "The daily usage fee-free overdraft period is for 12 months starting on the date you open a Current Account with us."
                                 ]
+                            }],
+                            "RepaymentAllocation": {
+                                "Notes": ["N/A"]
                             }
-                        ]
-                    }
-                }
+                        },
+                        "OtherFeesCharges": {
+                            "FeeChargeDetail": [{
+                                "FeeCategory": "Purchase",
+                                "FeeType": "Purchase",
+                                "FeeRate": "15.90",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "CashAdvance",
+                                "FeeType": "CashAdvance",
+                                "FeeRate": "15.90",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "Servicing",
+                                "FeeType": "Handling",
+                                "FeeRate": "1.00",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "FX",
+                                "FeeType": "ForeignCash",
+                                "FeeRate": "2.99",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }],
+                            "FeeChargeCap": [{
+                                "FeeType": "Handling",
+                                "MinMaxType": "Minimum",
+                                "FeeCapAmount": "3.00",
+                                "CappingPeriod": "Month"
+                            }]
+                        },
+                        "CoreProduct": {
+                            "ProductURL": "http://www.business.hsbc.uk/en-gb/finance-and-borrowing/business-card/business-credit-card?DCSext.nav=foot-mat",
+                            "ProductDescription": "A flexible way to manage your day-to-day expenses and boost your cash flow.",
+                            "TcsAndCsURL": "http://www.business.hsbc.uk/~/media/library/business-uk/pdfs/commercial-card-agreement-terms.pdf?la=en-GB",
+                            "MaxDailyCardWithdrawalLimit": "500.00",
+                            "MinCreditLimit": "500.00",
+                            "MaxPurchaseInterestFreeLengthDays": 56,
+                            "SalesAccessChannels": ["Branch", "Online"],
+                            "ServicingAccessChannels": ["Branch", "Online", "Post", "CallCentre", "MobileBankingApp"],
+                            "CardScheme": ["MasterCard"],
+                            "ContactlessIndicator": true,
+                            "PeriodicFee": "32.00",
+                            "PeriodicFeePeriod": "Year",
+                            "APR": "22.00",
+                            "Notes": ["After the initial 12 month period, the annual charge for each Commercial Card is £32."]
+                        }
+                    }]
+                }]
             },
             {
                 "AccountId": "90613",
                 "ProductType": "CommercialCreditCard",
-                "ProductName": "AmericanExpress Credit Card",
-                "PCA": {
-                    "CreditInterest": {
-                        "TierBandSet": {
-                            "TierBandMethod": "Tiered",
-                            "CalculationMethod": "Compound",
-                            "Notes": [
-                                "From the 11th June 2017, we will be changing how we pat credit interest on our Bank of Scotland current accounts with Vantage.",
-                                "We are replacing the current tiered rates with a single interest rate of 2% AER(1.98% gross) (variable) on credit balances between \u00c2\u00a31 and \u00c2\u00a35,000. Depending on the balance of your account this may be an increase or decrease to the rate your currently receive."
-                            ],
-                            "TierBand": [
-                                {
-                                    "Identification": "1",
-                                    "TierValueMinimum": "1.00",
-                                    "TierValueMaximum": "999.99",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "1.50",
-                                    "BankInterestRateType": "Gross"
-                                },
-                                {
-                                    "Identification": "2",
-                                    "TierValueMinimum": "1000.00",
-                                    "TierValueMaximum": "2999.99",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "2.00",
-                                    "BankInterestRateType": "Gross"
-                                },
-                                {
-                                    "TierValueMinimum": "3000.00",
-                                    "TierValueMaximum": "5000.00",
-                                    "CalculationFrequency": "Monthly",
-                                    "ApplicationFrequency": "Monthly",
-                                    "DepositInterestAppliedCoverage": "Tiered",
-                                    "FixedVariableInterestRateType": "Variable",
-                                    "AER": "3.00",
-                                    "BankInterestRateType": "Gross"
-                                }
-                            ]
-                        }
-                    },
-                    "Overdraft": {
-                        "OverdraftTierBandSet": [
-                            {
-                                "TierBandMethod": "Whole",
-                                "Identification": "Arranged Overdraft",
-                                "OverdraftFeesCharges": [
+                "ProductName": "American Express Credit Card",
+                "CCC": [{
+                    "Name": "British Airways American Express Credit Card",
+                    "Identification": "Personal Credit Card - Commercial Card",
+                    "Segment": ["General"],
+                    "CCCMarketingState": [{
+                        "Identification": "P1",
+                        "PredecessorID": "",
+                        "MarketingState": "Promotional",
+                        "FirstMarketedDate": "1990-01-01",
+                        "LastMarketedDate": "9999-12-31",
+                        "StateTenureLength": 12,
+                        "StateTenurePeriod": "Month",
+                        "Notes": ["earn 5,000 bonus Avios when you spend £1,000 in your first three months of Cardmembership. No annual fee"]
+                    }, 
+                    {
+                        "Identification": "R1",
+                        "PredecessorID": "P2",
+                        "MarketingState": "Regular",
+                        "FirstMarketedDate": "1990-01-01",
+                        "LastMarketedDate": "9999-12-31",
+                        "Notes": ["Regular Rates Apply"],
+                        "Repayment": {
+                            "MinBalanceRepaymentRate": "1.0",
+                            "MinBalanceRepaymentAmount": "5.00",
+                            "Notes": ["Minimum Payment:\nthe higher of the following amounts:\n£25 (or the total amount you owe if less); or\nany interest, default fees, repayment protection insurance and 1/12th of any annual cardmembership fee or the full monthly fee (if applicable to the product you hold) plus 2% of the amount you owe on the account.\n"],
+                            "NonRepaymentFeeCharges": [{
+                                "NonRepaymentFeeChargeDetail": [{
+                                        "FeeType": "LatePayment",
+                                        "FeeAmount": "12.00",
+                                        "ApplicationFrequency": "Monthly",
+                                        "CalculationFrequency": "CalculationFrequency"
+                                    },
                                     {
-                                        "OverdraftFeeChargeCap": [
-                                            {
-                                                "CappingPeriod": "Month",
-                                                "FeeType": [
-                                                    "UnauthorisedBorrowing"
-                                                ],
-                                                "FeeMinMaxType": "Maximum",
-                                                "FeeCapAmount": "60.00"
-                                            },
-                                            {
-                                                "CappingPeriod": "Month",
-                                                "FeeType": [
-                                                    "BorrowingItem"
-                                                ],
-                                                "FeeMinMaxType": "Maximum",
-                                                "FeeCapAmount": "35.00"
-                                            }
-                                        ],
-                                        "OverdraftFeeChargeDetail": [
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "ArrangedOverdraft",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "0.50"
-                                            },
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "UnauthorisedBorrowing",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "5.00"
-                                            },
-                                            {
-                                                "ApplicationFrequency": "Monthly",
-                                                "FeeType": "BorrowingItem",
-                                                "CalculationFrequency": "Daily",
-                                                "FeeAmount": "5.00"
-                                            }
-                                        ]
+                                        "FeeType": "ReturnPayment",
+                                        "FeeAmount": "0.00",
+                                        "ApplicationFrequency": "Monthly",
+                                        "CalculationFrequency": "CalculationFrequency"
                                     }
-                                ],
-                                "BufferAmount": "10.00",
-                                "Notes": [
-                                    "The daily usage fee-free overdraft period is for 12 months starting on the date you open a Current Account with us."
                                 ]
+                            }],
+                            "RepaymentAllocation": {
+                                "Notes": ["N/A"]
                             }
-                        ]
-                    }
-                }
+                        },
+                        "OtherFeesCharges": {
+                            "FeeChargeDetail": [{
+                                "FeeCategory": "Purchase",
+                                "FeeType": "Purchase",
+                                "FeeRate": "1.74",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "CashAdvance",
+                                "FeeType": "CashAdvance",
+                                "FeeRate": "2.08",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "BalanceTransfers",
+                                "FeeType": "BalanceTransfers",
+                                "FeeRate": "1.74",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }, {
+                                "FeeCategory": "FX",
+                                "FeeType": "ForeignCash",
+                                "FeeRate": "2.99",
+                                "ApplicationFrequency": "Monthly",
+                                "CalculationFrequency": "Daily"
+                            }]
+                        },
+                        "CoreProduct": {
+                            "ProductURL": "https://www.americanexpress.com/uk/credit-cards/ba-credit-card/?linknav=UK-Acq-CreditCards-BAAmexCreditCard-LearnMore",
+                            "ProductDescription": "A flexible way to manage your day-to-day expenses and boost your cash flow.",
+                            "TcsAndCsURL": "https://icm.aexp-static.com/Internet/internationalcardshop/en_gb/pdf/ba-credit-card/BACreditTCs.pdf",
+                            "MaxDailyCardWithdrawalLimit": "500.00",
+                            "MinCreditLimit": "700",
+                            "MaxPurchaseInterestFreeLengthDays": 56,
+                            "SalesAccessChannels": ["Branch", "Online"],
+                            "ServicingAccessChannels": ["Branch", "Online", "Post", "CallCentre", "MobileBankingApp"],
+                            "CardScheme": ["AmericanExpress"],
+                            "ContactlessIndicator": true,
+                            "PeriodicFee": "32.00",
+                            "PeriodicFeePeriod": "Year",
+                            "APR": "22.9",
+                            "Notes": ["After the initial 12 month period, the annual charge for each Commercial Card is £32."]
+                        }
+                    }]
+                }]
             }
         ]
     },

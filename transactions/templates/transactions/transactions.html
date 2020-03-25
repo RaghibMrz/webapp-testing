@@ -3,29 +3,65 @@
 {% load static %}
 {% load humanize %}
 <!-- Begin Page Content -->
+{% if noRows %}
+<div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+    {% if accountID == "None" or accountID == "AllCur" or accountID == "AllCC" %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">No Account found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Please go to your profile and add one</h4>
+    {% else %}
+    <h4 class="h4 mb-0 text-gray-800  mr-3">AccountID "{{accountID}}" not found</h4>
+    <h4 class="h5 mb-0 text-black-800  mr-3">Delete this ID and try again</h4>
+    {% endif %}
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <form action="{% url 'home' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="submit">
+          <!--working with actual accounts-->
+          <option value="none" selected disabled hidden>Switch accounts</option>
+          {% for account in accountIDs %}
+            <option value="{{account}}">{{ account }}</option>
+          {% endfor %}
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
+        </select>
+        <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+      </form>
+    </div>
+</div>
+{% else %}
 <div class="container-fluid">
   <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
-    <h1 class="h3 mb-0 text-gray-800  mr-3">All Transactions</h1>
-    <h4 class="h6 mb-0 text-gray-800  mr-3">(Account: {{ selectedAccount }})</h4>
-    <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-tachometer-alt text-white-50"></i> See Dashboard</a>
-    <a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    <h3 class="h6 mb-0 text-gray-800 ml-2 mr-2">Select Account:</h3>
-    <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
-      <select class="custom-select w-auto" name="submit">
-        <!--working with actual accounts-->
-        <option value="All">All Accounts</option>
-        {% for account in accountIDs %}
-          <option value="{{account}}">Account: {{ account }}</option>
-        {% endfor %}
-      </select>
-      <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
-    </form>
-  </div>
+    <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
+      {% if selectedAccount == "AllCurr" %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">All Current Accounts</h4>
+      {% elif selectedAccount == "AllCC" %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">All Credit Accounts</h4>
+      {% else %}
+      <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
+      <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
+      {% endif %}
+      <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 5px"></i>Sort by Category</a>
+      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
+      
+      <form action="{% url 'transactions' %}" method="POST">
+        {% csrf_token %}
+        <select class="custom-select w-auto" name="submit">
+          <!--working with actual accounts-->
+          <option value="none" selected disabled hidden>Switch accounts</option>
+          {% for account in accountIDs %}
+            <option value="{{account}}">{{ account }}</option>
+          {% endfor %}
+          <option value="AllCurr">Show all current accounts</option>
+          <option value="AllCC">Show all credit accounts</option>
+        </select>
+        <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
+      </form>
+    </div>
+  
 
   <!-- Content Row -->
   <div class="row">
-
     <!-- Earnings (Monthly) Card Example -->
     <!-- Balance Card -->
     <div class="col-xl-3 col-md-6 mb-4">
@@ -33,8 +69,12 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Balance</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£340,002</div>
+              {% if accountType == "Credit-Card" %}
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Outstanding balance</div>
+              {% else %}
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Account Balance</div>
+              {% endif %}
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ balance }}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -50,8 +90,13 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
+              {% if accountType == "Credit-Card" %}
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Minimum Payment</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{minPayment|floatformat:2| intcomma}}</div>
+              {% else %}
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Predicted Monthly Income</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyIncome|floatformat:2| intcomma}}</div>
+              {% endif %}
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -131,7 +176,7 @@
             <h6 class="m-0 font-weight-bold text-secondary">Choose date range:</h6>
           </div>
           <div>
-            <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
+            <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
               <input class="custom-select" type="text" name="datetimes"/>
               <script>
               $(function() {
@@ -151,7 +196,7 @@
           </div>
           <div>
             <h6 class="m-0 font-weight-bold text-secondary">{{ dateIndicator }}</h6>
-            <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST">{% csrf_token %}
+            <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
               <input type="submit" name="submit" value="Clear" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
             </form>
           </div>
@@ -180,33 +225,85 @@
                   {% endfor %}
                 </tbody>
                 </table>
+                <br>
             </div>
-            <div class="d-sm-flex align-items-center justify-content-sm-start mb-4">
-              <form action="{% url 'transactions' 'Page 1' 'Page 2' %}" method="POST" style="margin-right: 10%">
-                {% csrf_token %}
-                <select class="custom-select w-auto" name="submit">
-                  <!--working with actual accounts-->
-                  {% for i in transPerPageList %}
-                    <option value="{{ i }}">{{ i }} elements per page</option>
-                  {% endfor %}
-                  <option value="AllTransactions">Show all</option>
-                </select>
-                <input type="submit" value="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
-              </form>
-              
-              {% for pageElem in elements %}
-                {% if pageElem == page %}
-                  <h5 style="margin: 1%">{{ pageElem }}</h5>
-                {% else %}
-                  <a href="{% url 'transactions' pageElem page %}" style="margin: 1%">{{ pageElem }}</a>
-                {% endif %}
-              {% endfor %}
-            </div>
+          <!-- Old method of pagination -->
+            <!--<div class="d-sm-flex align-items-center justify-content-sm-start mb-4">-->
+              <!--<form action="{% url 'transactions' %}" method="POST" style="margin-right: 10%"> 2 args: 'Page 1' 'Page 2' -->
+                <!--{% csrf_token %}-->
+                <!--<select class="custom-select w-auto" name="submit">-->
+                  <!--&lt;!&ndash;working with actual accounts&ndash;&gt;-->
+                  <!--{% for i in transPerPageList %}-->
+                    <!--<option value="{{ i }}">{{ i }} elements per page</option>-->
+                  <!--{% endfor %}-->
+                  <!--<option value="AllTransactions">Show all</option>-->
+                <!--</select>-->
+                <!--<input type="submit" value="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">-->
+              <!--</form>-->
+              <!---->
+              <!--{% for pageElem in elements %}-->
+                <!--{% if pageElem == page %}-->
+                  <!--<h5 style="margin: 1%">{{ pageElem }}</h5>-->
+                <!--{% else %}-->
+                  <!--<a href="{% url 'transactions' %}" style="margin: 1%">{{ pageElem }}</a> 2 args 'pageElem' 'page' -->
+                <!--{% endif %}-->
+              <!--{% endfor %}-->
+            <!--</div>-->
             <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
               <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total |floatformat:2| intcomma}}</h6>
-              <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" id="capPrompt"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+              <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#capPrompt">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+              
+              <!-- Modal -->
+                <div class="modal fade" id="capPrompt" tabindex="-1" role="dialog" aria-labelledby="capPromptTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="capPromptTitle">Set Cap on all expenditure</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueAll" value="{{ setCap }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          {% if accountType == "Current Account" %}
+                          <div class="row">
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
+                            </div>
+                          </div>
+                          {% else %}
+                          {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              
               <script>src="jquery.min.js"</script>
             </div>
+          <script>
+            $(document).ready(function() {
+                  $('#datatable').DataTable({
+                    "iDisplayLength": 10,
+                    "ordering": false
+                  });
+                });
+              </script>
         </div>
       </div>
     </div>
@@ -556,91 +653,80 @@
 
   <!-- Content Row -->
   <div class="row">
-
     <!-- Content Column -->
     <!-- Area Chart -->
     <div class="col-xl-12 col-lg-11">
-        <div class="card shadow mb-4">
-          <!-- Card Header - Dropdown -->
-          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Spending Pattern and Predictions</h6>
-            <!-- <div class="dropdown no-arrow">
-              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                <div class="dropdown-header">Dropdown Header:</div>
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div> -->
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          {% if prediction %}
+          <h6 class="m-0 font-weight-bold text-primary">Spending Pattern and Predictions</h6>
+          <h6 class="m-0 text-secondary" style="float:left"> - For Account {{ selectedAccount }}</h6>
           </div>
-          <!-- Card Body -->
-          <div class="card-body">
-          <div class="line mt-4 pb-2">
-            <!-- <img src="{% static 'transactions/img/line.jpg' %}" style="max-width:100%;">-->
-
-
-            <canvas id="lineChart"></canvas>
-            <script>
-              // var endpoint = '/home/api/chart/data/'
-              // $.ajax({
-              //   method: "GET",
-              //   url: endpoint,
-              //   success: function(data){
-                  
-              //   },
-              //   error: function(error_data){
-
-              //   },
-              // })
-
-              var ctxLine = document.getElementById("lineChart")
-              var myLineChart = new Chart(ctxLine,{
-                type: 'line',
-                data: {
-                  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                  datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                      'rgba(153, 102, 255, 0.2)',
-                      'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                  }]
-                },
-                // options: {
-                //   scales: {
-                //     yAxes: [{
-                //       ticks: {
-                //         beginAtZero: true  
-                //       }
-                //     }]
-                //   }
-                // }
-              });
-            </script>
-
-
+            <!-- Card Body -->
+            <div class="card-body" style="position: relative; height: 50vh;">
+              <!-- <img src="{% static 'transactions/img/line.jpg' %}" style="max-width:100%;"> -->
+              
+              <canvas id='lineChart'></canvas>
+              <script>
+                var timeFormat = "MMM Do YY";
+    
+                var predictionDates = "{{ prediction.date }}".slice(1,-1).replace(/\s/g, '').split(',');
+                for (i in predictionDates) {
+                  predictionDates[i] = new Date(parseInt(predictionDates[i]));
+                };
+    
+                var predictionValues = "{{ prediction.value }}".slice(1,-1).replace(/\s/g, '').split(',');
+                for (i in predictionValues) {
+                  predictionValues[i] = parseInt(predictionValues[i])
+                };
+    
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: predictionDates,
+                    datasets: [{
+                      label: "Predicted Amount Spent",
+                      data: predictionValues,
+                      backgroundColor: 'rgba(231, 74, 59, 0.5)',
+                      borderColor: 'rgba(231, 74, 59, 1)',
+                      fill: false
+                    }],
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    }
+                  }
+                });
+              </script>
+            </div>
+          {% else %}
+            <h6 class="m-0 font-weight-bold text-secondary">Spending Pattern and Predictions- Not available for <strong>all</strong> accounts,
+              please select one from the drop down menu in the top right</h6>
           </div>
-        </div>
-        </div>
+          {% endif %}
       </div>
+    </div>
   </div>
 </div>
+{% endif %}
 {% endblock ctt %} 

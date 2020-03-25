@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
+from transactions.utils import isCreditAccount
 
 
 class Profile(models.Model):
@@ -48,21 +49,39 @@ class Profile(models.Model):
     def getAccountID(self):
         return self.accountID
 
-    def getAccount(self):
+    def getAccountIDList(self):
         return Account.objects.filter(user__username=self.user.username).values_list('accountid', flat=True)
 
     def addToAccountList(self, accountID):
-        if accountID not in self.getAccount():
+        if accountID not in self.getAccountIDList():
             Account.objects.create(accountid=str(accountID), user=self.user)
 
     def clearAccountList(self):
-        for accountid in self.getAccount():
+        for accountid in self.getAccountIDList():
             Account.objects.filter(accountid=str(accountid), user=self.user).delete()
         self.gotAccount = "0"
         self.accountID = "Null"
 
+    def clearCurrAccounts(self):
+        for accountid in self.getAccountIDList():
+            if not isCreditAccount(accountid):
+                Account.objects.filter(accountid=str(accountid), user=self.user).delete()
+
+        if len(self.getAccountIDList()) == 0:
+            self.gotAccount = "0"
+            self.accountID = "Null"
+
+    def clearCCAccounts(self):
+        for accountid in self.getAccountIDList():
+            if isCreditAccount(accountid):
+                Account.objects.filter(accountid=str(accountid), user=self.user).delete()
+
+        if len(self.getAccountIDList()) == 0:
+            self.gotAccount = "0"
+            self.accountID = "Null"
+
     def deleteAccount(self, accountID):
-        if accountID in self.getAccount():
+        if accountID in self.getAccountIDList():
             Account.objects.filter(accountid=str(accountID), user=self.user).delete()
         if accountID == self.accountID:
             self.accountID = "Null"

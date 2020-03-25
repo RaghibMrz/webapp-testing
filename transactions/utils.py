@@ -196,8 +196,10 @@ def updateContext(context, rows, request, accountID, home):
     if getAccountType(accountID) == "Credit-Card":
         context['minPayment'] = getMinPayment(request.user.profile, accountID)
         context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+
     if getAccountType(accountID) == "Current Account":
         # whatever u need for current accounts only
+        context['dd'] = getDirectDebits(accountID)
         context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
 
     if rows != False:
@@ -448,6 +450,11 @@ def getSalaryData(rows):
 
     averageDay = totalOfDays // len(salaryDates)
     return [modalValue, averageDay]
+
+
+# function which works out average monthly direct debit costs
+def getDirectDebits(accountID):
+    return "1234.56"
 
 
 # prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values

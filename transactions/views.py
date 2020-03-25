@@ -48,6 +48,13 @@ def home(request):
 
     return render(request, 'transactions/home.html', updateContext(context, rows, request, accountID, True))
 
+@login_required
+def summary(request):
+    request.session.set_expiry(600)
+
+    accountID = getAccount(request)
+    return render(request, 'transactions/summary.html')
+
 
 @login_required
 def transactions(request):

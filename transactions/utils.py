@@ -93,9 +93,9 @@ def sortedRows(rows):
     sortedRows.reverse()
     return sortedRows
 
-#function that returns all necessary info on summary page
+#function that returns all necessary info on summary page 
 def getSummaryContext(request):
-    accountIDs = getAccountIDsFromModel(request.user.profile)
+    accountIDs = getStrAccountIDs(request.user.profile)
     accountData = []
     totalCurrentBalance = 0
     totalCreditBalance = 0
@@ -106,7 +106,7 @@ def getSummaryContext(request):
         newEntry['accountID'] = accountID
         newEntry['isCreditAccount'] = isCreditAccount(accountID)
         predict = prediction( datetime.datetime(2020, 2, 10), accountID)
-        newEntry['nextBillingDay'] = predict['nextBillingDay'].date()
+        newEntry['nextBillingDay'] = predict['nextBillingDay']
         if newEntry['isCreditAccount']:
             newEntry['balance'] = predict['balance']
             totalCreditBalance+= predict['balance']

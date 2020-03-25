@@ -7,7 +7,6 @@
       <change beforePath="$PROJECT_DIR$/env/bin/python" beforeDir="false" afterPath="$PROJECT_DIR$/env/bin/python" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/env/bin/python3" beforeDir="false" afterPath="$PROJECT_DIR$/env/bin/python3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/env/lib64" beforeDir="false" afterPath="$PROJECT_DIR$/env/lib64" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transactions/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transactions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/views.py" afterDir="false" />
     </list>
@@ -22,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transactions/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="272">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -34,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/transactions/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="98">
-              <caret line="207" column="8" lean-forward="true" selection-start-line="207" selection-start-column="10" selection-end-line="207" selection-end-column="87" />
+            <state relative-caret-position="527">
+              <caret line="224" column="18" lean-forward="true" selection-start-line="224" selection-start-column="18" selection-end-line="224" selection-end-column="18" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -145,6 +144,7 @@
       <find>BAlanc</find>
       <find>balance</find>
       <find>datatabl</find>
+      <find>str</find>
       <find>print</find>
     </findStrings>
   </component>
@@ -172,8 +172,8 @@
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-15" />
     <option name="y" value="-15" />
-    <option name="width" value="1955" />
-    <option name="height" value="2095" />
+    <option name="width" value="1948" />
+    <option name="height" value="1045" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -258,7 +258,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.07992074" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.07992074" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
@@ -397,8 +397,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/transactions/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        <state relative-caret-position="272">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
@@ -407,8 +407,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/transactions/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="207" column="8" lean-forward="true" selection-start-line="207" selection-start-column="10" selection-end-line="207" selection-end-column="87" />
+        <state relative-caret-position="527">
+          <caret line="224" column="18" lean-forward="true" selection-start-line="224" selection-start-column="18" selection-end-line="224" selection-end-column="18" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

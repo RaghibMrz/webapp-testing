@@ -15,8 +15,6 @@ def home(request):
     request.session.set_expiry(600)
     accountID = getAccount(request)
 
-
-
     if validateID(request, accountID) == True:
         context, rows = makeCatContext(request, accountID), getRows(request, accountID)
 

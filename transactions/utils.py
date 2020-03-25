@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 from django import template
 from requests import auth
 
-from users.models import Account
+# from users.models import Account
 
 register = template.Library()
 
@@ -19,37 +19,41 @@ register = template.Library()
 # default setting displays "All" account transactions aggregated into one,
 # selecting an account from the drop down menu filters to just the selected account
 def getAccount(request):
-    if len(request.user.profile.getAccount()) > 0 and request.user.profile.getGotAccount() == "0":
-        request.user.profile.setAccountID("All")
+    if len(request.user.profile.getAccountIDList()) > 0 and request.user.profile.getGotAccount() == "0":
+        accountList = getAccountIDsFromModel(request.user.profile)
+        if len(accountList) > 0:
+            request.user.profile.setAccountID(accountList[0])
+        else:
+            request.user.profile.setAccountID("None")
     if request.method == 'POST' and 'submit' in request.POST:
-        if request.POST['submit'] in getAccountsFromQuerySet(request.user.profile):
+        if request.POST['submit'] in getAccountsForDropDown(request.user.profile):
             request.user.profile.setAccountID(request.POST.get('submit'))
     return request.user.profile.getAccountID()
 
 
 # checks if entered accountID produces a valid list of transactions, if not user is redirected with a page that displays
 # a user friendly message telling them to check the ID they entered.
-def validateID(request, accountID, page):
-    if not getSingleAccountRows(accountID) and accountID != "All":
+def validateID(request, accountID):
+    if not getRows(request, accountID):
         context = {
-            'rows': [{
-                'TransactionInformation': 'Incorrect UserID linked',
-                'Amount': 'Update accountID',
-                'Currency': 'and try again',
-                'BookingDateTime': 'No Data Found',
-                'accountIDs': getStrAccountIDs(request.user.profile),
-                'selectedAccount': accountID
-            }]}
-        return render(request, 'transactions/' + page + '.html', context)
+            'accountID': accountID,
+            'noRows': True,
+            'accountIDs': getAccountIDsFromModel(request.user.profile)
+        }
+        return request, 'transactions/home.html', context
+    return True
 
 
 # returns rows of userID selected, or aggregate rows if all selected
 def getRows(request, accountID):
     if accountID == "All":
-        rows = getAllRows(getStrAccountIDs(request.user.profile))
-    else:
-        rows = getSingleAccountRows(accountID)
-    return rows
+        return False
+        # rows = getAllRows(getAccountIDsFromModel(request.user.profile))
+    elif accountID == "AllCurr":
+        return getAllRowsCurr(getAccountIDsFromModel(request.user.profile))
+    elif accountID == "AllCC":
+        return getAllRowsCC(getAccountIDsFromModel(request.user.profile))
+    return getSingleAccountRows(accountID)
 
 
 # helper function to get data from database/local file into python dictionaries
@@ -89,20 +93,7 @@ def sortedRows(rows):
     sortedRows.reverse()
     return sortedRows
 
-
-# Takes an account id, returns the balance on it, if "All accounts are selected, then it shows all
-def getCurrAccountBalance(request, accountID):
-    if accountID != "All":
-        return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
-
-    total = 0
-    for account in getStrAccountIDs(request.user.profile):
-        print(account)
-        print(isCreditAccount(account))
-        if not isCreditAccount(account):
-            total += float(getData(account)['Balance'][0]['Amount']['Amount'])
-    return total
-
+#function that returns all necessary info on summary page 
 def getSummaryContext(request):
     accountIDs = getStrAccountIDs(request.user.profile)
     accountData = []
@@ -141,11 +132,33 @@ def getSummaryContext(request):
     }
     return context
 
-    
+
+# Takes an account id, returns the balance on it, if "All accounts are selected, then it shows all
+def getCurrAccountBalance(request, accountID):
+    if accountID == "All":
+        return False
+    elif accountID == "AllCurr":
+        total = 0
+        for account in getAccountIDsFromModel(request.user.profile):
+            if not isCreditAccount(account):
+                total += float(getData(account)['Balance'][0]['Amount']['Amount'])
+        return total
+    elif accountID == "AllCC":
+        total = 0
+        for account in getAccountIDsFromModel(request.user.profile):
+            if isCreditAccount(account):
+                total += float(getData(account)['Balance'][0]['Amount']['Amount'])
+        return total
+    return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
 
 
-
-
+# def getSummaryContext(request, accountID):
+#     accountIDs = getStrAccountIDs(request.user.profile)
+#     accountData = []
+#     for accountID in accountIDs:
+#         data = getData(accountID)
+#
+#         newEntry = {}
 
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
@@ -157,7 +170,7 @@ def makeCatContext(request, accountID):
     context = {
         'one': bpList, 'two': tpList, 'three': groceryList, 'four': fcList, 'five': financesList, 'six': foodList,
         'seven': genList, 'eight': entertainmentList, 'nine': lsList, 'zero': uncatList,
-        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+        'accountIDs': getAccountIDsFromModel(request.user.profile), 'selectedAccount': accountID
     }
     return context
 
@@ -167,7 +180,7 @@ def makeCatContext(request, accountID):
 # the required context dictionary for later use
 def makeAggContext(request, accountID):
     context = {
-        'accountIDs': getStrAccountIDs(request.user.profile), 'selectedAccount': accountID
+        'accountIDs': getAccountIDsFromModel(request.user.profile), 'selectedAccount': accountID
     }
     return context
 
@@ -180,10 +193,37 @@ def isCreditAccount(accountID):
 def getAccountType(accountID):
     if accountID == "All":
         return "MyAcccounts"
-    elif isCreditAccount(accountID):
-        return "Credit-Card"
-    else:
+    elif accountID == "AllCurr":
         return "Current Account"
+    elif accountID == "AllCC":
+        return "Credit-Card"
+
+    if "All" not in accountID:
+        if isCreditAccount(accountID):
+            return "Credit-Card"
+        else:
+            return "Current Account"
+
+
+# gets minimum payment for a credit account, returns false if current account
+def getMinPayment(profile, accountID):
+    if accountID == "AllCC":
+        totalMp = 0.0
+        for account in getAccountIDsFromModel(profile):
+            if isCreditAccount(account):
+                minimumRepaymentRate = float(
+                    getData(account)['Product'][0]['CCC'][0]['CCCMarketingState'][1]['Repayment'][
+                        'MinBalanceRepaymentRate'])
+                mp = float(getData(account)['Balance'][0]['Amount']['Amount']) * minimumRepaymentRate / 100.0
+                totalMp += mp
+        return totalMp
+
+    if isCreditAccount(accountID):
+        minimumRepaymentRate = float(
+            getData(accountID)['Product'][0]['CCC'][0]['CCCMarketingState'][1]['Repayment']['MinBalanceRepaymentRate'])
+        mp = float(getData(accountID)['Balance'][0]['Amount']['Amount']) * minimumRepaymentRate / 100.0
+        return mp
+    return False
 
 
 # the context dictionary needs to be updated with all sorts of different information retrieved from different
@@ -196,25 +236,80 @@ def updateContext(context, rows, request, accountID, home):
         context['caps'] = getAllCaps(request)
         context['spendIndicatorList'] = spendIndicatorList
     else:
+        context['setCap'] = getAllCaps(request)[0]
         context['total'] = getTotal(rows)[0]
         context['spendIndicator'] = getTotal(rows)[1]
     context['balance'] = getCurrAccountBalance(request, accountID)
     context['accountType'] = getAccountType(accountID)
-    if accountID != "All":
-        context['credit'] = isCreditAccount(accountID)
-        context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+
+    if getAccountType(accountID) == "Credit-Card":
+        context['minPayment'] = getMinPayment(request.user.profile, accountID)
+        # context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+
+    if getAccountType(accountID) == "Current Account":
+        # whatever u need for current accounts only
+        context['dd'] = getMonthlyDirectDebit(request, accountID)
+        # context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
     if rows != False:
-        context['monthlyIncome'] = getIncome(rows)
+        context['monthlyIncome'] = getMinIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
 
-    accountsss = {
-        "10567": "Credit",
-        "22289": "Current"
-    }
-    context['myacc'] = accountsss
+        #for lib kai, 4 lines below:
+        context['averageSpend'] = getAverageMonthlySpend(rows)
+        context['averageIncome'] = getAverageMonthlyIncome(rows)
+        context['monthlySpendVIncome'] = getSpendVIncome(rows)
+    context['prediction'] = buildPredictionDict(request)
 
     return context
+
+
+# creates dictionary of monthly spend against monthly income
+def getSpendVIncome(rows):
+    monthDict = getMonthlySpendDict(rows, "spend")
+    months = []
+    spend = []
+    income = []
+    for key in sorted(monthDict, reverse=True):
+        months.append(key)
+        spend.append(monthDict[key])
+    monthDict = getMonthlySpendDict(rows, "income")
+    for key in sorted(monthDict, reverse=True):
+        income.append(monthDict[key])
+    months = getCleanMonths(months)
+    return {'months': months, 'spend': spend, 'income': income}
+
+
+# takes list of months, returns in neater format
+def getCleanMonths(months):
+    newList = []
+    for month in months:
+        date = datetime.datetime.strptime(str(month), "%m-%Y")
+        date = (time.mktime(date.timetuple()) * 1000)
+        newList.append(date)
+    return newList
+
+
+# builds a dictionary with predicted spend values for all accounts associated with user
+def buildPredictionDict(request):
+    current = []
+    credit = []
+    for account in getAccountIDsFromModel(request.user.profile):
+        newDict = {}
+        if isCreditAccount(account):
+            credit.append(prediction(datetime.datetime(2020, 2, 10), account))
+        else:
+            newDict[str(account)] = {
+                "dates": prediction(datetime.datetime(2020, 2, 10), account).get('date'),
+                "values": prediction(datetime.datetime(2020, 2, 10), account).get('value')
+            }
+            current.append(newDict)
+
+    pred = {
+        'current': current,
+        'credit': credit
+    }
+    return pred
 
 
 # takes user bank accountID and returns a list of transactions.
@@ -259,13 +354,55 @@ def getSingleAccountRows(accountID):
 
 
 # combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
-def getAllRows(IDs):
-    row = getSingleAccountRows(IDs[0])
-    for accountID in IDs:
-        if accountID == IDs[0]:
+# def getAllRows(IDs):
+#     row = getSingleAccountRows(IDs[0])
+#     for accountID in IDs:
+#         if accountID == IDs[0]:
+#             continue
+#         for collectingDict in getSingleAccountRows(accountID):
+#             row.append(collectingDict)
+#     return sortedRows(row)
+
+
+# combines list of transactions from all current accounts into one, by unpacking each list of dictionaries into one
+def getAllRowsCurr(accountIDs):
+    firstID = 0
+    for accountID in accountIDs:
+        if not isCreditAccount(accountID):
+            firstID = accountID
+            row = getSingleAccountRows(accountID)
+            break
+
+    if firstID == 0:
+        return
+
+    for accountID in accountIDs:
+        if accountID == firstID:
             continue
-        for collectingDict in getSingleAccountRows(accountID):
-            row.append(collectingDict)
+        if not isCreditAccount(accountID):
+            for collectingDict in getSingleAccountRows(accountID):
+                row.append(collectingDict)
+    return sortedRows(row)
+
+
+# combines list of transactions from all credit accounts into one, by unpacking each list of dictionaries into one
+def getAllRowsCC(accountIDs):
+    firstID = 0
+    for accountID in accountIDs:
+        if isCreditAccount(accountID):
+            firstID = accountID
+            row = getSingleAccountRows(accountID)
+            break
+
+    if firstID == 0:
+        return False
+
+    for accountID in accountIDs:
+        if accountID == firstID:
+            continue
+        if isCreditAccount(accountID):
+            for collectingDict in getSingleAccountRows(accountID):
+                row.append(collectingDict)
     return sortedRows(row)
 
 
@@ -282,19 +419,21 @@ def makeFirstElement(element, elemList):
 
 
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
-def getStrAccountIDs(profile):
+def getAccountIDsFromModel(profile):
     accountList = []
-    for accounts in profile.getAccount():
+    for accounts in profile.getAccountIDList():
         accountList.append(str(accounts))
     return accountList
 
 
 # our accountID list is stored in the sqlite3 database as a "QuerySet", this function converts it to a string
-def getAccountsFromQuerySet(profile):
+def getAccountsForDropDown(profile):
     accountList = []
-    for accounts in profile.getAccount():
+    for accounts in profile.getAccountIDList():
         accountList.append(str(accounts))
-    accountList.append("All")
+    # accountList.append("All")
+    accountList.append("AllCurr")
+    accountList.append("AllCC")
     return accountList
 
 
@@ -394,20 +533,21 @@ def getSalaryData(rows):
                 continue
             date = row['BookingDateTime']
             amount = float(row['Amount'])
-            if str(date.month) not in monthDict:
-                monthDict[str(date.month)] = amount
+            if str(date.month) + str(date.year) not in monthDict:
+                monthDict[str(date.month) + str(date.year)] = amount
                 fullDateDict[str(date)] = amount
-            elif amount > monthDict[str(date.month)]:
-                monthDict[str(date.month)] = amount
+            elif amount > monthDict[str(date.month) + str(date.year)]:
+                monthDict[str(date.month) + str(date.year)] = amount
                 fullDateDict[str(date)] = amount
 
     salList = list(monthDict.values())
     modalValue = max(set(salList), key=salList.count)
+    newDict = {}
     for item in fullDateDict:
-        if fullDateDict[item] != modalValue:
-            del fullDateDict[item]
+        if fullDateDict[item] == modalValue:
+            newDict[item] = modalValue
 
-    salaryDates = list(fullDateDict.keys())
+    salaryDates = list(newDict.keys())
     totalOfDays = 0
     for date in salaryDates:
         totalOfDays += int(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S").day)
@@ -416,16 +556,29 @@ def getSalaryData(rows):
     return [modalValue, averageDay]
 
 
+def getMonthlyDirectDebit(request, accountID):
+    if accountID == "AllCurr":
+        total = 0
+        for account in getAccountIDsFromModel(request.user.profile):
+            if not isCreditAccount(account):
+                data = getData(account)
+                totalDirectDebit = 0
+                for directdebit in data['DirectDebit']:
+                    if directdebit['DirectDebitStatusCode'] == "Active":
+                        totalDirectDebit += float(directdebit['PreviousPaymentAmount']['Amount'])
+                total += totalDirectDebit
+        return total
 
-def getMonthlyDirectDebit(accountID):
     data = getData(accountID)
-    totalDirectDebit = 0 
+    totalDirectDebit = 0.0
     for directdebit in data['DirectDebit']:
         if directdebit['DirectDebitStatusCode'] == "Active":
-            totalDirectDebit+= float(directdebit['PreviousPaymentAmount']['Amount'])
+            totalDirectDebit += float(directdebit['PreviousPaymentAmount']['Amount'])
     return totalDirectDebit
-        
-# it takes the dataset a, the testdate and the account to return all the direct debits u need to pay from the testdate to the next billing day
+
+
+# it takes the dataset a, the testdate and the account to return all the direct debits u need to pay from the
+# testdate to the next billing day
 def getDirectDebit(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     if testDate.day > billingdate.day:
@@ -438,7 +591,7 @@ def getDirectDebit(a, testDate, accountID):
             previouspayment = datetime.datetime.strptime(directdebit['PreviousPaymentDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
             nextpayment = previouspayment + relativedelta(months=1)
-            print(nextpayment, targetdate, testDate)
+            # print(nextpayment, targetdate, testDate)
             if nextpayment <= targetdate and nextpayment > testDate:
                 if nextpayment.date() in directDebitToPay:
                     directDebitToPay[nextpayment.date()] += float(directdebit['PreviousPaymentAmount']['Amount'])
@@ -446,10 +599,11 @@ def getDirectDebit(a, testDate, accountID):
                     directDebitToPay[nextpayment.date()] = float(directdebit['PreviousPaymentAmount']['Amount'])
     return directDebitToPay
 
+
 # prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
 def getPredictionForCurrent(a, testDate, accountID):
     salaryData = getSalaryData(getSingleAccountRows(accountID))
-    print(salaryData)
+    # print(salaryData)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     salaryDay = datetime.datetime(testDate.year, testDate.month, salaryData[1])
     # print(billingdate)
@@ -462,10 +616,10 @@ def getPredictionForCurrent(a, testDate, accountID):
     if salaryDay > testDate and salaryDay < targetdate:
         salary[salaryDay.date()] = salaryData[0]
     else:
-        salaryDay = salaryDay + relativedelta(months = 1)
+        salaryDay = salaryDay + relativedelta(months=1)
         if salaryDay > testDate and salaryDay < targetdate:
             salary[salaryDay.date()] = salaryData[0]
-    print(salary)
+    # print(salary)
     currentbalance = float(a['Balance'][0]['Amount']['Amount'])
     prediction = {
         "date": [],
@@ -480,7 +634,7 @@ def getPredictionForCurrent(a, testDate, accountID):
     daysPredicted = 0
     while daysPredicted < timeInterval.days:
         currentdate += relativedelta(days=1)
-        print(currentdate)
+        # print(currentdate)
         currentbalance -= averagespending
         if currentdate in salary:
             currentbalance += salary[currentdate]
@@ -490,7 +644,7 @@ def getPredictionForCurrent(a, testDate, accountID):
         prediction["date"].append(time.mktime(currentdate.timetuple()) * 1000)
         prediction["value"].append(currentbalance)
         daysPredicted += 1
-        
+
     return prediction
 
 
@@ -539,7 +693,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
                 interest += (chargedDate.date() - paymentTime.date()).days * purchaseRate / 365
     result = {}
     result['BalanceWithInterest'] = balance
-    result["Interest"]= interest
+    result["Interest"] = interest
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
     result['nextBillingDay'] = targetdate
@@ -556,32 +710,47 @@ def prediction(testDate, accountID):
     return getPredictionForCurrent(getData(accountID), testDate, accountID)
 
 
-def getIncome(rows):
-    if rows != False:
-        monthDict = {}
-        for row in rows:
-            amount = float(row['Amount'])
-            date = row['BookingDateTime']
-            if str(date.month) not in monthDict:
-                monthDict[str(date.month)] = 0
-            if amount > 0:
-                monthDict[str(date.month)] += amount
-        # round(sum(monthDict.values()) / len(monthDict.values()), 2)
-        if len(monthDict.values()) > 0:
-            return min(monthDict.values())
-        else:
-            return 0
-
-
-def getSpend(rows):
+def getMonthlySpendDict(rows, indicator):
     monthDict = {}
     for row in rows:
         amount = float(row['Amount'])
         date = row['BookingDateTime']
-        if str(date.month) not in monthDict:
-            monthDict[str(date.month)] = 0
-        if amount < 0:
-            monthDict[str(date.month)] += amount
+        if str(date.month) + "-" + str(date.year) not in monthDict:
+            monthDict[str(date.month) + "-" + str(date.year)] = 0
+        if indicator == "spend":
+            if amount < 0:
+                monthDict[str(date.month) + "-" + str(date.year)] += amount
+        if indicator == "income":
+            if amount > 0:
+                monthDict[str(date.month) + "-" + str(date.year)] += amount
+    return monthDict
+
+
+# calculates the minimum income per month
+def getAverageMonthlyIncome(rows):
+    monthDict = getMonthlySpendDict(rows, "income")
+    return round(sum(monthDict.values()) / len(monthDict.values()), 2)
+
+
+# calculates the average income per month
+def getMinIncome(rows):
+    monthDict = getMonthlySpendDict(rows, "income")
+    if len(monthDict.values()) > 0:
+        return min(monthDict.values())
+    else:
+        return 0
+
+
+# returns average monthly spend on account
+def getAverageMonthlySpend(rows):
+    monthDict = getMonthlySpendDict(rows, "spend")
+    return -round(sum(monthDict.values()) / len(monthDict.values()), 2)
+
+
+# calculates minimum monthly spend- this is not average spend but rather the lowest amount of money you usually
+# spend on your account
+def getSpend(rows):
+    monthDict = getMonthlySpendDict(rows, "spend")
     if len(monthDict.values()) > 0:
         return -round(max(monthDict.values()), 2)
     else:
@@ -590,7 +759,7 @@ def getSpend(rows):
 
 def calcExcess(rows):
     leftOver = []
-    left = getIncome(rows) - getSpend(rows)
+    left = getMinIncome(rows) - getSpend(rows)
     if left >= 0:
         leftOver.append("On track to save: ")
     else:
@@ -602,7 +771,7 @@ def calcExcess(rows):
 
 # check if post request has been sent to update a certain cap
 def updateCaps(request):
-    possibleCapSetOn = ["getValueCC", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+    possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
                         "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
 
     if request.method == "POST" and any(cap in request.POST for cap in possibleCapSetOn):
@@ -613,11 +782,11 @@ def updateCaps(request):
 
 # gets all the numerical values of the caps set on each category
 def getAllCaps(request):
-    possibleCapSetOn = ["getValueCC", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+    possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
                         "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
     capValues = []
     for caps in possibleCapSetOn:
-        capValues.append((request.user.profile.getCap(caps)[0]))
+        capValues.append(float(request.user.profile.getCap(caps)[0]))
     return capValues
 
 

@@ -205,17 +205,42 @@ def updateContext(context, rows, request, accountID, home):
 
     if getAccountType(accountID) == "Credit-Card":
         context['minPayment'] = getMinPayment(request.user.profile, accountID)
-        context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+        # context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
 
     if getAccountType(accountID) == "Current Account":
         # whatever u need for current accounts only
         context['dd'] = getMonthlyDirectDebit(request, accountID)
-        context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
+        # context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
     if rows != False:
         context['monthlyIncome'] = getIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
+
+    context['prediction'] = buildPredictionDict(request)
     return context
+
+
+# builds a dictionary with predicted spend values for all accounts associated with user
+def buildPredictionDict(request):
+    current = []
+    credit = []
+    for account in getAccountIDsFromModel(request.user.profile):
+        newDict = {}
+        if isCreditAccount(account):
+            print(prediction(datetime.datetime(2020, 2, 10), account))
+            credit.append(newDict)
+        else:
+            newDict[str(account)] = {
+                "dates": prediction(datetime.datetime(2020, 2, 10), account).get('date'),
+                "values": prediction(datetime.datetime(2020, 2, 10), account).get('value')
+            }
+            current.append(newDict)
+
+    pred = {
+        'current': current,
+        'credit': credit
+    }
+    return pred
 
 
 # takes user bank accountID and returns a list of transactions.

@@ -112,15 +112,14 @@ def getCurrAccountBalance(request, accountID):
         return total
     return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
 
-def getSummaryContext(request, accountID):
-    accountIDs = getStrAccountIDs(request.user.profile)
-    accountData = []
-    for accountID in accountIDs:
-        data = getData(accountID)
 
-        newEntry = {}
-
-
+# def getSummaryContext(request, accountID):
+#     accountIDs = getStrAccountIDs(request.user.profile)
+#     accountData = []
+#     for accountID in accountIDs:
+#         data = getData(accountID)
+#
+#         newEntry = {}
 
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
@@ -209,7 +208,7 @@ def updateContext(context, rows, request, accountID, home):
 
     if getAccountType(accountID) == "Current Account":
         # whatever u need for current accounts only
-        context['dd'] = getDirectDebits(accountID)
+        context['dd'] = getMonthlyDirectDebit(request, accountID)
         context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
 
     if rows != False:
@@ -462,17 +461,29 @@ def getSalaryData(rows):
     return [modalValue, averageDay]
 
 
-
-
-def getMonthlyDirectDebit(accountID):
+def getMonthlyDirectDebit(request, accountID):
+    if accountID == "AllCurr":
+        total = 0
+        for account in getAccountIDsFromModel(request.user.profile):
+            if not isCreditAccount(account):
+                data = getData(accountID)
+                totalDirectDebit = 0
+                for directdebit in data['DirectDebit']:
+                    if directdebit['DirectDebitStatusCode'] == "Active":
+                        totalDirectDebit += float(directdebit['PreviousPaymentAmount']['Amount'])
+                total += totalDirectDebit
+        return total
+    
     data = getData(accountID)
-    totalDirectDebit = 0 
+    totalDirectDebit = 0
     for directdebit in data['DirectDebit']:
         if directdebit['DirectDebitStatusCode'] == "Active":
-            totalDirectDebit+= float(directdebit['PreviousPaymentAmount']['Amount'])
+            totalDirectDebit += float(directdebit['PreviousPaymentAmount']['Amount'])
     return totalDirectDebit
-        
-# it takes the dataset a, the testdate and the account to return all the direct debits u need to pay from the testdate to the next billing day
+
+
+# it takes the dataset a, the testdate and the account to return all the direct debits u need to pay from the
+# testdate to the next billing day
 def getDirectDebit(a, testDate, accountID):
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     if testDate.day > billingdate.day:
@@ -493,6 +504,7 @@ def getDirectDebit(a, testDate, accountID):
                     directDebitToPay[nextpayment.date()] = float(directdebit['PreviousPaymentAmount']['Amount'])
     return directDebitToPay
 
+
 # prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
 def getPredictionForCurrent(a, testDate, accountID):
     salaryData = getSalaryData(getSingleAccountRows(accountID))
@@ -509,7 +521,7 @@ def getPredictionForCurrent(a, testDate, accountID):
     if salaryDay > testDate and salaryDay < targetdate:
         salary[salaryDay.date()] = salaryData[0]
     else:
-        salaryDay = salaryDay + relativedelta(months = 1)
+        salaryDay = salaryDay + relativedelta(months=1)
         if salaryDay > testDate and salaryDay < targetdate:
             salary[salaryDay.date()] = salaryData[0]
     print(salary)
@@ -536,7 +548,7 @@ def getPredictionForCurrent(a, testDate, accountID):
         prediction["date"].append(time.mktime(currentdate.timetuple()) * 1000)
         prediction["value"].append(currentbalance)
         daysPredicted += 1
-        
+
     return prediction
 
 

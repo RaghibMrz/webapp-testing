@@ -1542,7 +1542,7 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          {% if prediction %}
+          {% if accountType == "Current Account" %}
           <h6 class="m-0 font-weight-bold text-primary">Spending Pattern and Predictions</h6>
           <h6 class="m-0 text-secondary" style="float:left"> - For Account {{ selectedAccount }}</h6>
           </div>
@@ -1553,16 +1553,52 @@
               <canvas id='lineChart'></canvas>
               <script>
                 var timeFormat = "MMM Do YY";
-    
-                var predictionDates = "{{ prediction.date }}".slice(1,-1).replace(/\s/g, '').split(',');
-                for (i in predictionDates) {
-                  predictionDates[i] = new Date(parseInt(predictionDates[i]));
+
+                function dateStringToArray(s) {
+                  var final = s.slice(1,-1).replace(/\s/g, '').split(',');
+                  for (i in final) {
+                    final[i] = new Date(parseInt(final[i]))
+                  };
+                  return final
                 };
-    
-                var predictionValues = "{{ prediction.value }}".slice(1,-1).replace(/\s/g, '').split(',');
-                for (i in predictionValues) {
-                  predictionValues[i] = parseInt(predictionValues[i])
+
+                function dataStringToArray(s) {
+                  var final = s.slice(1,-1).replace(/\s/g, '').split(',');
+                  for (i in final) {
+                    final[i] = parseFloat(final[i])
+                  };
+                  return final
                 };
+
+                console.log("here")
+                console.log(typeof("{{prediction.current.0 | safe}}"))
+
+                var currentList = JSON.parse(JSON.stringify("{{prediction.current | safe}}"));
+                var array = JSON.parse("[" + currentList + "]");
+                console.log(array)
+                console.log(typeof(array))
+                console.log(currentList)
+                // console.log(typeof(currentList))
+
+                var completeDataset = [];
+
+                console.log(typeof("{{prediction.current | safe}}"));
+                // console.log("here")
+
+
+                for (i in "{{prediction.current}}") {
+                  console.log(i);
+                  newDict = {};
+                  newDict["label"] = i.account;
+                  newDict["data"] = dataStringToArray(i.values);
+                  completeDataset.push(newDict);
+                }
+
+                console.log(completeDataset);
+                
+                var predictionDates = dateStringToArray("{{ prediction.current.dates }}");
+    
+                var predictionValues = dataStringToArray("{{ prediction.current.values }}");
     
                 var ctxLine = document.getElementById("lineChart").getContext("2d");
                 var myLineChart = new Chart(ctxLine,{

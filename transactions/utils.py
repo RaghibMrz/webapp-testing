@@ -260,10 +260,13 @@ def buildPredictionDict(request):
         if isCreditAccount(account):
             credit.append(prediction(datetime.datetime(2020, 2, 10), account))
         else:
-            newDict[str(account)] = {
-                "dates": prediction(datetime.datetime(2020, 2, 10), account).get('date'),
-                "values": prediction(datetime.datetime(2020, 2, 10), account).get('value')
-            }
+            newDict["account"] = account
+            newDict["dates"] = prediction(datetime.datetime(2020, 2, 10), account).get('date')
+            newDict["values"] = prediction(datetime.datetime(2020, 2, 10), account).get('value')
+            # newDict[str(account)] = {
+            #     "dates": prediction(datetime.datetime(2020, 2, 10), account).get('date'),
+            #     "values": prediction(datetime.datetime(2020, 2, 10), account).get('value')
+            # }
             current.append(newDict)
 
     pred = {

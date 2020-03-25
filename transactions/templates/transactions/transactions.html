@@ -251,7 +251,49 @@
             <!--</div>-->
             <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
               <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total |floatformat:2| intcomma}}</h6>
-              <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" id="capPrompt"><i class="fas fa-tachometer-alt"></i> Set Cap </a>
+              <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#capPrompt">
+                  <i class="fas fa-tachometer-alt"></i> Set Cap
+                </button>
+              
+              <!-- Modal -->
+                <div class="modal fade" id="capPrompt" tabindex="-1" role="dialog" aria-labelledby="capPromptTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="capPromptTitle">Set Cap on all expenditure</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="input-group mb-3 input-group-lg">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">£</span>
+                            </div>
+                            <input type="text" class="form-control" name="getValueAll" value="{{ setCap }}">
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                          {% if accountType == "Current Account" %}
+                          <div class="row">
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
+                            </div>
+                          </div>
+                          {% else %}
+                          {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              
               <script>src="jquery.min.js"</script>
             </div>
           <script>

@@ -49,7 +49,6 @@ def home(request):
 @login_required
 def summary(request):
     request.session.set_expiry(600)
-
     accountID = getAccount(request)
     return render(request, 'transactions/summary.html')
 
@@ -60,14 +59,18 @@ def transactions(request):
     request.session.set_expiry(600)
     accountID = getAccount(request)
 
+    # update categorical caps if necessary
+    updateCaps(request)
+
     if validateID(request, accountID) == True:
         context, rows = makeAggContext(request, accountID), getRows(request, accountID)
 
-        # get date range selected by user, parse it and then update transactions+details displayed
-        if request.method == "POST" and request.POST['submit'] == "Enter":
-            request.user.profile.setDateRange(request.POST.get('datetimes'))
-        if request.method == "POST" and request.POST['submit'] == "Clear":
-            request.user.profile.setUseDateFilter("0")
+        # gets date range selected by user, parses it and then updates transactions+details displayed
+        if request.method == "POST" and 'submit' in request.POST:
+            if request.POST['submit'] == "Enter":
+                request.user.profile.setDateRange(request.POST.get('datetimes'))
+            if request.POST['submit'] == "Clear":
+                request.user.profile.setUseDateFilter("0")
 
         if request.user.profile.useDateFilter == "1":
             rawDates = request.user.profile.getDateRange().split("-")

@@ -197,6 +197,7 @@ def updateContext(context, rows, request, accountID, home):
         context['caps'] = getAllCaps(request)
         context['spendIndicatorList'] = spendIndicatorList
     else:
+        context['setCap'] = getAllCaps(request)[0]
         context['total'] = getTotal(rows)[0]
         context['spendIndicator'] = getTotal(rows)[1]
     context['balance'] = getCurrAccountBalance(request, accountID)
@@ -210,7 +211,6 @@ def updateContext(context, rows, request, accountID, home):
         # whatever u need for current accounts only
         context['dd'] = getMonthlyDirectDebit(request, accountID)
         context['prediction'] = prediction(datetime.datetime(2020, 2, 10), accountID)
-
     if rows != False:
         context['monthlyIncome'] = getIncome(rows)
         context['monthlySpend'] = getSpend(rows)
@@ -466,7 +466,7 @@ def getMonthlyDirectDebit(request, accountID):
         total = 0
         for account in getAccountIDsFromModel(request.user.profile):
             if not isCreditAccount(account):
-                data = getData(accountID)
+                data = getData(account)
                 totalDirectDebit = 0
                 for directdebit in data['DirectDebit']:
                     if directdebit['DirectDebitStatusCode'] == "Active":
@@ -475,7 +475,7 @@ def getMonthlyDirectDebit(request, accountID):
         return total
     
     data = getData(accountID)
-    totalDirectDebit = 0
+    totalDirectDebit = 0.0
     for directdebit in data['DirectDebit']:
         if directdebit['DirectDebitStatusCode'] == "Active":
             totalDirectDebit += float(directdebit['PreviousPaymentAmount']['Amount'])
@@ -508,7 +508,7 @@ def getDirectDebit(a, testDate, accountID):
 # prediction for current account returns a dictionary with dates being the keys and predicted remaining balance on this account as the values
 def getPredictionForCurrent(a, testDate, accountID):
     salaryData = getSalaryData(getSingleAccountRows(accountID))
-    print(salaryData)
+    # print(salaryData)
     billingdate = datetime.datetime(testDate.year, testDate.month, int(a['BillingDate'].split('-')[1]))
     salaryDay = datetime.datetime(testDate.year, testDate.month, salaryData[1])
     # print(billingdate)
@@ -524,7 +524,7 @@ def getPredictionForCurrent(a, testDate, accountID):
         salaryDay = salaryDay + relativedelta(months=1)
         if salaryDay > testDate and salaryDay < targetdate:
             salary[salaryDay.date()] = salaryData[0]
-    print(salary)
+    # print(salary)
     currentbalance = float(a['Balance'][0]['Amount']['Amount'])
     prediction = {
         "date": [],
@@ -538,7 +538,7 @@ def getPredictionForCurrent(a, testDate, accountID):
     daysPredicted = 0
     while daysPredicted < timeInterval.days:
         currentdate += relativedelta(days=1)
-        print(currentdate)
+        # print(currentdate)
         currentbalance -= averagespending
         if currentdate in salary:
             currentbalance += salary[currentdate]
@@ -658,7 +658,7 @@ def calcExcess(rows):
 
 # check if post request has been sent to update a certain cap
 def updateCaps(request):
-    possibleCapSetOn = ["getValueCC", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+    possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
                         "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
 
     if request.method == "POST" and any(cap in request.POST for cap in possibleCapSetOn):
@@ -669,7 +669,7 @@ def updateCaps(request):
 
 # gets all the numerical values of the caps set on each category
 def getAllCaps(request):
-    possibleCapSetOn = ["getValueCC", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+    possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
                         "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
     capValues = []
     for caps in possibleCapSetOn:

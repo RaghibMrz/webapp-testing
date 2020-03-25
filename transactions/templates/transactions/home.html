@@ -352,7 +352,7 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
-                          {% if dd %}
+                          {% if accountType == "Current Account" %}
                           <div class="row">
                             <div class="col-xl-12">
                               <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
@@ -439,14 +439,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -525,14 +525,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -611,14 +611,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -697,14 +697,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -783,14 +783,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -869,14 +869,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -955,14 +955,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1011,7 +1011,6 @@
                       {% endfor %}
                     </tbody>
                   </table>
-                  
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
@@ -1041,14 +1040,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1127,14 +1126,14 @@
                               <span class="input-group-text">.00</span>
                             </div>
                           </div>
+                          {% if accountType == "Current Account" %}
                           <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+                            <div class="col-xl-12">
+                              <h4 class="h6 mb-0 text-gray-800  mr-3">Your monthly direct debits: £{{dd|floatformat:2| intcomma}}</h4>
                             </div>
                           </div>
+                          {% else %}
+                          {% endif %}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -35,7 +35,7 @@
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Balance on current account</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ balance }}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{totalCurrentBalance|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -51,8 +51,8 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Credit Card Bill to Pay</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{CCBill|floatformat:2| intcomma}}</div>
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Credit Card Bill to Pay</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{totalCreditBalance|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -68,8 +68,8 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Predicted Monthly Bill Payment</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{monthlyBill|floatformat:2| intcomma}}</div>
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Monthly Bill Payment</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{totalBills|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-pound-sign fa-2x text-gray-300"></i>
@@ -88,7 +88,7 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Overall Remaining Balance</div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ leftOver.1 |floatformat:2| intcomma}}</div>
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">£{{ remainingAmount |floatformat:2| intcomma}}</div>
                 </div>
                 <!--<div class="col">-->
                   <!--<div class="progress progress-sm mr-2">-->
@@ -130,43 +130,63 @@
 
           
         </div>
-        
+        {% for account in accountData %}
         <!-- Card Body -->
         <div class="card-body">
           <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedCreditCardTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedCreditCardTransactions">
+            <a href="#{{account.accountID}}" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedCreditCardTransactions">
               <div class="row">
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Credit Cards</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{account.accountID}}</h6>
                 </div>
                 <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6>
+                    {% if account.isCreditAccount %}
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Credit Card</h6>
+                  {% else %}
+                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Current Account</h6>
+                  {% endif %}
                 </div>
               </div>
             </a>
             <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedCreditCardTransactions">
+            <div class="collapse hide" id={{account.accountID}}>
               <div class="card-body">
                 <div class="table-responsive">
+                  {% if account.isCreditAccount %}
                   <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
+                      <th>Next Billing Day</th>
+                      <th>Total Balance to Pay</th>
+                      <th>Minimum Payment Amount</th>
+                      <th>Amount to Pay to Avoid Interest</th>
                       </tr>
                   </thead>
                   <tbody>
-                    {% for row in two %}
                       <tr>
-                      <td>{{ row.BookingDateTime }}</td>
-                      <td>{{ row.TransactionInformation }}</td>
-                      <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                      <td>{{ row.Currency }}</td>
+                      <td>{{ account.nextBillingDay }}</td>
+                      <td>{{ account.balance |floatformat:2| intcomma }}</td>
+                      <td>{{ account.minimumPayment |floatformat:2| intcomma}}</td>
+                      <td>{{ account.balanceWithBalance |floatformat:2| intcomma}}</td>
                       </tr>
-                    {% endfor %}
                   </table>
+                  {% else %}
+                  <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                      <th>Next Interest Payday</th>
+                      <th>Balance</th>
+                      <th>Remaining Bills to Pay</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                      <td>{{ account.nextBillingDay }}</td>
+                      <td>{{ account.balance }}</td>
+                      <td>{{ account.directDebit}}</td>
+                      </tr>
+                  </table>
+                  {% endif %}
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
@@ -174,94 +194,9 @@
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#creditCardCap">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
+            
 
-                <!-- Modal -->
-                <div class="modal fade" id="creditCardCap" tabindex="-1" role="dialog" aria-labelledby="creditCardCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="creditCardCapTitle">Credit Card Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueCC" value="{{ caps.0 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedBPTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedBPTransactions">
-              <div class="row">
-                <div class="col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
-                </div>
-                <div class="col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.0}}: £{{totals.0|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-              <!-- <h6 class="m-0 font-weight-bold text-primary">Bills & Payments</h6>
-              <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Amount</h6> -->
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedBPTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="bpTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in one %}
-                        <tr>
-                        <td>{{ row.TransactionInformation }}</td>
-                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                        <td>{{ row.Currency }}</td>
-                        <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  <br>
-                </div>
-                <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                  <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.0}}: £{{ totals.0 |floatformat:2| intcomma}}</h6>
-                  <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#bpCap">
-                    <i class="fas fa-tachometer-alt"></i> Set Cap
-                  </button>
-  
+                
                   <!-- Modal -->
                   <div class="modal fade" id="bpCap" tabindex="-1" role="dialog" aria-labelledby="bpCapTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -304,781 +239,8 @@
             </div>
           </div>
           </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedTransportTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedTransportTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Transport</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.1}}: £{{totals.1|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedTransportTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="transportTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in two %}
-                        <tr>
-                        <td>{{ row.TransactionInformation }}</td>
-                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                        <td>{{ row.Currency }}</td>
-                        <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#transportCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="transportCap" tabindex="-1" role="dialog" aria-labelledby="transportCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="transportCapTitle">Transport Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueTP" value="{{ caps.2 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedGroceriesTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedGroceriesTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Groceries</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.2}}: £{{totals.2|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedGroceriesTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="groceriesTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Currency</th>
-                      <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in three %}
-                        <tr>
-                        <td>{{ row.TransactionInformation }}</td>
-                        <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                        <td>{{ row.Currency }}</td>
-                        <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.2}}: £{{ totals.2 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#groceriesCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="groceriesCap" tabindex="-1" role="dialog" aria-labelledby="groceriesCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="groceriesCapTitle">Groceries Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.3 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedFCTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedFCTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Fashion & Cosmetics</h6>
-                </div>
-                <div class="col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.3}}: £{{totals.3|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedFCTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="fcTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Transaction</th>
-                        <th>Amount</th>
-                        <th>Currency</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in four %}
-                        <tr>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                          <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.3}}: £{{ totals.3 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#fcCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="fcCap" tabindex="-1" role="dialog" aria-labelledby="fcCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="fcCapTitle">Fashion & Cosmetics Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueFC" value="{{ caps.4 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedFinancesTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedFinancesTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Finances</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.4}}: £{{totals.4|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedFinancesTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="financesTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                          <th>Transaction</th>
-                          <th>Amount</th>
-                          <th>Currency</th>
-                          <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in five %}
-                        <tr>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                          <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.4}}: £{{ totals.4 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#financesCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="financesCap" tabindex="-1" role="dialog" aria-labelledby="financesCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="financesCapTitle">Finances Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueFSC" value="{{ caps.5 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedFoodTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedFoodTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Food</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.5}}: £{{totals.5|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedFoodTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="foodTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Transaction</th>
-                        <th>Amount</th>
-                        <th>Currency</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in six %}
-                        <tr>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                          <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.5}}: £{{ totals.5 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#foodCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="foodCap" tabindex="-1" role="dialog" aria-labelledby="foodCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="foodCapTitle">Food Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueFoodC" value="{{ caps.6 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedGeneralTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedGeneralTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">General</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.6}}: £{{totals.6|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedGeneralTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="generalTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Transaction</th>
-                        <th>Amount</th>
-                        <th>Currency</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in seven %}
-                        <tr>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                          <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.6}}: £{{ totals.6 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#generalCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="generalCap" tabindex="-1" role="dialog" aria-labelledby="generalCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="generalCapTitle">General Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.7 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedEntertainmentTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedEntertainmentTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Entertainment</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.7}}: £{{totals.7|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedEntertainmentTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="entertainmentTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Transaction</th>
-                        <th>Amount</th>
-                        <th>Currency</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in eight %}
-                        <tr>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                          <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.7}}: £{{ totals.7 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#entertainmentCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="entertainmentCap" tabindex="-1" role="dialog" aria-labelledby="entertainmentCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="entertainmentCapTitle">Entertainment Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueEC" value="{{ caps.8 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedLSTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedLSTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Leisure & Self-Care</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.8}}: £{{totals.8|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedLSTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="lsTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Transaction</th>
-                        <th>Amount</th>
-                        <th>Currency</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in nine %}
-                        <tr>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                          <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.8}}: £{{ totals.8 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#lsCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="lsCap" tabindex="-1" role="dialog" aria-labelledby="lsCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="lsCapTitle">Leisure & Self-Care Cap</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueLSC" value="{{ caps.9 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card shadow mb-2 ml-3 mr-3 mt-2">
-            <a href="#collapsedOtherTransactions" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsedOtherTransactions">
-              <div class="row">
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary">Other</h6>
-                </div>
-                <div class = "col-xl-6">
-                  <h6 class="m-0 font-weight-bold text-primary float-right mr-3">Total {{spendIndicatorList.9}}: £{{totals.9|floatformat:2| intcomma}}</h6>
-                </div>
-              </div>
-            </a>
-            <!-- Card Content - Collapse -->
-            <div class="collapse hide" id="collapsedOtherTransactions">
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="otherTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Transaction</th>
-                        <th>Amount</th>
-                        <th>Currency</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for row in zero %}
-                        <tr>
-                          <td>{{ row.TransactionInformation }}</td>
-                          <td>{{ row.Amount |floatformat:2| intcomma}}</td>
-                          <td>{{ row.Currency }}</td>
-                          <td>{{ row.BookingDateTime }}</td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                  
-                </div>
-              </div>
-              <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicatorList.9}}: £{{ totals.9 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#otherCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="otherCap" tabindex="-1" role="dialog" aria-labelledby="otherCapTitle" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="otherCapTitle">Other</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="input-group mb-3 input-group-lg">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">£</span>
-                            </div>
-                            <input type="text" class="form-control" name="getValueOC" value="{{ caps.10 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-                            </div>
-                            <div class="col-xl-6">
-                              <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        
+          {% endfor %}  
         <!-- <div class="card-body">
           <div class="chart-area">
             <canvas id="myAreaChart"></canvas>
@@ -1088,6 +250,7 @@
       </div>
     </div>
   </div>
+  
 
   <!-- Pie Chart -->
   <div class="row">

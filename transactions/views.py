@@ -51,9 +51,9 @@ def home(request):
 @login_required
 def summary(request):
     request.session.set_expiry(600)
-
-    accountID = getAccount(request)
-    return render(request, 'transactions/summary.html')
+    context = getSummaryContext(request)
+    print(context)
+    return render(request, 'transactions/summary.html', context)
 
 
 @login_required

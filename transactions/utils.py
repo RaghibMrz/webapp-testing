@@ -103,13 +103,47 @@ def getCurrAccountBalance(request, accountID):
             total += float(getData(account)['Balance'][0]['Amount']['Amount'])
     return total
 
-def getSummaryContext(request, accountID):
+def getSummaryContext(request):
     accountIDs = getStrAccountIDs(request.user.profile)
     accountData = []
+    totalCurrentBalance = 0
+    totalCreditBalance = 0
+    totalBills = 0
     for accountID in accountIDs:
         data = getData(accountID)
-
         newEntry = {}
+        newEntry['accountID'] = accountID
+        newEntry['isCreditAccount'] = isCreditAccount(accountID)
+        predict = prediction( datetime.datetime(2020, 2, 10), accountID)
+        newEntry['nextBillingDay'] = predict['nextBillingDay']
+        if newEntry['isCreditAccount']:
+            newEntry['balance'] = predict['balance']
+            totalCreditBalance+= predict['balance']
+            newEntry['minimumPayment'] = predict['minRepaymentAmount']
+            newEntry['balanceWtihInterest'] = predict['BalanceWithInterest']
+        else:
+            newEntry['balance'] = float(data['Balance'][0]['Amount']['Amount'])
+            totalCurrentBalance += float(data['Balance'][0]['Amount']['Amount'])
+            directDebit = getDirectDebit(data, datetime.datetime(2020, 2, 10), accountID)
+            sumofDD = 0
+            for value in directDebit.values():
+                sumofDD +=value
+            newEntry['directDebit'] = sumofDD
+            totalBills+=sumofDD
+        accountData.append(newEntry)
+    context = {
+        'accountIDs' : accountIDs,
+        'accountData' : accountData,
+        'totalCurrentBalance' : totalCurrentBalance,
+        'totalCreditBalance' : totalCreditBalance,
+        'totalBills' : totalBills,
+        'remainingAmount' : totalCurrentBalance - totalCreditBalance - totalBills
+    }
+    return context
+
+    
+
+
 
 
 
@@ -435,7 +469,8 @@ def getPredictionForCurrent(a, testDate, accountID):
     currentbalance = float(a['Balance'][0]['Amount']['Amount'])
     prediction = {
         "date": [],
-        "value": []
+        "value": [],
+        "nextBillingDay" : targetdate
     }
     currentdate = testDate.date()
     timeInterval = targetdate - testDate
@@ -506,6 +541,8 @@ def getPredictionForCreditCard(a, testDate, accountID):
     result['BalanceWithInterest'] = balance
     result["Interest"]= interest
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
+    result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
+    result['nextBillingDay'] = targetdate
     print(result)
     return result
 

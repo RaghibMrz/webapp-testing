@@ -167,7 +167,7 @@
                       <td>{{ account.nextBillingDay }}</td>
                       <td>{{ account.balance |floatformat:2| intcomma }}</td>
                       <td>{{ account.minimumPayment |floatformat:2| intcomma}}</td>
-                      <td>{{ account.balanceWithBalance |floatformat:2| intcomma}}</td>
+                      <td>{{ account.balanceWtihInterest |floatformat:2| intcomma}}</td>
                       </tr>
                   </table>
                   {% else %}
@@ -182,18 +182,16 @@
                   <tbody>
                       <tr>
                       <td>{{ account.nextBillingDay }}</td>
-                      <td>{{ account.balance }}</td>
-                      <td>{{ account.directDebit}}</td>
+                      <td>{{ account.balance |floatformat:2| intcomma }}</td>
+                      <td>{{ account.directDebit |floatformat:2| intcomma}}</td>
                       </tr>
                   </table>
                   {% endif %}
                 </div>
               </div>
               <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-                <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator.1}}: £{{ totals.1 |floatformat:2| intcomma}}</h6>
-                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#creditCardCap">
-                  <i class="fas fa-tachometer-alt"></i> Set Cap
-                </button>
+                
+                
             
 
                 

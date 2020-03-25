@@ -13,7 +13,6 @@
     <h4 class="h4 mb-0 text-gray-800  mr-3">AccountID "{{accountID}}" not found</h4>
     <h4 class="h5 mb-0 text-black-800  mr-3">Delete this ID and try again</h4>
     {% endif %}
-      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
         <select class="custom-select w-auto" name="submit">
@@ -27,6 +26,8 @@
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <a href="{% url 'caps' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> Caps </a>
     </div>
 </div>
 {% else %}
@@ -41,9 +42,6 @@
       <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
       <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
       {% endif %}
-      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
-      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
-      
       <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
         <select class="custom-select w-auto" name="submit">
@@ -57,9 +55,11 @@
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <a href="{% url 'caps' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> Caps </a>
+      <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
     </div>
-
-
+  
   <!-- Content Row -->
   <div class="row">
    <!-- Balance Card -->
@@ -73,7 +73,7 @@
               {% else %}
               <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Account Balance</div>
               {% endif %}
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ balance }}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{ balance }}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-comments fa-2x text-gray-300"></i>

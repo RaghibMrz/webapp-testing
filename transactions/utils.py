@@ -448,11 +448,12 @@ def getSalaryData(rows):
 
     salList = list(monthDict.values())
     modalValue = max(set(salList), key=salList.count)
+    newDict = {}
     for item in fullDateDict:
-        if fullDateDict[item] != modalValue:
-            del fullDateDict[item]
+        if fullDateDict[item] == modalValue:
+            newDict[item] = modalValue
 
-    salaryDates = list(fullDateDict.keys())
+    salaryDates = list(newDict.keys())
     totalOfDays = 0
     for date in salaryDates:
         totalOfDays += int(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S").day)

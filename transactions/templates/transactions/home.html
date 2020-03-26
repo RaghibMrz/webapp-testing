@@ -1537,6 +1537,9 @@
             <!-- Card Body -->
             <div class="card-body" style="position: relative; height: 50vh;">              
               <canvas id='lineChart'></canvas>
+
+              
+              {% if selectedAccount == "AllCurr" %}
               <script>
                 var timeFormat = "MMM Do YY";
 
@@ -1628,6 +1631,106 @@
                   }
                 });
               </script>
+
+              {% else %}
+              <script>
+                var timeFormat = "MMM Do YY";
+
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
+
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
+
+                var currentList = {{ prediction.current | safe }}
+                var completeDataset = [];
+                var date = [];
+
+
+                for (var i = 0; i < currentList.length; i++) {
+                  newDict = {};
+                  if (currentList[i]["account"] == "{{selectedAccount}}"){
+                    newDict["label"] = "Account " + currentList[i]["account"]
+                    newDict["data"] = currentList[i]["values"]
+                    newDict["backgroundColor"] = backgroundColorList[i]
+                    newDict["borderColor"] = borderColorList[i]
+                    newDict["fill"] = false
+                    completeDataset.push(newDict);
+
+                    for (j in currentList[i]["dates"]) {
+                      date.push(new Date(parseInt(currentList[i]["dates"][j])))
+                    } 
+                  }
+                }
+
+                // if (currentList[0]["dates"].length >= currentList[1]["dates"].length && currentList[0]["dates"].length >= currentList[2]["dates"].length){
+                //   for (i in currentList[0]["dates"]) {
+                //     date.push(new Date(parseInt(currentList[0]["dates"][i])))
+                //   }
+                // }
+                // else if (currentList[1]["dates"].length >= currentList[0]["dates"].length && currentList[1]["dates"].length >= currentList[2]["dates"].length){
+                //   for (i in currentList[1]["dates"]) {
+                //     date.push(new Date(parseInt(currentList[1]["dates"][i])))
+                //   }
+                // }
+                // else if (currentList[2]["dates"].length >= currentList[0]["dates"].length && currentList[2]["dates"].length >= currentList[1]["dates"].length){
+                //   for (i in currentList[2]["dates"]) {
+                //     date.push(new Date(parseInt(currentList[2]["dates"][i])))
+                //   }
+                // }
+ 
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: date,
+                    datasets: completeDataset,
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    }
+                  }
+                });
+              </script>
+              {% endif %}
             </div>
           {% else %}
             <h6 class="m-0 font-weight-bold text-secondary">Spending Pattern and Predictions- Not available for <strong>all</strong> accounts,

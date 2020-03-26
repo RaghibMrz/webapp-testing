@@ -316,7 +316,10 @@ def buildPredictionDict(request):
     for account in getAccountIDsFromModel(request.user.profile):
         newDict = {}
         if isCreditAccount(account):
-            credit.append(prediction(datetime.datetime(2020, 2, 10), account))
+            newDict["account"] = account
+            newDict["dates"] = prediction(datetime.datetime(2020, 2, 10), account).get("balanceByDay").get("date")
+            newDict["values"] = prediction(datetime.datetime(2020, 2, 10), account).get("balanceByDay").get("value")
+            credit.append(newDict)
         else:
             newDict["account"] = account
             newDict["dates"] = prediction(datetime.datetime(2020, 2, 10), account).get('date')
@@ -723,13 +726,13 @@ def getPredictionForCreditCard(a, testDate, accountID):
                 spendingLastMonth[paymentTime.date()] = [float(transaction['Amount']['Amount'])]
         if paymentTime < lastBilling:
             balanceLastMonth +=float(transaction['Amount']['Amount'])
-        print(paymentTime)
-    print(targetdate, lastBilling)
+        # print(paymentTime)
+    # print(targetdate, lastBilling)
     daysPredicted = 0
-    print(spendingLastMonth)
+    # print(spendingLastMonth)
     currentdate = lastBilling.date()
     timeInterval = targetdate - lastBilling
-    balanceByDay = {"date": [time.mktime(currentdate.timetuple()) * 1000], "value" : [balanceLastMonth]}
+    balanceByDay = {"account": accountID, "date": [time.mktime(currentdate.timetuple()) * 1000], "value" : [balanceLastMonth]}
     while daysPredicted < timeInterval.days:
         currentdate += relativedelta(days=1)
         # print(currentdate)
@@ -749,7 +752,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
     # result['nextBillingDay'] = time.mktime(targetdate.timetuple()) * 1000
     result['nextBillingDay'] = targetdate
-    print(balanceByDay)
+    # print(balanceByDay)
     return result
 
 

@@ -1766,7 +1766,7 @@
           </div>
             <!-- Card Body -->
             <div class="card-body" style="position: relative; height: 50vh;">  
-              <div class="table-responsive">
+              <!-- <div class="table-responsive">
                 <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
@@ -1787,12 +1787,12 @@
                     {% endfor %}
                   </tbody>
                 </table>
-              </div>              
-
-              <!-- <canvas id='lineChart'></canvas> -->
+              </div>               -->
 
               
-              <!-- {% if selectedAccount == "AllCC" %}
+              <canvas id='lineChart'></canvas>
+              
+              {% if selectedAccount == "AllCC" %}
               <script>
                 var timeFormat = "MMM Do YY";
 
@@ -1828,21 +1828,19 @@
                 
                 var dateArrayLength = [];
 
+                console.log(creditList)
+
 
                 for (var i = 0; i < creditList.length; i++) {
                   newDict = {};
-                  dataList = [];
-                  tempList = []
                   newDict["label"] = "Account " + creditList[i]["account"]
-                  dataList.push(creditList[i]["BalanceWithInterest"])
-                  newDict["data"] = dataList
+                  newDict["data"] = creditList[i]["values"]
                   newDict["backgroundColor"] = backgroundColorList[i]
                   newDict["borderColor"] = borderColorList[i]
                   newDict["fill"] = false
                   completeDataset.push(newDict);
 
-                  tempList.push(creditList[i]["nextBillingDay"])
-                  dateArrayLength.push(tempList.length)
+                  dateArrayLength.push(creditList[i]["dates"].length)
                 }
 
                 var mostDates = dateArrayLength[0]
@@ -1855,13 +1853,12 @@
                   }
                 }
 
-                date.push(new Date(parseInt(creditList[indexMax]["nextBillingDay"])))
-                // for (i in creditList[indexMax]["nextBillingDay"]) {
-                //   date.push(new Date(parseInt(creditList[indexMax]["nextBillingDay"][i])))
-                // }
- 
                 console.log(completeDataset)
-                console.log(date)
+
+                // date.push(new Date(parseInt(creditList[indexMax]["nextBillingDay"])))
+                for (i in creditList[indexMax]["dates"]) {
+                  date.push(new Date(parseInt(creditList[indexMax]["dates"][i])))
+                }
 
                 var ctxLine = document.getElementById("lineChart").getContext("2d");
                 var myLineChart = new Chart(ctxLine,{
@@ -1947,17 +1944,17 @@
                   dataList = [];
                   if (creditList[i]["account"] == "{{selectedAccount}}"){
                     newDict["label"] = "Account " + creditList[i]["account"]
-                    dataList.push(creditList[i]["BalanceWithInterest"])
-                    newDict["data"] = dataList
+                    newDict["data"] = creditList[i]["values"]
                     newDict["backgroundColor"] = backgroundColorList[i]
                     newDict["borderColor"] = borderColorList[i]
                     newDict["fill"] = false
                     completeDataset.push(newDict);
-                    date.push(new Date(parseInt(creditList[i]["nextBillingDay"])))
 
-                    // for (j in creditList[i]["nextBillingDay"]) {
-                    //   date.push(new Date(parseInt(creditList[i]["nextBillingDay"][j])))
-                    // } 
+                    // date.push(new Date(parseInt(creditList[i]["nextBillingDay"])))
+
+                    for (j in creditList[i]["dates"]) {
+                      date.push(new Date(parseInt(creditList[i]["dates"][j])))
+                    } 
                   }
                 }
 
@@ -2020,7 +2017,7 @@
                   }
                 });
               </script>
-              {% endif %} -->
+              {% endif %}
 
 
             </div>

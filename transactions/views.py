@@ -110,6 +110,7 @@ def caps(request):
     else:
         context['totalPercentage'] = 0
     context['capData'] = capsContext
+    print(context)
     return render(request, 'transactions/caps.html', context)
 
 

@@ -219,6 +219,16 @@ def getMinPayment(profile, accountID):
         return mp
     return False
 
+def getSpendingIncome(rows):
+    spending = 0 
+    income = 0
+    for transaction in rows:
+        if transaction['Amount'][0] =='-':
+            spending += float(transaction['Amount'][1:])
+        else:
+            income += float(transaction['Amount'][1:])
+    return spending, income
+
 
 # the context dictionary needs to be updated with all sorts of different information retrieved from different
 # methods, this function collates those variables and adds them to the context.
@@ -248,7 +258,12 @@ def updateContext(context, rows, request, accountID, home):
         context['monthlyIncome'] = getMinIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
-
+        # added for spending and salary on transactions page 
+        context['allSpending'], context['allIncome'] = getSpendingIncome(rows)
+        if context['allIncome'] > 0:
+            context['allPercentage'] = context['allSpending'] / context['allIncome'] *100
+        else:
+            context['allPercentage'] = 0
         # for lib kai, 4 lines below:
         context['averageSpend'] = getAverageMonthlySpend(rows)
         context['averageIncome'] = getAverageMonthlyIncome(rows)
@@ -691,7 +706,6 @@ def getPredictionForCreditCard(a, testDate, accountID):
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
     result['nextBillingDay'] = targetdate
-    print(result)
     return result
 
 
@@ -785,7 +799,7 @@ def getAllCaps(request):
     capValues = []
     for caps in possibleCapSetOn:
         capValues.append(float(request.user.profile.getCap(caps)[0]))
-    print(capValues)
+    #print(capValues)
     return capValues
 
 

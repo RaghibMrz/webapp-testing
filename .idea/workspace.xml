@@ -7,7 +7,6 @@
       <change beforePath="$PROJECT_DIR$/env/bin/python" beforeDir="false" afterPath="$PROJECT_DIR$/env/bin/python" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/env/bin/python3" beforeDir="false" afterPath="$PROJECT_DIR$/env/bin/python3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/env/lib64" beforeDir="false" afterPath="$PROJECT_DIR$/env/lib64" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transactions/templates/transactions/summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/transactions/templates/transactions/summary.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/transactions/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+            <state relative-caret-position="515">
+              <caret line="91" column="48" lean-forward="true" selection-start-line="91" selection-start-column="48" selection-end-line="91" selection-end-column="48" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -29,11 +28,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/transactions/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2193">
-              <caret line="129" column="67" lean-forward="true" selection-start-line="129" selection-start-column="67" selection-end-line="129" selection-end-column="67" />
+            <state relative-caret-position="209">
+              <caret line="122" column="36" selection-start-line="122" selection-start-column="29" selection-end-line="122" selection-end-column="36" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -45,15 +44,9 @@
         <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/summary.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="33">
-              <caret line="761" column="14" lean-forward="true" selection-start-line="761" selection-start-column="14" selection-end-line="761" selection-end-column="14" />
+              <caret line="795" column="14" lean-forward="true" selection-start-line="795" selection-start-column="14" selection-end-line="795" selection-end-column="14" />
               <folding>
                 <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#4;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,18 +56,7 @@
         <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/caps.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="146" selection-start-line="146" selection-end-line="181" selection-end-column="8" />
-              <folding>
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#1;n#!!top" expanded="true" />
-              </folding>
+              <caret line="146" selection-start-line="146" selection-end-line="146" />
             </state>
           </provider>
         </entry>
@@ -83,16 +65,12 @@
         <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/transactions.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="238">
-              <caret line="155" column="2" lean-forward="true" selection-start-line="155" selection-start-column="2" selection-end-line="172" selection-end-column="8" />
+              <caret line="155" column="2" lean-forward="true" selection-start-line="155" selection-start-column="2" selection-end-line="155" selection-end-column="2" />
               <folding>
                 <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-                <element signature="e#12714#12721#1" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -109,7 +87,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>return</find>
       <find>%}</find>
       <find>marketingState</find>
       <find>table</find>
@@ -139,6 +116,7 @@
       <find>balance</find>
       <find>datatabl</find>
       <find>getCategoricalTotal</find>
+      <find>dateNow</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -157,13 +135,13 @@
         <option value="$PROJECT_DIR$/transactions/templates/transactions/base.html" />
         <option value="$PROJECT_DIR$/transactions/templates/transactions/caps.html" />
         <option value="$PROJECT_DIR$/transactions/templates/transactions/home.html" />
-        <option value="$PROJECT_DIR$/transactions/views.py" />
         <option value="$PROJECT_DIR$/transactions/utils.py" />
         <option value="$PROJECT_DIR$/transactions/templates/transactions/summary.html" />
+        <option value="$PROJECT_DIR$/transactions/views.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="width" value="1133" />
     <option name="height" value="1047" />
@@ -346,16 +324,12 @@
     <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/transactions.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
-          <caret line="155" column="2" lean-forward="true" selection-start-line="155" selection-start-column="2" selection-end-line="172" selection-end-column="8" />
+          <caret line="155" column="2" lean-forward="true" selection-start-line="155" selection-start-column="2" selection-end-line="155" selection-end-column="2" />
           <folding>
             <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#1;n#!!top" expanded="true" />
             <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="e#12714#12721#1" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -363,18 +337,7 @@
     <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/caps.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="146" selection-start-line="146" selection-end-line="181" selection-end-column="8" />
-          <folding>
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#3;n#div#1;n#!!top" expanded="true" />
-          </folding>
+          <caret line="146" selection-start-line="146" selection-end-line="146" />
         </state>
       </provider>
     </entry>
@@ -401,38 +364,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/transactions/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/transactions/templates/transactions/summary.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="33">
-          <caret line="761" column="14" lean-forward="true" selection-start-line="761" selection-start-column="14" selection-end-line="761" selection-end-column="14" />
+          <caret line="795" column="14" lean-forward="true" selection-start-line="795" selection-start-column="14" selection-end-line="795" selection-end-column="14" />
           <folding>
             <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#i#0;n#a#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#i#0;n#a#1;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#4;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/transactions/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2193">
-          <caret line="129" column="67" lean-forward="true" selection-start-line="129" selection-start-column="67" selection-end-line="129" selection-end-column="67" />
+        <state relative-caret-position="209">
+          <caret line="122" column="36" selection-start-line="122" selection-start-column="29" selection-end-line="122" selection-end-column="36" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transactions/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="515">
+          <caret line="91" column="48" lean-forward="true" selection-start-line="91" selection-start-column="48" selection-end-line="91" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>

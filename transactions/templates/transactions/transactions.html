@@ -796,7 +796,7 @@
                     },
                     title: {
                       display: true,
-                      text: "Spending Predictions"
+                      text: "Expected Balance"
                     },
                     tooltips: {
                       callbacks: {
@@ -907,7 +907,7 @@
                     },
                     title: {
                       display: true,
-                      text: "Spending Predictions"
+                      text: "Expected Balance"
                     },
                     tooltips: {
                       callbacks: {
@@ -928,7 +928,7 @@
             </div>
               <!-- Card Body -->
               <div class="card-body" style="position: relative; height: 50vh;">  
-                <div class="table-responsive">
+                <!-- <div class="table-responsive">
                   <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
@@ -949,7 +949,240 @@
                       {% endfor %}
                     </tbody>
                   </table>
-                </div>
+                </div> -->
+
+
+                <canvas id='lineChart'></canvas>
+              
+              {% if selectedAccount == "AllCC" %}
+              <script>
+                var timeFormat = "MMM Do YY";
+
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
+
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
+
+                var creditList = {{ prediction.credit | safe }}
+                var completeDataset = [];
+                var date = [];
+                
+                var dateArrayLength = [];
+
+                console.log(creditList)
+
+
+                for (var i = 0; i < creditList.length; i++) {
+                  newDict = {};
+                  newDict["label"] = "Account " + creditList[i]["account"]
+                  newDict["data"] = creditList[i]["values"]
+                  newDict["backgroundColor"] = backgroundColorList[i]
+                  newDict["borderColor"] = borderColorList[i]
+                  newDict["fill"] = false
+                  completeDataset.push(newDict);
+
+                  dateArrayLength.push(creditList[i]["dates"].length)
+                }
+
+                var mostDates = dateArrayLength[0]
+                var indexMax = 0
+
+                for (var i = 1; i < dateArrayLength.length; i++) {
+                  if (dateArrayLength[i] > mostDates){
+                    indexMax = i
+                    mostDates = dateArrayLength[i];
+                  }
+                }
+
+                console.log(completeDataset)
+
+                // date.push(new Date(parseInt(creditList[indexMax]["nextBillingDay"])))
+                for (i in creditList[indexMax]["dates"]) {
+                  date.push(new Date(parseInt(creditList[indexMax]["dates"][i])))
+                }
+
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: date,
+                    datasets: completeDataset,
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Balance with Interest to be paid"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
+                    }
+                  }
+                });
+              </script>
+
+              {% else %}
+              <script>
+                var timeFormat = "MMM Do YY";
+
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
+
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
+
+                var creditList = {{ prediction.credit | safe }}
+                var completeDataset = [];
+                var date = [];
+
+
+                for (var i = 0; i < creditList.length; i++) {
+                  newDict = {};
+                  dataList = [];
+                  if (creditList[i]["account"] == "{{selectedAccount}}"){
+                    newDict["label"] = "Account " + creditList[i]["account"]
+                    newDict["data"] = creditList[i]["values"]
+                    newDict["backgroundColor"] = backgroundColorList[i]
+                    newDict["borderColor"] = borderColorList[i]
+                    newDict["fill"] = false
+                    completeDataset.push(newDict);
+
+                    // date.push(new Date(parseInt(creditList[i]["nextBillingDay"])))
+
+                    for (j in creditList[i]["dates"]) {
+                      date.push(new Date(parseInt(creditList[i]["dates"][j])))
+                    } 
+                  }
+                }
+
+                // if (creditList[0]["dates"].length >= creditList[1]["dates"].length && creditList[0]["dates"].length >= creditList[2]["dates"].length){
+                //   for (i in creditList[0]["dates"]) {
+                //     date.push(new Date(parseInt(creditList[0]["dates"][i])))
+                //   }
+                // }
+                // else if (creditList[1]["dates"].length >= creditList[0]["dates"].length && creditList[1]["dates"].length >= creditList[2]["dates"].length){
+                //   for (i in creditList[1]["dates"]) {
+                //     date.push(new Date(parseInt(creditList[1]["dates"][i])))
+                //   }
+                // }
+                // else if (creditList[2]["dates"].length >= creditList[0]["dates"].length && creditList[2]["dates"].length >= creditList[1]["dates"].length){
+                //   for (i in creditList[2]["dates"]) {
+                //     date.push(new Date(parseInt(creditList[2]["dates"][i])))
+                //   }
+                // }
+ 
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: date,
+                    datasets: completeDataset,
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Balance with Interest to be paid"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
+                    }
+                  }
+                });
+              </script>
+              {% endif %}
+
+
+            </div>
           {% else %}
             <h6 class="m-0 font-weight-bold text-secondary">Spending Pattern and Predictions- Not available for <strong>all</strong> accounts,
               please select one from the drop down menu in the top right</h6>

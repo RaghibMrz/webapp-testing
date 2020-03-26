@@ -692,7 +692,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
-    lastBilling = targetdate - relativedelta(months = 1)
+    lastBilling = testDate - relativedelta(months = 1)
 
     # chargedDate is the date before which all the purchases will be charged the interest
     chargedDate = targetdate - relativedelta(
@@ -726,7 +726,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
             if paymentTime < chargedDate:
                 balance += float(transaction['Amount']['Amount'])
                 interest += (chargedDate.date() - paymentTime.date()).days * purchaseRate / 365
-        if paymentTime <targetdate and paymentTime>=lastBilling:
+        if paymentTime <testDate and paymentTime>=lastBilling:
             if paymentTime.date() in spendingLastMonth:
                 spendingLastMonth[paymentTime.date()].append(float(transaction['Amount']['Amount']))
             else:
@@ -738,7 +738,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
     daysPredicted = 0
     # print(spendingLastMonth)
     currentdate = lastBilling.date()
-    timeInterval = targetdate - lastBilling
+    timeInterval = testDate - lastBilling
     balanceByDay = {"account": accountID, "date": [time.mktime(currentdate.timetuple()) * 1000], "value" : [balanceLastMonth]}
     while daysPredicted < timeInterval.days:
         currentdate += relativedelta(days=1)

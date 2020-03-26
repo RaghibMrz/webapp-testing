@@ -126,7 +126,7 @@ MEDIA_URL = '/media/'
 # other configs I needed 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'summary'
 LOGIN_URL = 'login'
 
 # for email authentication

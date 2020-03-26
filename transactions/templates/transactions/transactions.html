@@ -13,7 +13,7 @@
     <h4 class="h4 mb-0 text-gray-800  mr-3">AccountID "{{accountID}}" not found</h4>
     <h4 class="h5 mb-0 text-black-800  mr-3">Delete this ID and try again</h4>
     {% endif %}
-    <form action="{% url 'home' %}" method="POST">
+    <form action="{% url 'transactions' %}" method="POST">
         {% csrf_token %}
         <select class="custom-select w-auto" name="submit">
           <!--working with actual accounts-->
@@ -43,7 +43,7 @@
       <h4 class="h3 mb-0 text-gray-800  mr-3">{{ accountType}}</h4>
       <h4 class="h3 mb-0 text-black-800  mr-3">{{selectedAccount}}</h4>
       {% endif %}
-          <form action="{% url 'home' %}" method="POST">
+          <form action="{% url 'transactions' %}" method="POST">
         {% csrf_token %}
         <select class="custom-select w-auto" name="submit">
           <!--working with actual accounts-->

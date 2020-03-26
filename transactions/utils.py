@@ -13,7 +13,7 @@ from requests import auth
 # from users.models import Account
 
 register = template.Library()
-dateNow = datetime.datetime.strptime("30 01 2020", "%d %m %Y")
+dateNow = datetime.datetime.strptime("02 02 2020", "%d %m %Y")
 
 
 # gets the correct account ID from the database through the correct post request
@@ -119,22 +119,26 @@ def getSummaryContext(request):
         newEntry = {}
         newEntry['accountID'] = accountID
         newEntry['isCreditAccount'] = isCreditAccount(accountID)
-        predict = prediction(datetime.datetime(2020, 2, 10), accountID)
+
+        predict = prediction(dateNow, accountID)
         newEntry['nextBillingDay'] = predict['nextBillingDay'].date()
+        directDebit = getDirectDebit(data, dateNow, accountID)
+        newEntry['directDebitList'] = directDebit
+        sumofDD = 0
+        for dd in directDebit:
+            sumofDD += dd['Amount']
+        newEntry['directDebit'] = sumofDD
+        print(predict)
+        totalBills += sumofDD
         if newEntry['isCreditAccount']:
             newEntry['balance'] = predict['balance']
             totalCreditBalance += predict['balance']
             newEntry['minimumPayment'] = predict['minRepaymentAmount']
             newEntry['balanceWtihInterest'] = predict['BalanceWithInterest']
         else:
+            newEntry['Overdraft'] = predict['Overdraft']
             newEntry['balance'] = float(data['Balance'][0]['Amount']['Amount'])
             totalCurrentBalance += float(data['Balance'][0]['Amount']['Amount'])
-            directDebit = getDirectDebit(data, datetime.datetime(2020, 2, 10), accountID)
-            sumofDD = 0
-            for value in directDebit.values():
-                sumofDD += value
-            newEntry['directDebit'] = sumofDD
-            totalBills += sumofDD
         accountData.append(newEntry)
 
     context['accountIDs'] = accountIDs
@@ -143,6 +147,7 @@ def getSummaryContext(request):
     context['totalCreditBalance'] = totalCreditBalance
     context['totalBills'] = totalBills
     context['remainingAmount'] = totalCurrentBalance - totalCreditBalance - totalBills
+    print(context)
     return context
 
 
@@ -316,11 +321,14 @@ def buildPredictionDict(request):
     for account in getAccountIDsFromModel(request.user.profile):
         newDict = {}
         if isCreditAccount(account):
-            credit.append(prediction(datetime.datetime(2020, 2, 10), account))
+            newDict["account"] = account
+            newDict["dates"] = prediction(datetime.datetime(2020, 2, 10), account).get("balanceByDay").get("date")
+            newDict["values"] = prediction(datetime.datetime(2020, 2, 10), account).get("balanceByDay").get("value")
+            credit.append(newDict)
         else:
             newDict["account"] = account
-            newDict["dates"] = prediction(datetime.datetime(2020, 2, 10), account).get('date')
-            newDict["values"] = prediction(datetime.datetime(2020, 2, 10), account).get('value')
+            newDict["dates"] = prediction(dateNow, account).get('date')
+            newDict["values"] = prediction(dateNow, account).get('value')
             # newDict[str(account)] = {
             #     "dates": prediction(datetime.datetime(2020, 2, 10), account).get('date'),
             #     "values": prediction(datetime.datetime(2020, 2, 10), account).get('value')
@@ -607,18 +615,16 @@ def getDirectDebit(a, testDate, accountID):
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
-    directDebitToPay = {}
+    directDebitToPay = []
     for directdebit in a['DirectDebit']:
         if directdebit['DirectDebitStatusCode'] == "Active":
             previouspayment = datetime.datetime.strptime(directdebit['PreviousPaymentDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
             nextpayment = previouspayment + relativedelta(months=1)
-            # print(nextpayment, targetdate, testDate)
+            print(nextpayment, targetdate, testDate)
             if nextpayment <= targetdate and nextpayment > testDate:
-                if nextpayment.date() in directDebitToPay:
-                    directDebitToPay[nextpayment.date()] += float(directdebit['PreviousPaymentAmount']['Amount'])
-                else:
-                    directDebitToPay[nextpayment.date()] = float(directdebit['PreviousPaymentAmount']['Amount'])
+                    directDebitToPay.append({'Date': nextpayment.date(), 'Amount':float(directdebit['PreviousPaymentAmount']['Amount']), 'Receiver': directdebit['MandateIdentification']})
+    print(directDebitToPay)
     return directDebitToPay
 
 
@@ -646,7 +652,8 @@ def getPredictionForCurrent(a, testDate, accountID):
     prediction = {
         "date": [],
         "value": [],
-        "nextBillingDay": targetdate
+        "nextBillingDay": targetdate,
+        "Overdraft" : []
     }
     currentdate = testDate.date()
     timeInterval = targetdate - testDate
@@ -660,8 +667,11 @@ def getPredictionForCurrent(a, testDate, accountID):
         currentbalance -= averagespending
         if currentdate in salary:
             currentbalance += salary[currentdate]
-        if currentdate in directDebitToPay:
-            currentbalance -= directDebitToPay[currentdate]
+        for directDebit in directDebitToPay:
+            if directDebit['Date'] == currentdate:
+                currentbalance -= directDebit['Amount']
+        if currentbalance < 0:
+            prediction["Overdraft"].append(currentdate)
         # prediction[time.mktime(currentdate.timetuple()) * 1000] = currentbalance
         prediction["date"].append(time.mktime(currentdate.timetuple()) * 1000)
         prediction["value"].append(currentbalance)
@@ -682,6 +692,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
+    lastBilling = targetdate - relativedelta(months = 1)
 
     # chargedDate is the date before which all the purchases will be charged the interest
     chargedDate = targetdate - relativedelta(
@@ -706,6 +717,8 @@ def getPredictionForCreditCard(a, testDate, accountID):
         if transaction['TransactionId'] == a['Balance'][0]['LastPaidTransaction']:
             lastPaymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
+    spendingLastMonth = {}
+    balanceLastMonth = 0
     for transaction in a['Transaction']:
         paymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
                                                  "%Y-%m-%dT%H:%M:%S+00:00")
@@ -713,12 +726,40 @@ def getPredictionForCreditCard(a, testDate, accountID):
             if paymentTime < chargedDate:
                 balance += float(transaction['Amount']['Amount'])
                 interest += (chargedDate.date() - paymentTime.date()).days * purchaseRate / 365
+        if paymentTime <targetdate and paymentTime>=lastBilling:
+            if paymentTime.date() in spendingLastMonth:
+                spendingLastMonth[paymentTime.date()].append(float(transaction['Amount']['Amount']))
+            else:
+                spendingLastMonth[paymentTime.date()] = [float(transaction['Amount']['Amount'])]
+        if paymentTime < lastBilling:
+            balanceLastMonth +=float(transaction['Amount']['Amount'])
+        # print(paymentTime)
+    # print(targetdate, lastBilling)
+    daysPredicted = 0
+    # print(spendingLastMonth)
+    currentdate = lastBilling.date()
+    timeInterval = targetdate - lastBilling
+    balanceByDay = {"account": accountID, "date": [time.mktime(currentdate.timetuple()) * 1000], "value" : [balanceLastMonth]}
+    while daysPredicted < timeInterval.days:
+        currentdate += relativedelta(days=1)
+        # print(currentdate)
+        if currentdate in spendingLastMonth:
+            balanceLastMonth += sum(spendingLastMonth[currentdate])
+        # prediction[time.mktime(currentdate.timetuple()) * 1000] = currentbalance
+        balanceByDay["date"].append(time.mktime(currentdate.timetuple()) * 1000)
+        balanceByDay["value"].append(balanceLastMonth)
+        daysPredicted += 1
+        
     result = {}
+    result["account"] = accountID
     result['BalanceWithInterest'] = balance
     result["Interest"] = interest
+    result["balanceByDay"] = balanceByDay
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
+    # result['nextBillingDay'] = time.mktime(targetdate.timetuple()) * 1000
     result['nextBillingDay'] = targetdate
+    # print(balanceByDay)
     return result
 
 

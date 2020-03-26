@@ -57,6 +57,7 @@ def home(request):
 def summary(request):
     request.session.set_expiry(600)
     context = getSummaryContext(request)
+    print(context)
     return render(request, 'transactions/summary.html', context)
 
 

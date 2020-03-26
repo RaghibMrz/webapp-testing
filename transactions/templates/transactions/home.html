@@ -75,10 +75,10 @@
               {% else %}
               <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Account Balance</div>
               {% endif %}
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{ balance }}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{ balance |floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
-              <i class="fas fa-comments fa-2x text-gray-300"></i>
+              <i class="fas fa-balance-scale fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
         <div class="card-body">
-          <h4 class="small font-weight-bold">Total spending: {{allSpending|floatformat:2| intcomma}} <span class="float-right">Total Salary: {{allIncome|floatformat:2| intcomma}}</span></h4>
+          <h4 class="small font-weight-bold">Total spending: £{{allSpending|floatformat:2| intcomma}} <span class="float-right">Total Salary: £{{allIncome|floatformat:2| intcomma}}</span></h4>
           <div class="progress mb-2">
             {% if allPercentage > 100%}
             <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="{{allSpend}} " aria-valuemin="0" aria-valuemax="{{allIncome}}"></div>
@@ -262,14 +262,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.1 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueBP" value="{{ caps.1 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueBP" value="{{ caps.1 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -349,14 +349,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.2 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueTP" value="{{ caps.2 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueTP" value="{{ caps.2 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -435,14 +435,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.3 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.3 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueGC" value="{{ caps.3 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -521,14 +521,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.4 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueFC" value="{{ caps.4 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueFC" value="{{ caps.4 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -607,14 +607,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.5 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueFSC" value="{{ caps.5 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueFSC" value="{{ caps.5 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -693,14 +693,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.6 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueFoodC" value="{{ caps.6 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueFoodC" value="{{ caps.6 |floatformat:2| intcomma }}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -779,14 +779,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.7 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueGeneralC" value="{{ caps.7 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueGeneralC" value="{{ caps.7 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -865,14 +865,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.8 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueEC" value="{{ caps.8 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueEC" value="{{ caps.8 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -950,14 +950,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.9 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueLSC" value="{{ caps.9 }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueLSC" value="{{ caps.9 |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -1036,11 +1036,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ caps.10 |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueOC" value="{{ caps.10 }}">
+                            <input type="text" class="form-control" name="getValueOC" value="{{ caps.10 |floatformat:2| intcomma}}">
                             <div class="input-group-append">
                               <span class="input-group-text">.00</span>
                             </div>
@@ -1571,6 +1574,8 @@
                 var currentList = {{ prediction.current | safe }}
                 var completeDataset = [];
                 var date = [];
+                
+                var dateArrayLength = [];
 
 
                 for (var i = 0; i < currentList.length; i++) {
@@ -1581,22 +1586,22 @@
                   newDict["borderColor"] = borderColorList[i]
                   newDict["fill"] = false
                   completeDataset.push(newDict);
+
+                  dateArrayLength.push(currentList[i]["dates"].length)
                 }
 
-                if (currentList[0]["dates"].length >= currentList[1]["dates"].length && currentList[0]["dates"].length >= currentList[2]["dates"].length){
-                  for (i in currentList[0]["dates"]) {
-                    date.push(new Date(parseInt(currentList[0]["dates"][i])))
+                var mostDates = dateArrayLength[0]
+                var indexMax = 0
+
+                for (var i = 1; i < dateArrayLength.length; i++) {
+                  if (dateArrayLength[i] > mostDates){
+                    indexMax = i
+                    mostDates = dateArrayLength[i];
                   }
                 }
-                else if (currentList[1]["dates"].length >= currentList[0]["dates"].length && currentList[1]["dates"].length >= currentList[2]["dates"].length){
-                  for (i in currentList[1]["dates"]) {
-                    date.push(new Date(parseInt(currentList[1]["dates"][i])))
-                  }
-                }
-                else if (currentList[2]["dates"].length >= currentList[0]["dates"].length && currentList[2]["dates"].length >= currentList[1]["dates"].length){
-                  for (i in currentList[2]["dates"]) {
-                    date.push(new Date(parseInt(currentList[2]["dates"][i])))
-                  }
+
+                for (i in currentList[indexMax]["dates"]) {
+                  date.push(new Date(parseInt(currentList[indexMax]["dates"][i])))
                 }
  
                 var ctxLine = document.getElementById("lineChart").getContext("2d");
@@ -1626,6 +1631,18 @@
                           labelString: "Amount"
                         }
                       }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Spending Predictions"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
                     }
                   }
                 });
@@ -1725,11 +1742,284 @@
                           labelString: "Amount"
                         }
                       }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Spending Predictions"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
                     }
                   }
                 });
               </script>
               {% endif %}
+            </div>
+          {% elif accountType == "Credit-Card" %}
+          <h6 class="m-0 font-weight-bold text-primary">Spending Pattern and Predictions</h6>
+          <h6 class="m-0 text-secondary" style="float:left"> - For Account {{ selectedAccount }}</h6>
+          </div>
+            <!-- Card Body -->
+            <div class="card-body" style="position: relative; height: 50vh;">  
+              <!-- <div class="table-responsive">
+                <table class="table table-bordered" id="ccTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Account</th>
+                      <th>Balance With Interest</th>
+                      <th>Interest</th>
+                      <th>Next Billing Day</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for info in prediction.credit %}
+                      <tr>
+                        <td>{{ info.account }}</td>
+                        <td>{{ info.BalanceWithInterest |floatformat:2| intcomma}}</td>
+                        <td>{{ info.Interest }}</td>
+                        <td>{{ info.nextBillingDay }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>               -->
+
+              
+              <canvas id='lineChart'></canvas>
+              
+              {% if selectedAccount == "AllCC" %}
+              <script>
+                var timeFormat = "MMM Do YY";
+
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
+
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
+
+                var creditList = {{ prediction.credit | safe }}
+                var completeDataset = [];
+                var date = [];
+                
+                var dateArrayLength = [];
+
+                console.log(creditList)
+
+
+                for (var i = 0; i < creditList.length; i++) {
+                  newDict = {};
+                  newDict["label"] = "Account " + creditList[i]["account"]
+                  newDict["data"] = creditList[i]["values"]
+                  newDict["backgroundColor"] = backgroundColorList[i]
+                  newDict["borderColor"] = borderColorList[i]
+                  newDict["fill"] = false
+                  completeDataset.push(newDict);
+
+                  dateArrayLength.push(creditList[i]["dates"].length)
+                }
+
+                var mostDates = dateArrayLength[0]
+                var indexMax = 0
+
+                for (var i = 1; i < dateArrayLength.length; i++) {
+                  if (dateArrayLength[i] > mostDates){
+                    indexMax = i
+                    mostDates = dateArrayLength[i];
+                  }
+                }
+
+                console.log(completeDataset)
+
+                // date.push(new Date(parseInt(creditList[indexMax]["nextBillingDay"])))
+                for (i in creditList[indexMax]["dates"]) {
+                  date.push(new Date(parseInt(creditList[indexMax]["dates"][i])))
+                }
+
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: date,
+                    datasets: completeDataset,
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Balance with Interest to be paid"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
+                    }
+                  }
+                });
+              </script>
+
+              {% else %}
+              <script>
+                var timeFormat = "MMM Do YY";
+
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
+
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
+
+                var creditList = {{ prediction.credit | safe }}
+                var completeDataset = [];
+                var date = [];
+
+
+                for (var i = 0; i < creditList.length; i++) {
+                  newDict = {};
+                  dataList = [];
+                  if (creditList[i]["account"] == "{{selectedAccount}}"){
+                    newDict["label"] = "Account " + creditList[i]["account"]
+                    newDict["data"] = creditList[i]["values"]
+                    newDict["backgroundColor"] = backgroundColorList[i]
+                    newDict["borderColor"] = borderColorList[i]
+                    newDict["fill"] = false
+                    completeDataset.push(newDict);
+
+                    // date.push(new Date(parseInt(creditList[i]["nextBillingDay"])))
+
+                    for (j in creditList[i]["dates"]) {
+                      date.push(new Date(parseInt(creditList[i]["dates"][j])))
+                    } 
+                  }
+                }
+
+                // if (creditList[0]["dates"].length >= creditList[1]["dates"].length && creditList[0]["dates"].length >= creditList[2]["dates"].length){
+                //   for (i in creditList[0]["dates"]) {
+                //     date.push(new Date(parseInt(creditList[0]["dates"][i])))
+                //   }
+                // }
+                // else if (creditList[1]["dates"].length >= creditList[0]["dates"].length && creditList[1]["dates"].length >= creditList[2]["dates"].length){
+                //   for (i in creditList[1]["dates"]) {
+                //     date.push(new Date(parseInt(creditList[1]["dates"][i])))
+                //   }
+                // }
+                // else if (creditList[2]["dates"].length >= creditList[0]["dates"].length && creditList[2]["dates"].length >= creditList[1]["dates"].length){
+                //   for (i in creditList[2]["dates"]) {
+                //     date.push(new Date(parseInt(creditList[2]["dates"][i])))
+                //   }
+                // }
+ 
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: date,
+                    datasets: completeDataset,
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Balance with Interest to be paid"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
+                    }
+                  }
+                });
+              </script>
+              {% endif %}
+
+
             </div>
           {% else %}
             <h6 class="m-0 font-weight-bold text-secondary">Spending Pattern and Predictions- Not available for <strong>all</strong> accounts,

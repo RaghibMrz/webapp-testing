@@ -231,41 +231,67 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Expenditure</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Categorical Caps</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body" style="position: relative; height: 50vh;">
           <canvas id="pieChart"></canvas>
           <script>
+            var capDataset = ["{{capData.0.Cap}}","{{capData.1.Cap}}","{{capData.2.Cap}}","{{capData.3.Cap}}","{{capData.4.Cap}}","{{capData.5.Cap}}","{{capData.6.Cap}}","{{capData.7.Cap}}","{{capData.8.Cap}}","{{capData.9.Cap}}"]
+
             var ctxPie = document.getElementById("pieChart")
             var myPieChart = new Chart(ctxPie,{
               type: 'pie',
               data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                 datasets: [{
-                  label: '# of Votes',
-                  data: [12, 19, 3, 5, 2, 3],
+                  label: 'Cap Set',
+                  data: capDataset,
                   backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(78, 115, 223, 0.5)', //blue
+                    'rgba(231, 74, 59, 0.5)',  //red
+                    'rgba(253, 126, 20, 0.5)',  //orange
+                    'rgba(232, 62, 140, 0.5)',  //pink
+                    'rgba(28, 200, 138, 0.5)',  //green
+                    'rgba(246, 194, 62, 0.5)',  //yellow
+                    'rgba(90, 92, 105, 0.5)',  //gray-dark
+                    'rgba(102, 16, 242, 0.5)',  //indigo
+                    'rgba(54, 185, 204, 0.5)',  //cyan
+                    'rgba(133, 135, 150, 0.5)',  //gray
                   ],
                   borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                  'rgba(78, 115, 223, 1)',
+                    'rgba(231, 74, 59, 1)',
+                    'rgba(253, 126, 20, 1)',
+                    'rgba(232, 62, 140, 1)',
+                    'rgba(28, 200, 138, 1)',
+                    'rgba(246, 194, 62, 1)',
+                    'rgba(90, 92, 105, 1)',
+                    'rgba(102, 16, 242, 1)',
+                    'rgba(54, 185, 204, 1)',
+                    'rgba(133, 135, 150, 1)',
                   ],
                   borderWidth: 1
                 }]
               },
               options: {
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: "Categorical Caps Set"
+                },
+                tooltips: {
+                  // Code to customize the title and label of Tooltips for pie chart
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']]
+                    },
+                    label: function(tooltipItem, data) {
+                      var label = data.datasets[tooltipItem.datasetIndex].label;
+                      return label + ": " + Number(data.datasets[0].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                    }
+                  }
+                }
               }
             });
           </script>
@@ -276,40 +302,73 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Expenditure</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Categorical Caps vs Spend</h6>
           </div>
         <div class="card-body" style="position: relative; height: 50vh;">
           <canvas id="barChart"></canvas>
           <script>
             var ctxBar = document.getElementById("barChart")
+
+            var spendDataset = ["{{capData.0.Spend}}","{{capData.1.Spend}}","{{capData.2.Spend}}","{{capData.3.Spend}}","{{capData.4.Spend}}","{{capData.5.Spend}}","{{capData.6.Spend}}","{{capData.7.Spend}}","{{capData.8.Spend}}","{{capData.9.Spend}}"]
+            var capDataset = ["{{capData.0.Cap}}","{{capData.1.Cap}}","{{capData.2.Cap}}","{{capData.3.Cap}}","{{capData.4.Cap}}","{{capData.5.Cap}}","{{capData.6.Cap}}","{{capData.7.Cap}}","{{capData.8.Cap}}","{{capData.9.Cap}}"]
+
             var myBarChart = new Chart(ctxBar,{
               type: 'bar',
               data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                 datasets: [{
-                  label: '# of Votes',
-                  data: [12, 19, 3, 5, 2, 3],
+                  label: 'Categorical Cap',
+                  data: capDataset,
+                  backgroundColor: 'rgba(231, 74, 59, 0.5)',  //red
+                  borderColor: 'rgba(231, 74, 59, 1)',
+                  borderWidth: 1
+                }, {
+                  label: 'Categorical Spend',
+                  data: spendDataset,
                   backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(78, 115, 223, 0.5)', //blue
+                    'rgba(231, 74, 59, 0.5)',  //red
+                    'rgba(253, 126, 20, 0.5)',  //orange
+                    'rgba(232, 62, 140, 0.5)',  //pink
+                    'rgba(28, 200, 138, 0.5)',  //green
+                    'rgba(246, 194, 62, 0.5)',  //yellow
+                    'rgba(90, 92, 105, 0.5)',  //gray-dark
+                    'rgba(102, 16, 242, 0.5)',  //indigo
+                    'rgba(54, 185, 204, 0.5)',  //cyan
+                    'rgba(133, 135, 150, 0.5)',  //gray
                   ],
-                  borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                  borderColor:[
+                    'rgba(78, 115, 223, 1)',
+                    'rgba(231, 74, 59, 1)',
+                    'rgba(253, 126, 20, 1)',
+                    'rgba(232, 62, 140, 1)',
+                    'rgba(28, 200, 138, 1)',
+                    'rgba(246, 194, 62, 1)',
+                    'rgba(90, 92, 105, 1)',
+                    'rgba(102, 16, 242, 1)',
+                    'rgba(54, 185, 204, 1)',
+                    'rgba(133, 135, 150, 1)',
                   ],
                   borderWidth: 1
                 }]
               },
               options: {
-                maintainAspectRatio:false
+                maintainAspectRatio:false,
+                title: {
+                  display: true,
+                  text: "Caps vs Spend"
+                },
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']]
+                    },
+                    label: function(tooltipItem, data) {
+                      var label = data.datasets[tooltipItem.datasetIndex].label;
+                      return label + ": " + Number(data.datasets[0].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                    }
+                  }
+                }
               }
             });
           </script>

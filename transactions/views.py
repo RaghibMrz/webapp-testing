@@ -1,3 +1,5 @@
+import calendar
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -66,12 +68,53 @@ def caps(request):
         return redirect('summary')
 
     accountID = getAccount(request)
+    tempcontext, rows = makeCatContext(request, accountID), getRows(request, accountID)
+    if rows != False:
+        endDay = str(calendar.monthrange(dateNow.year, dateNow.month)[1])
+        startDate = "1/" + str(dateNow.month) + "/" + str(dateNow.year) + " 00:00 "
+        endDate = " " + endDay + "/" + str(dateNow.month) + "/" + str(dateNow.year) + " 00:00"
+        rows = getFilteredRows(rows, startDate, endDate)
+        for transaction in rows:
+            tempcontext[getCategory(transaction['MCC'])].append(transaction)
+    totalList, spendIndicatorList, tempcontext = getCategoricalTotal(tempcontext)
+    possibleCapSetOn = ["getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+                        "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
+    categories = ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General',
+                  'Entertainment', 'Leisure & Self-Care', 'Other']
+
+    categoricalSpend = {}
+    for i in range(len(possibleCapSetOn)):
+        if spendIndicatorList[i] == 'Spent':
+            categoricalSpend[possibleCapSetOn[i]] = totalList[i]
+        else:
+            categoricalSpend[possibleCapSetOn[i]] = 0
     context = makeAggContext(request, accountID)
     context['spend'] = getAverageMonthlySpend(getRows(request, accountID))
     context['accountType'] = getAccountType(accountID)
-    caps = getAllCaps(request)
-    context['allCap'] = caps.pop(0)
-    context['totalCap'] = sum(caps)
+    capvalues = getAllCaps(request)
+    capsContext = []
+
+    for num in range(len(categories)):
+        capsContext.append(
+            {'Category': categories[num], 'Spend': categoricalSpend[possibleCapSetOn[num]],
+             'Cap': capvalues[(num + 1)]})
+
+    for cap in capsContext:
+        if cap['Cap'] != 0:
+            cap['Percentage'] = cap['Spend'] / cap['Cap'] * 100
+        else:
+            cap['Percentage'] = 0
+    context['allCap'] = capvalues.pop(0)
+    context['allSpend'] = sum(totalList)
+    context['totalCap'] = sum(capvalues)
+    if context['allCap'] > 0:
+        context['totalPercentage'] = sum(totalList) / context['allCap'] * 100
+    else:
+        context['totalPercentage'] = 0
+    context['capData'] = capsContext
+
+    vals = list(categoricalSpend.values())
+    context['mostExpCat'] = context['capData'][vals.index(max(vals))]
     return render(request, 'transactions/caps.html', context)
 
 

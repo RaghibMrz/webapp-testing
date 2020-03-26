@@ -13,6 +13,7 @@ from requests import auth
 # from users.models import Account
 
 register = template.Library()
+dateNow = datetime.datetime.strptime("30 01 2020", "%d %m %Y")
 
 
 # gets the correct account ID from the database through the correct post request
@@ -95,7 +96,8 @@ def sortedRows(rows):
     sortedRows.reverse()
     return sortedRows
 
-#function that returns all necessary info on summary page
+
+# function that returns all necessary info on summary page
 def getSummaryContext(request):
     accountIDs = getAccountIDsFromModel(request.user.profile)
     accountData = []
@@ -107,7 +109,7 @@ def getSummaryContext(request):
         newEntry = {}
         newEntry['accountID'] = accountID
         newEntry['isCreditAccount'] = isCreditAccount(accountID)
-        predict = prediction( datetime.datetime(2020, 2, 10), accountID)
+        predict = prediction(datetime.datetime(2020, 2, 10), accountID)
         newEntry['nextBillingDay'] = predict['nextBillingDay'].date()
         if newEntry['isCreditAccount']:
             newEntry['balance'] = predict['balance']
@@ -152,15 +154,6 @@ def getCurrAccountBalance(request, accountID):
                 total += float(getData(account)['Balance'][0]['Amount']['Amount'])
         return total
     return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
-
-
-# def getSummaryContext(request, accountID):
-#     accountIDs = getStrAccountIDs(request.user.profile)
-#     accountData = []
-#     for accountID in accountIDs:
-#         data = getData(accountID)
-#
-#         newEntry = {}
 
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
@@ -227,6 +220,16 @@ def getMinPayment(profile, accountID):
         return mp
     return False
 
+def getSpendingIncome(rows):
+    spending = 0 
+    income = 0
+    for transaction in rows:
+        if transaction['Amount'][0] =='-':
+            spending += float(transaction['Amount'][1:])
+        else:
+            income += float(transaction['Amount'][1:])
+    return spending, income
+
 
 # the context dictionary needs to be updated with all sorts of different information retrieved from different
 # methods, this function collates those variables and adds them to the context.
@@ -256,7 +259,12 @@ def updateContext(context, rows, request, accountID, home):
         context['monthlyIncome'] = getMinIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
-
+        # added for spending and salary on transactions page 
+        context['allSpending'], context['allIncome'] = getSpendingIncome(rows)
+        if context['allIncome'] > 0:
+            context['allPercentage'] = context['allSpending'] / context['allIncome'] *100
+        else:
+            context['allPercentage'] = 0
         # for lib kai, 4 lines below:
         context['averageSpend'] = getAverageMonthlySpend(rows)
         context['averageIncome'] = getAverageMonthlyIncome(rows)
@@ -702,7 +710,6 @@ def getPredictionForCreditCard(a, testDate, accountID):
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
     result['nextBillingDay'] = targetdate
-    print(result)
     return result
 
 
@@ -734,6 +741,8 @@ def getMonthlySpendDict(rows, indicator):
 # calculates the minimum income per month
 def getAverageMonthlyIncome(rows):
     monthDict = getMonthlySpendDict(rows, "income")
+    if len(monthDict.values()) == 0:
+        return 0
     return round(sum(monthDict.values()) / len(monthDict.values()), 2)
 
 
@@ -749,6 +758,8 @@ def getMinIncome(rows):
 # returns average monthly spend on account
 def getAverageMonthlySpend(rows):
     monthDict = getMonthlySpendDict(rows, "spend")
+    if len(monthDict.values()) == 0:
+        return 0
     return -round(sum(monthDict.values()) / len(monthDict.values()), 2)
 
 
@@ -777,7 +788,7 @@ def calcExcess(rows):
 # check if post request has been sent to update a certain cap
 def updateCaps(request):
     possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
-                        "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
+                        "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
 
     if request.method == "POST" and any(cap in request.POST for cap in possibleCapSetOn):
         chosenCapName = str(list(dict(request.POST).keys())[1])
@@ -788,11 +799,15 @@ def updateCaps(request):
 # gets all the numerical values of the caps set on each category
 def getAllCaps(request):
     possibleCapSetOn = ["getValueAll", "getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
-                        "getValueFoodC", "getValueGC", "getValueEC", "getValueLSC", "getValueOC"]
+                        "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
     capValues = []
     for caps in possibleCapSetOn:
         capValues.append(float(request.user.profile.getCap(caps)[0]))
     return capValues
+
+
+def getDate(day, month, year):
+    return datetime.datetime.strptime(day + " " + month + " " + year, "%d %m %Y")
 
 
 # performs lookup from Merchant Category Code file- maps it to a defined category

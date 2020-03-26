@@ -65,7 +65,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Balance on current account</div>
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total balance on current accounts</div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{totalCurrentBalance|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
@@ -137,15 +137,54 @@
     </div>
   </div>
 
-  <!-- Content Row -->
   <div class="row">
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
         <div class="card-body">
-          <h4 class="small font-weight-bold">Budget used <span class="float-right">Total Salary</span></h4>
-          <div class="progress mb-2">
-            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
+          <h4 class="small font-weight-bold">Account Dashboard</h4>
+          
+          <!-- relevant algorithms for summary page -->
+          
+            {% if remainingAmount < 0 %}
+            <div class="h6 mb-0 mr-3 text-gray-800"><i class="fas fa-exclamation-circle"></i>
+              It looks like your credit card bills and direct debits may put your current accounts into overdraft!
+            </div>
+            {% endif %}
+            {% if remainingAmount > 0  and  totalCreditBalance > 0%}
+            <div class="h6 mb-0 mr-3 text-gray-800">
+              <i class="fas fa-exclamation-circle"></i>
+              Looking good! You have enough balance to pay for your upcoming bills, keep within your budgets to keep saving money.
+              <br> Consider paying off more of your credit card's outstanding balance.
+            </div>
+            {% endif %}
+            {% if remainingAmount > 0  and  totalCreditBalance == 0 %}
+            <div class="h6 mb-0 mr-3 text-gray-800">
+              <i class="fas fa-exclamation-circle"></i>
+              Looking good! You have enough balance to pay for your upcoming bills, keep within your budgets to keep saving money.
+              You also have no outstanding balance on credit cards, so you could look into putting your money into a savings account!
+            </div>
+            {% endif %}
+          
+            
+          
+            {% if spend > totalCap %}
+            <div class="h6 mb-0 mr-3 text-gray-800" style="padding-top:2%"><i class="fas fa-exclamation-circle"></i>
+              Your current average spend is greater than your monthly cap on all transactions!
+            </div>
+            {% endif %}
+          
+            {% if spend > allCap %}
+            <div class="h6 mb-0 mr-3 text-gray-800" style="padding-top:2%"><i class="fas fa-exclamation-circle"></i>
+              Your current average spend is greater than the sum of your monthly categorical caps!
+            </div>
+            {% endif %}
+          
+            {% if mostExpCat.Cap == 0.0 %}
+            <div class="h6 mb-0 mr-3 text-gray-800" style="padding-top:2%"><i class="fas fa-exclamation-circle"></i>
+              Tip: You have not set a cap on your most costly category, you should consider doing this! You have spent £{{ mostExpCat.Spend |floatformat:2| intcomma }} on this category.
+            </div>
+            {% endif %}
+          
         </div>
       </div>
     </div>

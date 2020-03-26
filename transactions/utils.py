@@ -13,7 +13,7 @@ from requests import auth
 # from users.models import Account
 
 register = template.Library()
-dateNow = datetime.datetime.strptime("02 02 2020", "%d %m %Y")
+dateNow = datetime.datetime.strptime("15 10 2019", "%d %m %Y")
 
 
 # gets the correct account ID from the database through the correct post request
@@ -128,7 +128,6 @@ def getSummaryContext(request):
         for dd in directDebit:
             sumofDD += dd['Amount']
         newEntry['directDebit'] = sumofDD
-        print(predict)
         totalBills += sumofDD
         if newEntry['isCreditAccount']:
             newEntry['balance'] = predict['balance']
@@ -147,7 +146,6 @@ def getSummaryContext(request):
     context['totalCreditBalance'] = totalCreditBalance
     context['totalBills'] = totalBills
     context['remainingAmount'] = totalCurrentBalance - totalCreditBalance - totalBills
-    print(context)
     return context
 
 
@@ -621,10 +619,8 @@ def getDirectDebit(a, testDate, accountID):
             previouspayment = datetime.datetime.strptime(directdebit['PreviousPaymentDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
             nextpayment = previouspayment + relativedelta(months=1)
-            print(nextpayment, targetdate, testDate)
             if nextpayment <= targetdate and nextpayment > testDate:
                     directDebitToPay.append({'Date': nextpayment.date(), 'Amount':float(directdebit['PreviousPaymentAmount']['Amount']), 'Receiver': directdebit['MandateIdentification']})
-    print(directDebitToPay)
     return directDebitToPay
 
 

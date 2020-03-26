@@ -50,8 +50,7 @@ def validateID(request, accountID):
 # returns rows of userID selected, or aggregate rows if all selected
 def getRows(request, accountID):
     if accountID == "All":
-        return False
-        # rows = getAllRows(getAccountIDsFromModel(request.user.profile))
+        return getAllRows(getAccountIDsFromModel(request.user.profile))
     elif accountID == "AllCurr":
         return getAllRowsCurr(getAccountIDsFromModel(request.user.profile))
     elif accountID == "AllCC":
@@ -99,6 +98,17 @@ def sortedRows(rows):
 
 # function that returns all necessary info on summary page
 def getSummaryContext(request):
+    context = makeCatContext(request, "All")
+    rows = getRows(request, "All")
+    if rows != False:
+        for transaction in rows:
+            context[getCategory(transaction['MCC'])].append(transaction)
+
+    totalList, spendIndicatorList, context = getCategoricalTotal(context)
+    context['count'] = getTransactionNum(context)
+    context['totals'] = totalList
+    context['caps'] = getAllCaps(request)
+    context['spendIndicatorList'] = spendIndicatorList
     accountIDs = getAccountIDsFromModel(request.user.profile)
     accountData = []
     totalCurrentBalance = 0
@@ -126,14 +136,13 @@ def getSummaryContext(request):
             newEntry['directDebit'] = sumofDD
             totalBills += sumofDD
         accountData.append(newEntry)
-    context = {
-        'accountIDs': accountIDs,
-        'accountData': accountData,
-        'totalCurrentBalance': totalCurrentBalance,
-        'totalCreditBalance': totalCreditBalance,
-        'totalBills': totalBills,
-        'remainingAmount': totalCurrentBalance - totalCreditBalance - totalBills
-    }
+
+    context['accountIDs'] = accountIDs
+    context['accountData'] = accountData
+    context['totalCurrentBalance'] = totalCurrentBalance
+    context['totalCreditBalance'] = totalCreditBalance
+    context['totalBills'] = totalBills
+    context['remainingAmount'] = totalCurrentBalance - totalCreditBalance - totalBills
     return context
 
 
@@ -367,14 +376,14 @@ def getSingleAccountRows(accountID):
 
 
 # combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
-# def getAllRows(IDs):
-#     row = getSingleAccountRows(IDs[0])
-#     for accountID in IDs:
-#         if accountID == IDs[0]:
-#             continue
-#         for collectingDict in getSingleAccountRows(accountID):
-#             row.append(collectingDict)
-#     return sortedRows(row)
+def getAllRows(IDs):
+    row = getSingleAccountRows(IDs[0])
+    for accountID in IDs:
+        if accountID == IDs[0]:
+            continue
+        for collectingDict in getSingleAccountRows(accountID):
+            row.append(collectingDict)
+    return sortedRows(row)
 
 
 # combines list of transactions from all current accounts into one, by unpacking each list of dictionaries into one

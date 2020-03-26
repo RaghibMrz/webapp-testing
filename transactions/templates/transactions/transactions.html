@@ -514,6 +514,7 @@
           <canvas id="barChart"></canvas>
           <!-- <canvas id="treeChart"></canvas> -->
           <script>
+            // Tree Chart attempt
             // var ctxTree = document.getElementById("treeChart").getContext('2d');
             
             // var bpTotal = "{{totals.0}}";
@@ -606,11 +607,6 @@
             var timeFormat = "MMM YYYY";
 
             function dateStringToArray(s) {
-              // var final = s.slice(1,-1).replace(/\s/g, '').split(',');
-              // for (i in final) {
-              //   final[i] = new Date(parseInt(final[i]));
-              // };
-              // return final
               var final = s.slice(1,-1).replace(/\s/g, '').split(',');
               for (i in final) {
                 final[i] = new String(moment(new Date(parseInt(final[i]))).format("MMM YYYY"));

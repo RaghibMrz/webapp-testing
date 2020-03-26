@@ -1103,6 +1103,7 @@
 
           <canvas id="pieChart"></canvas>
           <script>
+            // Attempt to use AJAX to chart data before realizing AJAX was redundant and not needed
             // var endpoint = '/home/api/chart/data/'
             // var resData = []
             // var labels = []
@@ -1205,8 +1206,6 @@
               data: {
                 labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                 datasets: [{
-                  // data: resData,
-                  // data: [5,5,5,5,5,5,5,5,5,5],  //test
                   label: "Amount Spent",
                   data: [bpTotal, tpTotal, groceryTotal, fcTotal, financesTotal, foodTotal, genTotal, entertainmentTotal, lsTotal, uncatTotal],
 
@@ -1246,6 +1245,7 @@
                   text: "Amount Spent"
                 },
                 tooltips: {
+                  // Code to customize the title and label of Tooltips for pie chart
                   callbacks: {
                     title: function(tooltipItem, data) {
                       return data['labels'][tooltipItem[0]['index']]
@@ -1256,15 +1256,6 @@
                     }
                   }
                 }
-                // width: 100,
-                // height: 300,
-                // scales: {
-                //   yAxes: [{
-                //     ticks: {
-                //       beginAtZero: true
-                //     }
-                //   }]
-                // }
               }
             })
           </script>
@@ -1313,22 +1304,9 @@
         </div>
         <!-- Card Body -->
         <div class="card-body" style="position: relative; height: 50vh;">
-          <!-- <img src="{% static 'transactions/img/SquareBar.jpg' %}" style="max-width:100%;"> -->
 
           <canvas id="treeChart"></canvas>
           <script>
-            // var endpoint = '/home/api/chart/data/'
-            // $.ajax({
-            //   method: "GET",
-            //   url: endpoint,
-            //   success: function(data){
-                
-            //   },
-            //   error: function(error_data){
-
-            //   },
-            // })
-
             var ctxTree = document.getElementById("treeChart").getContext('2d');
           
             var bpTotal = "{{totals.0}}";
@@ -1358,7 +1336,6 @@
               data: {
                 labels: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                 datasets: [{
-                  // label: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
                   label: "Number of Transactions",
                   data: [bpCount, tpCount, groceryCount, fcCount, financesCount, foodCount, genCount, entertainmentCount, lsCount, uncatCount],
 
@@ -1403,78 +1380,83 @@
             });
 
 
-            var treemapData = [
-              {
-                category: "Bills & Payments",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: bpCount,
-                transactionTotal: bpTotal
-              },
-              {
-                category: "Transport",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: tpCount,
-                transactionTotal: tpTotal
-              },
-              {
-                category: "Groceries",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: groceryCount,
-                transactionTotal: groceryTotal
-              },
-              {
-                category: "Fashion & Cosmetics",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: fcCount,
-                transactionTotal: fcTotal
-              },
-              {
-                category: "Finances",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: financesCount,
-                transactionTotal: financesTotal
-              },
-              {
-                category: "Food",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: foodCount,
-                transactionTotal: foodTotal
-              },
-              {
-                category: "General",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: genCount,
-                transactionTotal: genTotal
-              },
-              {
-                category: "Entertainment",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: entertainmentCount,
-                transactionTotal: entertainmentTotal
-              },
-              {
-                category: "Leisure & Self-Care",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: lsCount,
-                transactionTotal: lsTotal
-              },
-              {
-                category: "Other",
-                count: "Number of Transactions",
-                sum: "Total Amount Spent",
-                transactionCount: uncatCount,
-                transactionTotal: uncatTotal
-              }
-            ]
+
+            // Initial Treemap Dataset
+
+            // var treemapData = [
+            //   {
+            //     category: "Bills & Payments",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: bpCount,
+            //     transactionTotal: bpTotal
+            //   },
+            //   {
+            //     category: "Transport",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: tpCount,
+            //     transactionTotal: tpTotal
+            //   },
+            //   {
+            //     category: "Groceries",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: groceryCount,
+            //     transactionTotal: groceryTotal
+            //   },
+            //   {
+            //     category: "Fashion & Cosmetics",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: fcCount,
+            //     transactionTotal: fcTotal
+            //   },
+            //   {
+            //     category: "Finances",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: financesCount,
+            //     transactionTotal: financesTotal
+            //   },
+            //   {
+            //     category: "Food",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: foodCount,
+            //     transactionTotal: foodTotal
+            //   },
+            //   {
+            //     category: "General",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: genCount,
+            //     transactionTotal: genTotal
+            //   },
+            //   {
+            //     category: "Entertainment",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: entertainmentCount,
+            //     transactionTotal: entertainmentTotal
+            //   },
+            //   {
+            //     category: "Leisure & Self-Care",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: lsCount,
+            //     transactionTotal: lsTotal
+            //   },
+            //   {
+            //     category: "Other",
+            //     count: "Number of Transactions",
+            //     sum: "Total Amount Spent",
+            //     transactionCount: uncatCount,
+            //     transactionTotal: uncatTotal
+            //   }
+            // ]
+
+              // Initial TreeMap Charting    Note: Struggled to make it work therefore chose an alternative bar chart instead
 
             // var myTreeChart = new Chart(ctxTree,{
             //   type: 'treemap',
@@ -1553,68 +1535,74 @@
           <h6 class="m-0 text-secondary" style="float:left"> - For Account {{ selectedAccount }}</h6>
           </div>
             <!-- Card Body -->
-            <div class="card-body" style="position: relative; height: 50vh;">
-              <!-- <img src="{% static 'transactions/img/line.jpg' %}" style="max-width:100%;"> -->
-              
+            <div class="card-body" style="position: relative; height: 50vh;">              
               <canvas id='lineChart'></canvas>
               <script>
                 var timeFormat = "MMM Do YY";
 
-                function dateStringToArray(s) {
-                  var final = s.slice(1,-1).replace(/\s/g, '').split(',');
-                  for (i in final) {
-                    final[i] = new Date(parseInt(final[i]))
-                  };
-                  return final
-                };
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
 
-                function dataStringToArray(s) {
-                  var final = s.slice(1,-1).replace(/\s/g, '').split(',');
-                  for (i in final) {
-                    final[i] = parseFloat(final[i])
-                  };
-                  return final
-                };
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
 
-                console.log("here")
-                console.log(typeof("{{prediction.current.0 | safe}}"))
-
-                var currentList = JSON.parse(JSON.stringify("{{prediction.current | safe}}"));
-                console.log(currentList)
-                // console.log(typeof(currentList))
-
+                var currentList = {{ prediction.current | safe }}
                 var completeDataset = [];
-
-                console.log(typeof("{{prediction.current | safe}}"));
-                // console.log("here")
+                var date = [];
 
 
-                // for (var i = 0; i < 3; i++) {
-                  
-                //   newDict = {};
-                //   newDict["label"] = "{{prediction.current.i.account}}";
-                //   newDict["data"] = dataStringToArray("{{prediction.current.i.values}}");
-                //   completeDataset.push(newDict);
-                // }
+                for (var i = 0; i < currentList.length; i++) {
+                  newDict = {};
+                  newDict["label"] = "Account " + currentList[i]["account"]
+                  newDict["data"] = currentList[i]["values"]
+                  newDict["backgroundColor"] = backgroundColorList[i]
+                  newDict["borderColor"] = borderColorList[i]
+                  newDict["fill"] = false
+                  completeDataset.push(newDict);
+                }
 
-                console.log(completeDataset);
-                
-                var predictionDates = dateStringToArray("{{ prediction.current.dates }}");
-    
-                var predictionValues = dataStringToArray("{{ prediction.current.values }}");
-    
+                if (currentList[0]["dates"].length >= currentList[1]["dates"].length && currentList[0]["dates"].length >= currentList[2]["dates"].length){
+                  for (i in currentList[0]["dates"]) {
+                    date.push(new Date(parseInt(currentList[0]["dates"][i])))
+                  }
+                }
+                else if (currentList[1]["dates"].length >= currentList[0]["dates"].length && currentList[1]["dates"].length >= currentList[2]["dates"].length){
+                  for (i in currentList[1]["dates"]) {
+                    date.push(new Date(parseInt(currentList[1]["dates"][i])))
+                  }
+                }
+                else if (currentList[2]["dates"].length >= currentList[0]["dates"].length && currentList[2]["dates"].length >= currentList[1]["dates"].length){
+                  for (i in currentList[2]["dates"]) {
+                    date.push(new Date(parseInt(currentList[2]["dates"][i])))
+                  }
+                }
+ 
                 var ctxLine = document.getElementById("lineChart").getContext("2d");
                 var myLineChart = new Chart(ctxLine,{
                   type: 'line',
                   data: {
-                    labels: predictionDates,
-                    datasets: [{
-                      label: "Predicted Amount Spent",
-                      data: predictionValues,
-                      backgroundColor: 'rgba(231, 74, 59, 0.5)',
-                      borderColor: 'rgba(231, 74, 59, 1)',
-                      fill: false
-                    }],
+                    labels: date,
+                    datasets: completeDataset,
                   },
                   options:{
                     maintainAspectRatio: false,

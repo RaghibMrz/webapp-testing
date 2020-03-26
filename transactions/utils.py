@@ -279,6 +279,7 @@ def updateContext(context, rows, request, accountID, home):
         context['averageIncome'] = getAverageMonthlyIncome(rows)
         context['monthlySpendVIncome'] = getSpendVIncome(rows)
     context['prediction'] = buildPredictionDict(request)
+    print(context['prediction'])
 
     return context
 
@@ -714,11 +715,12 @@ def getPredictionForCreditCard(a, testDate, accountID):
                 balance += float(transaction['Amount']['Amount'])
                 interest += (chargedDate.date() - paymentTime.date()).days * purchaseRate / 365
     result = {}
+    result["account"] = accountID
     result['BalanceWithInterest'] = balance
     result["Interest"] = interest
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
-    result['nextBillingDay'] = targetdate
+    result['nextBillingDay'] = time.mktime(targetdate.timetuple()) * 1000
     return result
 
 

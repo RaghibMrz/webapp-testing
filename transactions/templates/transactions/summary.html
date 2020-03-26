@@ -27,8 +27,9 @@
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
-      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
-      <a href="{% url 'caps' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> Caps </a>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i>All Transactions</a>
+      <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> Categorical Transactions</a>
+      <a href="{% url 'caps' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-history text-white-50"></i> Caps </a>
     </div>
 </div>
 {% else %}
@@ -51,8 +52,9 @@
         </select>
         <input type="submit" value="Select" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3">
       </form>
-      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> See All Transactions</a>
+      <a href="{% url 'transactions' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i>All Transactions</a>
       <a href="{% url 'home' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3"><i class="fas fa-download fa-history text-white-50" style="padding-right: 2px"></i> Categorical Transactions</a>
+      <a href="{% url 'caps' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-history text-white-50"></i> Caps </a>
       <!--<a href="{% url 'report' %}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-3"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
     </div>
 
@@ -69,7 +71,7 @@
               <div class="h5 mb-0 font-weight-bold text-gray-800">£{{totalCurrentBalance|floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
-              <i class="fas fa-comments fa-2x text-gray-300"></i>
+              <i class="fas fa-balance-scale fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
@@ -182,6 +184,18 @@
             {% if mostExpCat.Cap == 0.0 %}
             <div class="h6 mb-0 mr-3 text-gray-800" style="padding-top:2%"><i class="fas fa-exclamation-circle"></i>
               Tip: You have not set a cap on your most costly category, you should consider doing this! You have spent £{{ mostExpCat.Spend |floatformat:2| intcomma }} on this category.
+            </div>
+            {% endif %}
+
+            {% if remainingAmount > totalBills %}
+            <div class="h6 mb-0 mr-3 text-gray-800" style="padding-top:2%"><i class="fas fa-exclamation-circle"></i>
+              Your disposable income is currently £{{ remainingAmount |floatformat:2| intcomma}}, that's more than your monthly bills! Good job!
+            </div>
+            {% endif %}
+
+            {% if totalCurrentBalance < totalBills %}
+            <div class="h6 mb-0 mr-3 text-gray-800" style="padding-top:2%"><i class="fas fa-exclamation-circle"></i>
+              You have insufficient funds to pay off your monthly bills! Consider taking a loan to pay them off or wait for your salary.
             </div>
             {% endif %}
           

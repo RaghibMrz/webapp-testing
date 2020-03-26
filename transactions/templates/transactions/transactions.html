@@ -76,10 +76,10 @@
               {% else %}
               <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Account Balance</div>
               {% endif %}
-              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{ balance }}</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">£{{ balance |floatformat:2| intcomma}}</div>
             </div>
             <div class="col-auto">
-              <i class="fas fa-comments fa-2x text-gray-300"></i>
+              <i class="fas fa-balance-scale fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@
     <div class="col-xl-12 col-lg-11">
       <div class="card shadow mb-4">
         <div class="card-body">
-          <h4 class="small font-weight-bold">Total spending: {{allSpending|floatformat:2| intcomma}} <span class="float-right">Total Salary: {{allIncome|floatformat:2| intcomma}}</span></h4>
+          <h4 class="small font-weight-bold">Total spending: £{{allSpending|floatformat:2| intcomma}} <span class="float-right">Total Salary: £{{allIncome|floatformat:2| intcomma}}</span></h4>
           <div class="progress mb-2">
             {% if allPercentage > 100%}
             <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="{{allSpend}} " aria-valuemin="0" aria-valuemax="{{allIncome}}"></div>
@@ -258,7 +258,7 @@
               <!--{% endfor %}-->
             <!--</div>-->
             <div class="d-sm-flex align-items-center justify-content-sm-end mb-4">
-              <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: {{ total |floatformat:2| intcomma}}</h6>
+              <h6 class="m-0 font-weight-bold text-primary" style="padding-right: 15px">Total {{spendIndicator}}: £{{ total |floatformat:2| intcomma}}</h6>
               <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-3" data-toggle="modal" data-target="#capPrompt">
                   <i class="fas fa-tachometer-alt"></i> Set Cap
                 </button>
@@ -275,14 +275,14 @@
                           </button>
                         </div>
                         <div class="modal-body">
+                          <div class="row justify-content-center">
+                            <h1>£{{ setCap |floatformat:2| intcomma}}</h1>
+                          </div>
                           <div class="input-group mb-3 input-group-lg">
                             <div class="input-group-prepend">
                               <span class="input-group-text">£</span>
                             </div>
-                            <input type="text" class="form-control" name="getValueAll" value="{{ setCap }}">
-                            <div class="input-group-append">
-                              <span class="input-group-text">.00</span>
-                            </div>
+                            <input type="text" class="form-control" name="getValueAll" value="{{ setCap |floatformat:2| intcomma}}">
                           </div>
                           {% if accountType == "Current Account" %}
                           <div class="row">
@@ -359,14 +359,14 @@
             var myPieChart = new Chart(ctxPie,{
               type: 'pie',
               data: {
-                labels: ["Monthly Average Spend", "Monthly Average Income"],
+                labels: ["Monthly Average Income", "Monthly Average Spend"],
                 // labels: "Amount Spent",
                 datasets: [{
                   // data: resData,
                   // data: [5,5,5,5,5,5,5,5,5,5],  //test
                   label: "Comparing Monthly Average Spend vs Income",
                   // label: ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General', 'Entertainment', 'Leisure & Self-Care', 'Other'],
-                  data: ["{{averageSpend}}","{{averageIncome}}"],
+                  data: ["{{averageIncome}}","{{averageSpend}}"],
 
                   backgroundColor: [
                     'rgba(78, 115, 223, 0.5)', //blue
@@ -655,7 +655,7 @@
                     },
                     label: function(tooltipItem, data) {
                       var label = data.datasets[tooltipItem.datasetIndex].label;
-                      return label + ": " + Number(data.datasets[0].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                      return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
                     }
                   }
                 }
@@ -694,40 +694,84 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          {% if prediction %}
+          {% if accountType == "Current Account" %}
           <h6 class="m-0 font-weight-bold text-primary">Spending Pattern and Predictions</h6>
           <h6 class="m-0 text-secondary" style="float:left"> - For Account {{ selectedAccount }}</h6>
           </div>
             <!-- Card Body -->
-            <div class="card-body" style="position: relative; height: 50vh;">
-              <!-- <img src="{% static 'transactions/img/line.jpg' %}" style="max-width:100%;"> -->
-              
+            <div class="card-body" style="position: relative; height: 50vh;">              
               <canvas id='lineChart'></canvas>
+
+              
+              {% if selectedAccount == "AllCurr" %}
               <script>
                 var timeFormat = "MMM Do YY";
-    
-                var predictionDates = "{{ prediction.date }}".slice(1,-1).replace(/\s/g, '').split(',');
-                for (i in predictionDates) {
-                  predictionDates[i] = new Date(parseInt(predictionDates[i]));
-                };
-    
-                var predictionValues = "{{ prediction.value }}".slice(1,-1).replace(/\s/g, '').split(',');
-                for (i in predictionValues) {
-                  predictionValues[i] = parseInt(predictionValues[i])
-                };
-    
+
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
+
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
+
+                var currentList = {{ prediction.current | safe }}
+                var completeDataset = [];
+                var date = [];
+                
+                var dateArrayLength = [];
+
+
+                for (var i = 0; i < currentList.length; i++) {
+                  newDict = {};
+                  newDict["label"] = "Account " + currentList[i]["account"]
+                  newDict["data"] = currentList[i]["values"]
+                  newDict["backgroundColor"] = backgroundColorList[i]
+                  newDict["borderColor"] = borderColorList[i]
+                  newDict["fill"] = false
+                  completeDataset.push(newDict);
+
+                  dateArrayLength.push(currentList[i]["dates"].length)
+                }
+
+                var mostDates = dateArrayLength[0]
+                var indexMax = 0
+
+                for (var i = 1; i < dateArrayLength.length; i++) {
+                  if (dateArrayLength[i] > mostDates){
+                    indexMax = i
+                    mostDates = dateArrayLength[i];
+                  }
+                }
+
+                for (i in currentList[indexMax]["dates"]) {
+                  date.push(new Date(parseInt(currentList[indexMax]["dates"][i])))
+                }
+ 
                 var ctxLine = document.getElementById("lineChart").getContext("2d");
                 var myLineChart = new Chart(ctxLine,{
                   type: 'line',
                   data: {
-                    labels: predictionDates,
-                    datasets: [{
-                      label: "Predicted Amount Spent",
-                      data: predictionValues,
-                      backgroundColor: 'rgba(231, 74, 59, 0.5)',
-                      borderColor: 'rgba(231, 74, 59, 1)',
-                      fill: false
-                    }],
+                    labels: date,
+                    datasets: completeDataset,
                   },
                   options:{
                     maintainAspectRatio: false,
@@ -749,10 +793,134 @@
                           labelString: "Amount"
                         }
                       }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Spending Predictions"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
                     }
                   }
                 });
               </script>
+
+              {% else %}
+              <script>
+                var timeFormat = "MMM Do YY";
+
+                var backgroundColorList = [
+                  'rgba(78, 115, 223, 0.5)', //blue
+                  'rgba(231, 74, 59, 0.5)',  //red
+                  'rgba(253, 126, 20, 0.5)',  //orange
+                  'rgba(232, 62, 140, 0.5)',  //pink
+                  'rgba(28, 200, 138, 0.5)',  //green
+                  'rgba(246, 194, 62, 0.5)',  //yellow
+                  'rgba(90, 92, 105, 0.5)',  //gray-dark
+                  'rgba(102, 16, 242, 0.5)',  //indigo
+                  'rgba(54, 185, 204, 0.5)',  //cyan
+                  'rgba(133, 135, 150, 0.5)',  //gray
+                ]
+
+                var borderColorList = [
+                  'rgba(78, 115, 223, 1)',
+                  'rgba(231, 74, 59, 1)',
+                  'rgba(253, 126, 20, 1)',
+                  'rgba(232, 62, 140, 1)',
+                  'rgba(28, 200, 138, 1)',
+                  'rgba(246, 194, 62, 1)',
+                  'rgba(90, 92, 105, 1)',
+                  'rgba(102, 16, 242, 1)',
+                  'rgba(54, 185, 204, 1)',
+                  'rgba(133, 135, 150, 1)',
+                ]
+
+                var currentList = {{ prediction.current | safe }}
+                var completeDataset = [];
+                var date = [];
+
+
+                for (var i = 0; i < currentList.length; i++) {
+                  newDict = {};
+                  if (currentList[i]["account"] == "{{selectedAccount}}"){
+                    newDict["label"] = "Account " + currentList[i]["account"]
+                    newDict["data"] = currentList[i]["values"]
+                    newDict["backgroundColor"] = backgroundColorList[i]
+                    newDict["borderColor"] = borderColorList[i]
+                    newDict["fill"] = false
+                    completeDataset.push(newDict);
+
+                    for (j in currentList[i]["dates"]) {
+                      date.push(new Date(parseInt(currentList[i]["dates"][j])))
+                    } 
+                  }
+                }
+
+                // if (currentList[0]["dates"].length >= currentList[1]["dates"].length && currentList[0]["dates"].length >= currentList[2]["dates"].length){
+                //   for (i in currentList[0]["dates"]) {
+                //     date.push(new Date(parseInt(currentList[0]["dates"][i])))
+                //   }
+                // }
+                // else if (currentList[1]["dates"].length >= currentList[0]["dates"].length && currentList[1]["dates"].length >= currentList[2]["dates"].length){
+                //   for (i in currentList[1]["dates"]) {
+                //     date.push(new Date(parseInt(currentList[1]["dates"][i])))
+                //   }
+                // }
+                // else if (currentList[2]["dates"].length >= currentList[0]["dates"].length && currentList[2]["dates"].length >= currentList[1]["dates"].length){
+                //   for (i in currentList[2]["dates"]) {
+                //     date.push(new Date(parseInt(currentList[2]["dates"][i])))
+                //   }
+                // }
+ 
+                var ctxLine = document.getElementById("lineChart").getContext("2d");
+                var myLineChart = new Chart(ctxLine,{
+                  type: 'line',
+                  data: {
+                    labels: date,
+                    datasets: completeDataset,
+                  },
+                  options:{
+                    maintainAspectRatio: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        time: {
+                          parser: timeFormat,
+                          tooltipFormat: "ll",
+                        },
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Date",
+                        }
+                      }],
+                      yAxes: [{
+                        scaleLabel: {
+                          display: true,
+                          labelString: "Amount"
+                        }
+                      }],
+                    },
+                    title: {
+                      display: true,
+                      text: "Spending Predictions"
+                    },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var label = data.datasets[tooltipItem.datasetIndex].label;
+                          return label + ": " + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString("en-GB",{style:"currency", currency:"GBP"});
+                        }
+                      }
+                    }
+                  }
+                });
+              </script>
+              {% endif %}
             </div>
           {% else %}
             <h6 class="m-0 font-weight-bold text-secondary">Spending Pattern and Predictions- Not available for <strong>all</strong> accounts,

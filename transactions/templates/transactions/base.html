@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -96,6 +97,8 @@
                     <span class="font-weight-bold">A new monthly report is ready to download!</span>
                   </div>
               </a>
+
+              {% if spendIndicatorList.4 == "Income" %}
               <a class="dropdown-item d-flex align-items-center" href="">
                   <div class="mr-3">
                     <div class="icon-circle bg-success">
@@ -103,21 +106,72 @@
                     </div>
                   </div>
                   <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
-                    £290.29 has been deposited into your account!
+                    <div class="small text-gray-500">January 30, 2019</div>
+                    Throughout the month you have received £{{totals.4|floatformat:2| intcomma}}!
                   </div>
               </a>
-                <a class="dropdown-item d-flex align-items-center" href="">
-                  <div class="mr-3">
-                      <div class="icon-circle bg-warning">
-                        <i class="fas fa-exclamation-triangle text-white"></i>
-                      </div>
+              {% endif %}
+              
+              {% if leftOver.0 == "On track to save: " %}
+              <a class="dropdown-item d-flex align-items-center" href="">
+                <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
                     </div>
-                    <div>
-                      <div class="small text-gray-500">December 2, 2019</div>Spending Alert: We've noticed unusually high spending for your account.
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">January 30, 2019</div>Your spending habits are well monitored and you will save £{{ leftOver.1 |floatformat:2| intcomma}}.
+                  </div>
+              </a>
+              {% elif leftOver.0 == "Spends predicted to exceed income by:" %}
+              <a class="dropdown-item d-flex align-items-center" href="">
+                <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
                     </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="">Show All Alerts</a>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">January 30, 2019</div>Danger: Please keep track of your spending, you are expected to spend £{{ leftOver.1 |floatformat:2| intcomma}} more than what you have.
+                  </div>
+              </a>
+              {% endif %}
+
+              {% if allPercentage > 100 %}
+              <a class="dropdown-item d-flex align-items-center" href="">
+                <div class="mr-3">
+                    <div class="icon-circle bg-danger">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">January 30, 2019</div>Your spending habits are extremely high and has surpassed your income. Try to reduce spending where possible.
+                  </div>
+              </a>
+              {% elif allPercentage > 66 %}
+              <a class="dropdown-item d-flex align-items-center" href="">
+                <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">January 30, 2019</div>Your spending has gone slightly off track, please spend mindfully.
+                  </div>
+              </a>
+              {% elif allPercentage > 0 %}
+              <a class="dropdown-item d-flex align-items-center" href="">
+                <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">January 30, 2019</div>Great work! Your spending is less than 66% of your income!
+                  </div>
+              </a>
+              {% endif %}
+
+              <a class="dropdown-item text-center small text-gray-500" href="">Show All Alerts</a>
             </div>
         </li>
 

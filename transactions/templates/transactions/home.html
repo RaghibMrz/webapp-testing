@@ -1576,9 +1576,6 @@
                 console.log(typeof("{{prediction.current.0 | safe}}"))
 
                 var currentList = JSON.parse(JSON.stringify("{{prediction.current | safe}}"));
-                var array = JSON.parse("[" + currentList + "]");
-                console.log(array)
-                console.log(typeof(array))
                 console.log(currentList)
                 // console.log(typeof(currentList))
 
@@ -1588,13 +1585,13 @@
                 // console.log("here")
 
 
-                for (i in "{{prediction.current}}") {
-                  console.log(i);
-                  newDict = {};
-                  newDict["label"] = i.account;
-                  newDict["data"] = dataStringToArray(i.values);
-                  completeDataset.push(newDict);
-                }
+                // for (var i = 0; i < 3; i++) {
+                  
+                //   newDict = {};
+                //   newDict["label"] = "{{prediction.current.i.account}}";
+                //   newDict["data"] = dataStringToArray("{{prediction.current.i.values}}");
+                //   completeDataset.push(newDict);
+                // }
 
                 console.log(completeDataset);
                 

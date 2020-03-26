@@ -13,6 +13,7 @@ from requests import auth
 # from users.models import Account
 
 register = template.Library()
+dateNow = datetime.datetime.strptime("30 01 2020", "%d %m %Y")
 
 
 # gets the correct account ID from the database through the correct post request
@@ -95,7 +96,8 @@ def sortedRows(rows):
     sortedRows.reverse()
     return sortedRows
 
-#function that returns all necessary info on summary page
+
+# function that returns all necessary info on summary page
 def getSummaryContext(request):
     accountIDs = getAccountIDsFromModel(request.user.profile)
     accountData = []
@@ -107,7 +109,7 @@ def getSummaryContext(request):
         newEntry = {}
         newEntry['accountID'] = accountID
         newEntry['isCreditAccount'] = isCreditAccount(accountID)
-        predict = prediction( datetime.datetime(2020, 2, 10), accountID)
+        predict = prediction(datetime.datetime(2020, 2, 10), accountID)
         newEntry['nextBillingDay'] = predict['nextBillingDay'].date()
         if newEntry['isCreditAccount']:
             newEntry['balance'] = predict['balance']
@@ -152,7 +154,6 @@ def getCurrAccountBalance(request, accountID):
                 total += float(getData(account)['Balance'][0]['Amount']['Amount'])
         return total
     return float(getData(accountID)['Balance'][0]['Amount']['Amount'])
-
 
 
 # creates all the lists required to store categorical data, 10 lists for 10 categories
@@ -691,7 +692,6 @@ def getPredictionForCreditCard(a, testDate, accountID):
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
     result['nextBillingDay'] = targetdate
-    print(result)
     return result
 
 
@@ -785,8 +785,11 @@ def getAllCaps(request):
     capValues = []
     for caps in possibleCapSetOn:
         capValues.append(float(request.user.profile.getCap(caps)[0]))
-    print(capValues)
     return capValues
+
+
+def getDate(day, month, year):
+    return datetime.datetime.strptime(day + " " + month + " " + year, "%d %m %Y")
 
 
 # performs lookup from Merchant Category Code file- maps it to a defined category

@@ -84,7 +84,7 @@
                 <span class="badge badge-danger badge-counter">3+</span>
             </a>
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown" style="max-height: 400px; overflow-y: auto;">
               <h6 class="dropdown-header">Alerts Center</h6>
               <a class="dropdown-item d-flex align-items-center" href="{% url 'report' %}">
                   <div class="mr-3">
@@ -97,6 +97,23 @@
                     <span class="font-weight-bold">A new monthly report is ready to download!</span>
                   </div>
               </a>
+
+              {% for account in accountData %}
+                {% if not account.isCreditAccount%}
+                  {% for overdraft in account.Overdraft %}
+                  <a class="dropdown-item d-flex align-items-center" href="">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-danger">
+                          <i class="fas fa-exclamation-triangle text-white"></i>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="small text-gray-500">January 30, 2019</div>You will go into overdraft on {{overdraft}} on Account {{account.accountID}}
+                      </div>
+                  </a>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
 
               {% if spendIndicatorList.4 == "Income" %}
               <a class="dropdown-item d-flex align-items-center" href="">

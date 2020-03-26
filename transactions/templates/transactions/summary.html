@@ -180,7 +180,7 @@
             {% if not account.isCreditAccount%}
             {% for overdraft in account.Overdraft %}
             <div class="h6 mb-0 mr-3 text-gray-800">
-              <i class="fas fa-exclamation-circle"></i>
+              <i class="text-danger fas fa-exclamation-circle"></i>
               You will go into overdraft on {{overdraft}} on Account {{account.accountID}}
             </div>
             {% endfor %}

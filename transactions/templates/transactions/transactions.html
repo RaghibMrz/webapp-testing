@@ -922,6 +922,34 @@
               </script>
               {% endif %}
             </div>
+            {% elif accountType == "Credit-Card" %}
+            <h6 class="m-0 font-weight-bold text-primary">Spending Pattern and Predictions</h6>
+            <h6 class="m-0 text-secondary" style="float:left"> - For Account {{ selectedAccount }}</h6>
+            </div>
+              <!-- Card Body -->
+              <div class="card-body" style="position: relative; height: 50vh;">  
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="otherTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Account</th>
+                        <th>BalanceWithInterest</th>
+                        <th>Interest</th>
+                        <th>Next Billing Day</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for info in prediction.credit %}
+                        <tr>
+                          <td>{{ info.account }}</td>
+                          <td>{{ info.BalanceWithInterest |floatformat:2| intcomma}}</td>
+                          <td>{{ info.Interest }}</td>
+                          <td>{{ info.nextBillingDay }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
           {% else %}
             <h6 class="m-0 font-weight-bold text-secondary">Spending Pattern and Predictions- Not available for <strong>all</strong> accounts,
               please select one from the drop down menu in the top right</h6>

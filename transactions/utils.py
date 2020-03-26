@@ -720,7 +720,8 @@ def getPredictionForCreditCard(a, testDate, accountID):
     result["Interest"] = interest
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
-    result['nextBillingDay'] = time.mktime(targetdate.timetuple()) * 1000
+    # result['nextBillingDay'] = time.mktime(targetdate.timetuple()) * 1000
+    result['nextBillingDay'] = targetdate
     return result
 
 

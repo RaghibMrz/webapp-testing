@@ -279,7 +279,6 @@ def updateContext(context, rows, request, accountID, home):
         context['averageIncome'] = getAverageMonthlyIncome(rows)
         context['monthlySpendVIncome'] = getSpendVIncome(rows)
     context['prediction'] = buildPredictionDict(request)
-    print(context['prediction'])
 
     return context
 
@@ -683,6 +682,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
         targetdate = billingdate + relativedelta(months=1)
     else:
         targetdate = billingdate
+    lastBilling = targetdate - relativedelta(months = 1)
 
     # chargedDate is the date before which all the purchases will be charged the interest
     chargedDate = targetdate - relativedelta(
@@ -707,6 +707,8 @@ def getPredictionForCreditCard(a, testDate, accountID):
         if transaction['TransactionId'] == a['Balance'][0]['LastPaidTransaction']:
             lastPaymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
                                                          "%Y-%m-%dT%H:%M:%S+00:00")
+    spendingLastMonth = {}
+    balanceLastMonth = 0
     for transaction in a['Transaction']:
         paymentTime = datetime.datetime.strptime(transaction['ValueDateTime'],
                                                  "%Y-%m-%dT%H:%M:%S+00:00")
@@ -714,14 +716,40 @@ def getPredictionForCreditCard(a, testDate, accountID):
             if paymentTime < chargedDate:
                 balance += float(transaction['Amount']['Amount'])
                 interest += (chargedDate.date() - paymentTime.date()).days * purchaseRate / 365
+        if paymentTime <targetdate and paymentTime>=lastBilling:
+            if paymentTime.date() in spendingLastMonth:
+                spendingLastMonth[paymentTime.date()].append(float(transaction['Amount']['Amount']))
+            else:
+                spendingLastMonth[paymentTime.date()] = [float(transaction['Amount']['Amount'])]
+        if paymentTime < lastBilling:
+            balanceLastMonth +=float(transaction['Amount']['Amount'])
+        print(paymentTime)
+    print(targetdate, lastBilling)
+    daysPredicted = 0
+    print(spendingLastMonth)
+    currentdate = lastBilling.date()
+    timeInterval = targetdate - lastBilling
+    balanceByDay = {"date": [time.mktime(currentdate.timetuple()) * 1000], "value" : [balanceLastMonth]}
+    while daysPredicted < timeInterval.days:
+        currentdate += relativedelta(days=1)
+        # print(currentdate)
+        if currentdate in spendingLastMonth:
+            balanceLastMonth += sum(spendingLastMonth[currentdate])
+        # prediction[time.mktime(currentdate.timetuple()) * 1000] = currentbalance
+        balanceByDay["date"].append(time.mktime(currentdate.timetuple()) * 1000)
+        balanceByDay["value"].append(balanceLastMonth)
+        daysPredicted += 1
+        
     result = {}
     result["account"] = accountID
     result['BalanceWithInterest'] = balance
     result["Interest"] = interest
+    result["balanceByDay"] = balanceByDay
     result["minRepaymentAmount"] = float(a['Balance'][0]['Amount']['Amount']) * minRepaymentRate / 100
     result['balance'] = float(a['Balance'][0]['Amount']['Amount'])
     # result['nextBillingDay'] = time.mktime(targetdate.timetuple()) * 1000
     result['nextBillingDay'] = targetdate
+    print(balanceByDay)
     return result
 
 

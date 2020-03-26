@@ -42,7 +42,6 @@ def home(request):
             context['dateIndicator'] = "All transactions"
 
         # get data from database, store into "context" dictionary
-        # print(rows)
         if rows != False:
             for transaction in rows:
                 context[getCategory(transaction['MCC'])].append(transaction)
@@ -57,7 +56,6 @@ def home(request):
 def summary(request):
     request.session.set_expiry(600)
     context = getSummaryContext(request)
-    print(context)
     return render(request, 'transactions/summary.html', context)
 
 
@@ -67,56 +65,60 @@ def caps(request):
     request.session.set_expiry(600)
     if getAccount(request) == "All":
         return redirect('summary')
-
     accountID = getAccount(request)
-    tempcontext, rows = makeCatContext(request, accountID), getRows(request, accountID)
-    if rows != False:
-        endDay = str(calendar.monthrange(dateNow.year, dateNow.month)[1])
-        startDate = "1/" + str(dateNow.month) + "/" + str(dateNow.year) + " 00:00 "
-        endDate = " " + endDay + "/" + str(dateNow.month) + "/" + str(dateNow.year) + " 00:00"
-        rows = getFilteredRows(rows, startDate, endDate)
-        for transaction in rows:
-            tempcontext[getCategory(transaction['MCC'])].append(transaction)
-    totalList, spendIndicatorList, tempcontext = getCategoricalTotal(tempcontext)
-    possibleCapSetOn = ["getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
-                        "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
-    categories = ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General',
-                  'Entertainment', 'Leisure & Self-Care', 'Other']
 
-    categoricalSpend = {}
-    for i in range(len(possibleCapSetOn)):
-        if spendIndicatorList[i] == 'Spent':
-            categoricalSpend[possibleCapSetOn[i]] = totalList[i]
+    if validateID(request, accountID) == True:
+        tempcontext, rows = makeCatContext(request, accountID), getRows(request, accountID)
+        if rows != False:
+            endDay = str(calendar.monthrange(dateNow.year, dateNow.month)[1])
+            startDate = "1/" + str(dateNow.month) + "/" + str(dateNow.year) + " 00:00 "
+            endDate = " " + endDay + "/" + str(dateNow.month) + "/" + str(dateNow.year) + " 00:00"
+            rows = getFilteredRows(rows, startDate, endDate)
+            for transaction in rows:
+                tempcontext[getCategory(transaction['MCC'])].append(transaction)
+        totalList, spendIndicatorList, tempcontext = getCategoricalTotal(tempcontext)
+        possibleCapSetOn = ["getValueBP", "getValueTP", "getValueGC", "getValueFC", "getValueFSC",
+                            "getValueFoodC", "getValueGeneralC", "getValueEC", "getValueLSC", "getValueOC"]
+        categories = ['Bills & Payments', 'Transport', 'Groceries', 'Fashion & Cosmetics', 'Finances', 'Food', 'General',
+                      'Entertainment', 'Leisure & Self-Care', 'Other']
+
+        categoricalSpend = {}
+        for i in range(len(possibleCapSetOn)):
+            if spendIndicatorList[i] == 'Spent':
+                categoricalSpend[possibleCapSetOn[i]] = totalList[i]
+            else:
+                categoricalSpend[possibleCapSetOn[i]] = 0
+        context = makeAggContext(request, accountID)
+        context['spend'] = getAverageMonthlySpend(getRows(request, accountID))
+        context['accountType'] = getAccountType(accountID)
+        capvalues = getAllCaps(request)
+        capsContext = []
+
+        for num in range(len(categories)):
+            capsContext.append(
+                {'Category': categories[num], 'Spend': categoricalSpend[possibleCapSetOn[num]],
+                 'Cap': capvalues[(num + 1)]})
+
+        for cap in capsContext:
+            if cap['Cap'] != 0:
+                cap['Percentage'] = cap['Spend'] / cap['Cap'] * 100
+            else:
+                cap['Percentage'] = 0
+        context['allCap'] = capvalues.pop(0)
+        context['allSpend'] = sum(totalList)
+        context['totalCap'] = sum(capvalues)
+        if context['allCap'] > 0:
+            context['totalPercentage'] = sum(totalList) / context['allCap'] * 100
         else:
-            categoricalSpend[possibleCapSetOn[i]] = 0
-    context = makeAggContext(request, accountID)
-    context['spend'] = getAverageMonthlySpend(getRows(request, accountID))
-    context['accountType'] = getAccountType(accountID)
-    capvalues = getAllCaps(request)
-    capsContext = []
+            context['totalPercentage'] = 0
+        context['capData'] = capsContext
 
-    for num in range(len(categories)):
-        capsContext.append(
-            {'Category': categories[num], 'Spend': categoricalSpend[possibleCapSetOn[num]],
-             'Cap': capvalues[(num + 1)]})
-
-    for cap in capsContext:
-        if cap['Cap'] != 0:
-            cap['Percentage'] = cap['Spend'] / cap['Cap'] * 100
-        else:
-            cap['Percentage'] = 0
-    context['allCap'] = capvalues.pop(0)
-    context['allSpend'] = sum(totalList)
-    context['totalCap'] = sum(capvalues)
-    if context['allCap'] > 0:
-        context['totalPercentage'] = sum(totalList) / context['allCap'] * 100
+        vals = list(categoricalSpend.values())
+        context['mostExpCat'] = context['capData'][vals.index(max(vals))]
+        return render(request, 'transactions/caps.html', context)
     else:
-        context['totalPercentage'] = 0
-    context['capData'] = capsContext
-
-    vals = list(categoricalSpend.values())
-    context['mostExpCat'] = context['capData'][vals.index(max(vals))]
-    return render(request, 'transactions/caps.html', context)
+        return render(validateID(request, accountID)[0], validateID(request, accountID)[1],
+               validateID(request, accountID)[2])
 
 
 # noinspection PySimplifyBooleanCheck

@@ -49,12 +49,15 @@ def validateID(request, accountID):
 
 # returns rows of userID selected, or aggregate rows if all selected
 def getRows(request, accountID):
+    accountIDs = getAccountIDsFromModel(request.user.profile)
+    if len(accountIDs) == 0:
+        return False
     if accountID == "All":
-        return getAllRows(getAccountIDsFromModel(request.user.profile))
+        return getAllRows(accountIDs)
     elif accountID == "AllCurr":
-        return getAllRowsCurr(getAccountIDsFromModel(request.user.profile))
+        return getAllRowsCurr(accountIDs)
     elif accountID == "AllCC":
-        return getAllRowsCC(getAccountIDsFromModel(request.user.profile))
+        return getAllRowsCC(accountIDs)
     return getSingleAccountRows(accountID)
 
 
@@ -383,13 +386,16 @@ def getSingleAccountRows(accountID):
 
 # combines list of transactions from all accounts into one, by unpacking each list of dictionaries into one
 def getAllRows(IDs):
-    row = getSingleAccountRows(IDs[0])
-    for accountID in IDs:
-        if accountID == IDs[0]:
-            continue
-        for collectingDict in getSingleAccountRows(accountID):
-            row.append(collectingDict)
-    return sortedRows(row)
+    if len(IDs) > 0:
+        row = getSingleAccountRows(IDs[0])
+        for accountID in IDs:
+            if accountID == IDs[0]:
+                continue
+            for collectingDict in getSingleAccountRows(accountID):
+                row.append(collectingDict)
+        return sortedRows(row)
+    else:
+        return False
 
 
 # combines list of transactions from all current accounts into one, by unpacking each list of dictionaries into one
@@ -527,13 +533,14 @@ def getFilteredRows(rows, startDate, endDate):
     start = datetime.datetime.strptime(startDate, "%d/%m/%Y %H:%M ")
     end = datetime.datetime.strptime(endDate, " %d/%m/%Y %H:%M")
     filteredRows = []
-    for row in rows:
-        if row['BookingDateTime'] > end:
-            continue
-        if row['BookingDateTime'] < start:
-            break
-        filteredRows.append(row)
-    return filteredRows
+    if rows != False:
+        for row in rows:
+            if row['BookingDateTime'] > end:
+                continue
+            if row['BookingDateTime'] < start:
+                break
+            filteredRows.append(row)
+        return filteredRows
 
 
 def getAverageSpending(testDate, accountID):

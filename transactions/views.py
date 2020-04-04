@@ -19,7 +19,6 @@ def home(request):
         return redirect('summary')
 
     accountID = getAccount(request)
-
     if validateID(request, accountID) == True:
         context, rows = makeCatContext(request, accountID), getRows(request, accountID)
 

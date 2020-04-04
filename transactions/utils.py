@@ -14,6 +14,7 @@ from requests import auth
 
 register = template.Library()
 dateNow = datetime.datetime.strptime("15 11 2019", "%d %m %Y")
+dataDic = {}
 
 
 # gets the correct account ID from the database through the correct post request
@@ -72,10 +73,15 @@ def getData(accountID):
 
     # get locally
     try:
-        with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
-            jsonData = json.load(data)
-        return jsonData
+        if accountID in dataDic:
+            return dataDic[accountID]
+        else:
+            with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
+                jsonData = json.load(data)
+            dataDic[accountID] = jsonData
+            return jsonData
     except FileNotFoundError:
+        dataDic[accountID] = False
         return False
 
 
@@ -119,6 +125,8 @@ def getSummaryContext(request):
     totalBills = 0
     for accountID in accountIDs:
         data = getData(accountID)
+        if data == False:
+            continue
         newEntry = {}
         newEntry['accountID'] = accountID
         newEntry['isCreditAccount'] = isCreditAccount(accountID)
@@ -159,6 +167,8 @@ def getCurrAccountBalance(request, accountID):
     elif accountID == "AllCurr":
         total = 0
         for account in getAccountIDsFromModel(request.user.profile):
+            if getData(account) == False:
+                continue
             if not isCreditAccount(account):
                 total += float(getData(account)['Balance'][0]['Amount']['Amount'])
         return total
@@ -314,12 +324,13 @@ def getCleanMonths(months):
         newList.append(date)
     return newList
 
-
 # builds a dictionary with predicted spend values for all accounts associated with user
 def buildPredictionDict(request):
     current = []
     credit = []
     for account in getAccountIDsFromModel(request.user.profile):
+        if getData(account) == False:
+            continue
         newDict = {}
         if isCreditAccount(account):
             newDict["account"] = account
@@ -391,6 +402,8 @@ def getAllRows(IDs):
         for accountID in IDs:
             if accountID == IDs[0]:
                 continue
+            if getData(accountID) == False:
+                continue
             for collectingDict in getSingleAccountRows(accountID):
                 row.append(collectingDict)
         return sortedRows(row)
@@ -402,6 +415,8 @@ def getAllRows(IDs):
 def getAllRowsCurr(accountIDs):
     firstID = 0
     for accountID in accountIDs:
+        if getData(accountID) == False:
+                continue
         if not isCreditAccount(accountID):
             firstID = accountID
             row = getSingleAccountRows(accountID)
@@ -411,6 +426,8 @@ def getAllRowsCurr(accountIDs):
         return
 
     for accountID in accountIDs:
+        if getData(accountID) == False:
+                continue
         if accountID == firstID:
             continue
         if not isCreditAccount(accountID):
@@ -456,6 +473,8 @@ def makeFirstElement(element, elemList):
 def getAccountIDsFromModel(profile):
     accountList = []
     for accounts in profile.getAccountIDList():
+        if getData(str(accounts)) == False:
+            continue
         accountList.append(str(accounts))
     return accountList
 

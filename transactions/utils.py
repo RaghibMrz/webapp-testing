@@ -65,24 +65,30 @@ def getRows(request, accountID):
 # helper function to get data from database/local file into python dictionaries
 def getData(accountID):
     # get from database
-    # res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json",
-    #                    auth=auth.HTTPDigestAuth("admin", "admin"))
-    # if res.status_code == 404:
-    #     return False
-    # return json.loads(res.text)
-
-    # get locally
-    try:
-        if accountID in dataDic:
-            return dataDic[accountID]
-        else:
-            with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
-                jsonData = json.load(data)
-            dataDic[accountID] = jsonData
-            return jsonData
-    except FileNotFoundError:
+    if accountID in dataDic:
+        return dataDic[accountID]
+    res = requests.get("http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json",
+                       auth=auth.HTTPDigestAuth("admin", "admin"))
+    print(1)
+    if res.status_code == 404:
         dataDic[accountID] = False
         return False
+    result = json.loads(res.text)
+    dataDic[accountID] = result
+    return result
+
+    # get locally
+    # try:
+    #     if accountID in dataDic:
+    #         return dataDic[accountID]
+    #     else:
+    #         with open(os.path.join(sys.path[0], "aux_files/" + accountID + ".json"), 'r') as data:
+    #             jsonData = json.load(data)
+    #         dataDic[accountID] = jsonData
+    #         return jsonData
+    # except FileNotFoundError:
+    #     dataDic[accountID] = False
+    #     return False
 
 
 # function which takes a list of transaction, works out the total and if the sum is money spent or income.
@@ -246,7 +252,7 @@ def getMinPayment(profile, accountID):
     return False
 
 def getSpendingIncome(rows):
-    spending = 0 
+    spending = 0
     income = 0
     for transaction in rows:
         if transaction['Amount'][0] =='-':
@@ -284,7 +290,7 @@ def updateContext(context, rows, request, accountID, home):
         context['monthlyIncome'] = getMinIncome(rows)
         context['monthlySpend'] = getSpend(rows)
         context['leftOver'] = calcExcess(rows)
-        # added for spending and salary on transactions page 
+        # added for spending and salary on transactions page
         context['allSpending'], context['allIncome'] = getSpendingIncome(rows)
         if context['allIncome'] > 0:
             context['allPercentage'] = context['allSpending'] / context['allIncome'] *100
@@ -490,21 +496,21 @@ def getAccountsForDropDown(profile):
     return accountList
 
 
-def getDataForAccount(accountID):
-    a = getData(accountID)
-    resultDic = {}
-    for key in a['Data']:
-        current = []
-        for item in a['Data'][key]:
-            if item["AccountId"] == accountID:
-                if key == "Account":
-                    month = item["OpeningDate"][3:5]
-                    day = item["OpeningDate"][0:2]
-                    resultDic["BillingDate"] = month + '-' + day
-                current.append(item)
-            resultDic[key] = current
-    with open(os.path.join(sys.path[0], "aux_files/" + accountID + "new.json"), 'w') as outfile:
-        json.dump(resultDic, outfile)
+# def getDataForAccount(accountID):
+    # a = getData(accountID)
+    # resultDic = {}
+    # for key in a['Data']:
+    #     current = []
+    #     for item in a['Data'][key]:
+    #         if item["AccountId"] == accountID:
+    #             if key == "Account":
+    #                 month = item["OpeningDate"][3:5]
+    #                 day = item["OpeningDate"][0:2]
+    #                 resultDic["BillingDate"] = month + '-' + day
+    #             current.append(item)
+    #         resultDic[key] = current
+    # with open(os.path.join(sys.path[0], "aux_files/" + accountID + "new.json"), 'w') as outfile:
+    #     json.dump(resultDic, outfile)
     # result = json.dumps(resultDic)
     # url = "http://51.104.239.212:8060/v1/documents?uri=/documents/" + accountID + ".json"
     # headers = {'Content-Type': 'application/json'}
@@ -759,7 +765,7 @@ def getPredictionForCreditCard(a, testDate, accountID):
         balanceByDay["date"].append(time.mktime(currentdate.timetuple()) * 1000)
         balanceByDay["value"].append(balanceLastMonth)
         daysPredicted += 1
-        
+
     result = {}
     result["account"] = accountID
     result['BalanceWithInterest'] = balance

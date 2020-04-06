@@ -1,6 +1,5 @@
 # Icy Banking - Open Banking Data Analysis 
-# -Team 45 with NTT data
-# COMP0016
+# UCL Team 45 with NTT data for COMP0016
 
 
 ## 1. User Manual

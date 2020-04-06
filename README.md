@@ -1,17 +1,16 @@
-# Icy Banking - Open Banking Data Analysis -Team 45 COMP0016 with NTT data
+# Icy Banking - Open Banking Data Analysis 
+# -Team 45 with NTT data
+# COMP0016
 
 
 ## 1. User Manual
 
 Please take note that we have these accounts in database. All other accounts will be seen as invalid.
+
 10567
-
 22289
-
 76523
-
 90613
-
 92548
 
 Our webapp can be accessed using the link www.uclproject.co.uk. You will be welcomed with a login screen, for which you can either sign up to an account or login using a test account we have made for you:

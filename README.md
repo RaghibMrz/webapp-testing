@@ -1,13 +1,17 @@
-Icy Banking - Open Banking Data Analysis -Team 45 COMP0016 with NTT data
+# Icy Banking - Open Banking Data Analysis -Team 45 COMP0016 with NTT data
 
 
-##1. User Manual
+## 1. User Manual
 
 Please take note that we have these accounts in database. All other accounts will be seen as invalid.
 10567
+
 22289
+
 76523
+
 90613
+
 92548
 
 Our webapp can be accessed using the link www.uclproject.co.uk. You will be welcomed with a login screen, for which you can either sign up to an account or login using a test account we have made for you:
@@ -23,7 +27,7 @@ Since your account will likely not have a bank account connected to your user, y
 Scroll to the bottom and enter your unique userID, for demonstration purposes enter the id "10567" and hit save. If you now navigate back to the home page by clicking the "Icy Bank" badge on the top right, the categorical tables should now be populated with data as required! There is a lot more functionality available which you can see demonstrated in the latter half of the video on the home page
 
 
-##2. Deployment Manual
+## 2. Deployment Manual
 
 if you would like to manually deploy the webapp on your own virtual machine, you will need to create one, transfer all the Django code onto the virtual machine, and then set up an Apache web server.
 
